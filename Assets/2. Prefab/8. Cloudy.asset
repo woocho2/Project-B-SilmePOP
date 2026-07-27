@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489e1f6948168864ab2ffc613ddebf7e, type: 3}
+  m_Name: 8. Cloudy
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeData
+  themeName: Cloudy
+  mainMenuSprite: {fileID: 8288426215254106694, guid: 4e83402ce65adbc4fbe029dd2fc04147, type: 3}
+  optionAndTableSprite: {fileID: 7680820834086852892, guid: 77b52b07a7d706c429e13b10cc802b91, type: 3}
+  mapFillSprite: {fileID: 8102358098348255977, guid: a29944e8d08c8e84a8f71883fdebc995, type: 3}
+  timerFillSprite: {fileID: 5272401415994956661, guid: 467c70649612f434a92668383f1405fa, type: 3}

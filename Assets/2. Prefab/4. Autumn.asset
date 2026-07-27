@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489e1f6948168864ab2ffc613ddebf7e, type: 3}
+  m_Name: 4. Autumn
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeData
+  themeName: Autumn
+  mainMenuSprite: {fileID: -4178046375966092550, guid: 91865827994952e40848adbc1801773c, type: 3}
+  optionAndTableSprite: {fileID: -1540426309290004842, guid: 13a4cae736baa7e438b1cf6bfa5036e5, type: 3}
+  mapFillSprite: {fileID: 4164744761163438241, guid: 52d507b2be3ebfc4dabf219f03d55cb8, type: 3}
+  timerFillSprite: {fileID: -796155573255488767, guid: ef130e3be1442cd4f8ee63f0492f04ef, type: 3}

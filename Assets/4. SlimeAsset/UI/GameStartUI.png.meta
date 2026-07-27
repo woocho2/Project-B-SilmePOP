@@ -1,0 +1,269 @@
+fileFormatVersion: 2
+guid: 142e0cc5a8dcc9449bf8a6983fe308eb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3934597994281241375
+    second: GameStartUI_0
+  - first:
+      213: 7108192792978745965
+    second: GameStartUI_1
+  - first:
+      213: -3612827377033802655
+    second: GameStartUI_2
+  - first:
+      213: 5422709554134562428
+    second: GameStartUI_3
+  - first:
+      213: -1906538067032807190
+    second: GameStartUI_4
+  - first:
+      213: -7840315422809809381
+    second: GameStartUI_5
+  - first:
+      213: 1041818130458797777
+    second: GameStartUI_6
+  - first:
+      213: 6653006091701154307
+    second: GameStartUI_7
+  - first:
+      213: -1183194264069826488
+    second: GameStartUI_8
+  - first:
+      213: -3682058144034104732
+    second: GameStartUI_9
+  - first:
+      213: 8681576609518833256
+    second: GameStartUI_10
+  - first:
+      213: -722952240504522803
+    second: GameStartUI_11
+  - first:
+      213: 4365106059659877470
+    second: GameStartUI_12
+  - first:
+      213: 4735806715766320216
+    second: GameStartUI_13
+  - first:
+      213: -2502725401195320247
+    second: GameStartUI_14
+  - first:
+      213: 7410545776720437637
+    second: GameStartUI_15
+  - first:
+      213: 8125852989794300784
+    second: GameStartUI_16
+  - first:
+      213: -3315024628123586325
+    second: GameStartUI_17
+  - first:
+      213: -6633843338272829887
+    second: GameStartUI_18
+  - first:
+      213: -5314605384758118529
+    second: GameStartUI_19
+  - first:
+      213: 2466729260968958828
+    second: GameStartUI_20
+  - first:
+      213: -2456768499002893965
+    second: GameStartUI_21
+  - first:
+      213: 8152519628962509238
+    second: GameStartUI_22
+  - first:
+      213: 275630819235871144
+    second: GameStartUI_23
+  - first:
+      213: -7343593821639984864
+    second: GameStartUI_24
+  - first:
+      213: 2397631357334320825
+    second: GameStartUI_25
+  - first:
+      213: 2748763952088174716
+    second: GameStartUI_26
+  - first:
+      213: 4414334645905098996
+    second: GameStartUI_27
+  - first:
+      213: 7875297104887780721
+    second: GameStartUI_28
+  - first:
+      213: 5148631554043499872
+    second: GameStartUI_29
+  - first:
+      213: 7216432954685827695
+    second: GameStartUI_30
+  - first:
+      213: -8129728856666945260
+    second: GameStartUI_31
+  - first:
+      213: 6272281789395880325
+    second: GameStartUI_32
+  - first:
+      213: -1684823491454109701
+    second: GameStartUI_33
+  - first:
+      213: 7289481614853129347
+    second: GameStartUI_34
+  - first:
+      213: 6846727612066918678
+    second: GameStartUI_35
+  - first:
+      213: 9138345502752789838
+    second: GameStartUI_36
+  - first:
+      213: 8575117669342839232
+    second: GameStartUI_37
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 2048
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GameStartUI_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2760
+        height: 1504
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e4f6e878ff7569c0800000000000000
+      internalID: -3934597994281241375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 07d394aa787e41c4ca56550a954d6e84
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":2760.0,"y":1504.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      GameStartUI_0: -3934597994281241375
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

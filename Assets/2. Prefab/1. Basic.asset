@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489e1f6948168864ab2ffc613ddebf7e, type: 3}
+  m_Name: 1. Basic
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeData
+  themeName: Basic
+  mainMenuSprite: {fileID: -855298285791758126, guid: ac24100418498a1429c1a2e67e2ade5f, type: 3}
+  optionAndTableSprite: {fileID: 4113829005332862926, guid: 268282c99caf5734599696fc92239849, type: 3}
+  mapFillSprite: {fileID: 6660783624410144326, guid: 32e1906b4b370a342875056d7793c752, type: 3}
+  timerFillSprite: {fileID: 6894999169920593895, guid: 8d24b32ee67245d4f9ab68e6cfaecf71, type: 3}
