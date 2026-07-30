@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// TreeEditor 네임스페이스 삭제 완료 (빌드 에러 방지)
-
 public class Change : MonoBehaviour
 {
     public enum Category
@@ -14,7 +12,8 @@ public class Change : MonoBehaviour
     public enum SlimePart
     {
         Color,
-        Face
+        Face,
+        Costume // 코스튬 부위 추가
     }
 
     public enum MapPart
@@ -42,10 +41,7 @@ public class Change : MonoBehaviour
 
     private void OnEnable()
     {
-        // 이벤트 관리를 단일 메서드로 통합하여 중복 제거
         ManageEvents(true);
-
-        // 씬 활성화 시점에 저장된 데이터를 즉시 불러옴 (Start()에서의 중복 호출 제거)
         ApplySavedData();
     }
 
@@ -53,7 +49,6 @@ public class Change : MonoBehaviour
     {
         ManageEvents(false);
     }
-
 
     private void ManageEvents(bool subscribe)
     {
@@ -63,12 +58,14 @@ public class Change : MonoBehaviour
             {
                 UIManager_Menu.Instance.OnColorChanged += ApplyColor;
                 UIManager_Menu.Instance.OnFaceChanged += ApplyFace;
+                UIManager_Menu.Instance.OnCostumeChanged += ApplyCostume; // 코스튬 이벤트 구독
                 UIManager_Menu.Instance.OnMapChanged += ApplyMap;
             }
             else
             {
                 UIManager_Menu.Instance.OnColorChanged -= ApplyColor;
                 UIManager_Menu.Instance.OnFaceChanged -= ApplyFace;
+                UIManager_Menu.Instance.OnCostumeChanged -= ApplyCostume; // 코스튬 이벤트 해제
                 UIManager_Menu.Instance.OnMapChanged -= ApplyMap;
             }
         }
@@ -79,12 +76,14 @@ public class Change : MonoBehaviour
             {
                 UIManager_Game.Instance.OnColorChanged += ApplyColor;
                 UIManager_Game.Instance.OnFaceChanged += ApplyFace;
+                UIManager_Game.Instance.OnCostumeChanged += ApplyCostume; // 코스튬 이벤트 구독
                 UIManager_Game.Instance.OnMapChanged += ApplyMap;
             }
             else
             {
                 UIManager_Game.Instance.OnColorChanged -= ApplyColor;
                 UIManager_Game.Instance.OnFaceChanged -= ApplyFace;
+                UIManager_Game.Instance.OnCostumeChanged -= ApplyCostume; // 코스튬 이벤트 해제
                 UIManager_Game.Instance.OnMapChanged -= ApplyMap;
             }
         }
@@ -102,10 +101,18 @@ public class Change : MonoBehaviour
             {
                 ApplyFace(ChangeData.SelectedFace);
             }
+            else if (slimepart == SlimePart.Costume) // 코스튬 초기 데이터 불러오기
+            {
+                ApplyCostume(ChangeData.SelectedCostume);
+            }
         }
         else if (category == Category.Map)
         {
-            if (ChangeData.SelectedMapTheme != null)
+            if (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar)
+            {
+                ApplyColor(ChangeData.SelectedColor);
+            }
+            else if (ChangeData.SelectedMapTheme != null)
             {
                 ApplyMap(ChangeData.SelectedMapTheme);
             }
@@ -114,14 +121,20 @@ public class Change : MonoBehaviour
 
     public void ApplyColor(Color color)
     {
-        if (category != Category.Slime || slimepart != SlimePart.Color) return;
-
-        if (targetimg != null) targetimg.color = color;
-        if (targetsr != null) targetsr.color = color;
-
-        if (slimeController != null)
+        if (category == Category.Slime && slimepart == SlimePart.Color)
         {
-            slimeController.SetSlimeColor(color);
+            if (targetimg != null) targetimg.color = color;
+            if (targetsr != null) targetsr.color = color;
+
+            if (slimeController != null)
+            {
+                slimeController.SetSlimeColor(color);
+            }
+        }
+        else if (category == Category.Map && (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar))
+        {
+            if (targetimg != null) targetimg.color = color;
+            if (targetsr != null) targetsr.color = color;
         }
     }
 
@@ -134,17 +147,25 @@ public class Change : MonoBehaviour
         if (targetsr != null) targetsr.sprite = faceSprite;
     }
 
+    // 코스튬 적용 메서드 추가
+    public void ApplyCostume(Sprite costumeSprite)
+    {
+        if (category != Category.Slime || slimepart != SlimePart.Costume) return;
+        if (costumeSprite == null) return;
+
+        if (targetimg != null) targetimg.sprite = costumeSprite;
+        if (targetsr != null) targetsr.sprite = costumeSprite;
+    }
 
     public void ApplyMap(ThemeData themeData)
     {
         if (category != Category.Map || themeData == null) return;
+        if (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar) return;
 
         Sprite spriteToApply = mappart switch
         {
             MapPart.Menu => themeData.mainMenuSprite,
             MapPart.GameTable => themeData.optionAndTableSprite,
-            MapPart.SliderBar => themeData.mapFillSprite,
-            MapPart.TimerBar => themeData.timerFillSprite,
             _ => null
         };
 

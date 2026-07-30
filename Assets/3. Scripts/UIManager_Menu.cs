@@ -8,6 +8,7 @@ public class UIManager_Menu : MonoBehaviour
 
     public event UnityAction<Color> OnColorChanged;
     public event UnityAction<Sprite> OnFaceChanged;
+    public event UnityAction<Sprite> OnCostumeChanged; // 코스튬 이벤트 추가
     public event UnityAction<ThemeData> OnMapChanged;
 
     [Header("Panels & UI Elements")]
@@ -37,17 +38,21 @@ public class UIManager_Menu : MonoBehaviour
     [Header("Custom Color Settings")]
     [SerializeField] private Button btn_slimeCustom;
     [SerializeField] private GameObject ColorPallet;
-    [SerializeField] private FlexibleColorPicker fcp; // FCP 연동용 변수 추가
+    [SerializeField] private FlexibleColorPicker fcp;
 
     [Header("Slime Face Settings")]
     [SerializeField] private Button btn_slimeNone;
     [SerializeField] private Button btn_slimeNormal;
+
+    [Header("Slime Costume Settings")]
+    [SerializeField] private Button btn_slimeCostumeNone;
     [SerializeField] private Button btn_slimeDemon;
     [SerializeField] private Button btn_slimeAngel;
     [SerializeField] private Button btn_slimeKing;
 
     [SerializeField] private Sprite spr_slimeNone;
     [SerializeField] private Sprite spr_slimeNormal;
+
     [SerializeField] private Sprite spr_slimeDemon;
     [SerializeField] private Sprite spr_slimeAngel;
     [SerializeField] private Sprite spr_slimeKing;
@@ -91,7 +96,6 @@ public class UIManager_Menu : MonoBehaviour
         BindSlimeFaceButtons();
         BindMapButtons();
 
-        // 컬러 피커에서 색상이 변경될 때 FCP 전용 메서드 실행 (커스텀 값 저장 기능 포함)
         if (fcp != null)
         {
             fcp.onColorChange.AddListener(ChangeCustomSlimeColor);
@@ -106,7 +110,6 @@ public class UIManager_Menu : MonoBehaviour
         if (Panel_Help != null) Panel_Help.SetActive(false);
         if (img_Check != null) img_Check.enabled = false;
 
-        // 초기화 시 팔레트 창은 닫아둡니다.
         if (ColorPallet != null) ColorPallet.SetActive(false);
     }
 
@@ -150,25 +153,19 @@ public class UIManager_Menu : MonoBehaviour
         BindColor(btn_slimeYellowGreen, ChangeData.HEX_YELLOWGREEN);
         BindColor(btn_slimeBrown, ChangeData.HEX_BROWN);
 
-        // 커스텀 컬러 버튼 클릭 시 팔레트를 열면서 이전에 저장된 값을 FCP에 반영
         if (btn_slimeCustom != null && ColorPallet != null)
         {
             btn_slimeCustom.onClick.RemoveAllListeners();
             btn_slimeCustom.onClick.AddListener(() =>
             {
                 bool willBeActive = !ColorPallet.activeSelf;
-
-                // 1. 창이 열리기 직전, 덮어씌워지기 전의 안전한 커스텀 컬러를 임시 백업합니다.
                 Color backupColor = ChangeData.LastCustomColor;
-
-                // 2. 창 활성화 (이 순간 FCP 내부 로직에 의해 빨간색 이벤트가 발생하며 LastCustomColor가 오염됨)
                 ColorPallet.SetActive(willBeActive);
 
-                // 3. 창이 열렸다면, 오염된 데이터를 백업본으로 복구하고 FCP UI에도 강제 적용합니다.
                 if (willBeActive && fcp != null)
                 {
-                    ChangeData.LastCustomColor = backupColor; // 오염된 데이터 원상 복구
-                    fcp.color = backupColor; // FCP에 다시 전달 (이때 올바른 색상으로 이벤트가 재발생함)
+                    ChangeData.LastCustomColor = backupColor;
+                    fcp.color = backupColor;
                 }
             });
         }
@@ -176,11 +173,15 @@ public class UIManager_Menu : MonoBehaviour
 
     private void BindSlimeFaceButtons()
     {
+        // 얼굴은 Face로
         BindSprite(btn_slimeNone, spr_slimeNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
-        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeFace);
-        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeFace);
-        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeFace);
+
+        // 악마, 천사, 왕관은 Costume으로 분리 연결
+        BindSprite(btn_slimeCostumeNone, spr_slimeNone, ChangeSlimeCostume);
+        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
+        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
+        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
     }
 
     private void BindMapButtons()
@@ -246,7 +247,6 @@ public class UIManager_Menu : MonoBehaviour
         btn.onClick.AddListener(() => ChangeMap(theme));
     }
 
-    // 기본 프리셋 버튼 전용 색상 적용 메서드
     private void ChangeSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
@@ -254,12 +254,11 @@ public class UIManager_Menu : MonoBehaviour
         OnColorChanged?.Invoke(newColor);
     }
 
-    // FCP(커스텀 컬러 팔레트) 전용 색상 적용 메서드 (LastCustomColor 저장 기능 포함)[cite: 37]
     private void ChangeCustomSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
         ChangeData.SelectedColor = newColor;
-        ChangeData.LastCustomColor = newColor; // 컬러 피커에서 선택한 값을 따로 저장[cite: 37]
+        ChangeData.LastCustomColor = newColor;
         OnColorChanged?.Invoke(newColor);
     }
 
@@ -267,7 +266,6 @@ public class UIManager_Menu : MonoBehaviour
     {
         if (btn_slimeCustom != null && btn_slimeCustom.image != null)
         {
-            // 버튼이 투명해지지 않도록 알파값을 완전히 불투명(1.0f)하게 고정
             newColor.a = 1.0f;
             btn_slimeCustom.image.color = newColor;
         }
@@ -278,6 +276,14 @@ public class UIManager_Menu : MonoBehaviour
         if (newSprite == null) return;
         ChangeData.SelectedFace = newSprite;
         OnFaceChanged?.Invoke(newSprite);
+    }
+
+    // 코스튬 전용 메서드 추가
+    private void ChangeSlimeCostume(Sprite newSprite)
+    {
+        if (newSprite == null) return;
+        ChangeData.SelectedCostume = newSprite;
+        OnCostumeChanged?.Invoke(newSprite);
     }
 
     private void ChangeMap(ThemeData newTheme)
@@ -294,10 +300,9 @@ public class UIManager_Menu : MonoBehaviour
 
     private void OnDestroy()
     {
-        // 메모리 누수 방지용 이벤트 리스너 해제
         if (fcp != null)
         {
-            fcp.onColorChange.RemoveListener(ChangeCustomSlimeColor); // 변경된 메서드로 해제
+            fcp.onColorChange.RemoveListener(ChangeCustomSlimeColor);
             fcp.onColorChange.RemoveListener(ChangeCustomButtonColor);
         }
 

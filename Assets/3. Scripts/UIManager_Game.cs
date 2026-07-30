@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEngine.InputSystem; // 키보드 입력을 받기 위해 추가
+using UnityEngine.InputSystem;
 
 public class UIManager_Game : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class UIManager_Game : MonoBehaviour
 
     public event UnityAction<Color> OnColorChanged;
     public event UnityAction<Sprite> OnFaceChanged;
+    public event UnityAction<Sprite> OnCostumeChanged; // 코스튬 이벤트 추가
     public event UnityAction<ThemeData> OnMapChanged;
 
     [SerializeField] private DragManager m_dragManager;
@@ -23,7 +24,6 @@ public class UIManager_Game : MonoBehaviour
     [SerializeField] private Button btn_exact;
     [SerializeField] private Button btn_mix;
     [SerializeField] private GameObject m_score;
-
 
     [Header("MainMenu Panel")]
     [SerializeField] private GameObject Panel_Main;
@@ -61,12 +61,15 @@ public class UIManager_Game : MonoBehaviour
     [Header("Slime Face Settings")]
     [SerializeField] private Button btn_slimeNone;
     [SerializeField] private Button btn_slimeNormal;
+
+    [Header("Slime Costume Settings")]
     [SerializeField] private Button btn_slimeDemon;
     [SerializeField] private Button btn_slimeAngel;
     [SerializeField] private Button btn_slimeKing;
 
     [SerializeField] private Sprite spr_slimeNone;
     [SerializeField] private Sprite spr_slimeNormal;
+
     [SerializeField] private Sprite spr_slimeDemon;
     [SerializeField] private Sprite spr_slimeAngel;
     [SerializeField] private Sprite spr_slimeKing;
@@ -188,7 +191,6 @@ public class UIManager_Game : MonoBehaviour
             }
         }
 
-        // 스킬 단축키(S) 및 믹스 단축키(D) 입력 감지 (게임 진행 중일 때만 작동)
         if (isTimerRunning && Keyboard.current != null)
         {
             if (Keyboard.current.sKey.wasPressedThisFrame)
@@ -202,7 +204,6 @@ public class UIManager_Game : MonoBehaviour
         }
     }
 
-    // 스킬 발동 전용 메서드 분리
     private void UseSkill()
     {
         if (SlimeManager.Instance != null)
@@ -211,7 +212,6 @@ public class UIManager_Game : MonoBehaviour
         }
     }
 
-    // 믹스 기능 전용 메서드 분리
     private void UseMix()
     {
         if (SlimeManager.Instance != null)
@@ -241,7 +241,6 @@ public class UIManager_Game : MonoBehaviour
             btn_exact.onClick.AddListener(UseSkill);
         }
 
-        // Mix 버튼 바인딩 추가
         if (btn_mix != null)
         {
             btn_mix.onClick.RemoveAllListeners();
@@ -330,6 +329,7 @@ public class UIManager_Game : MonoBehaviour
 
                 OnColorChanged?.Invoke(ChangeData.SelectedColor);
                 if (ChangeData.SelectedFace != null) OnFaceChanged?.Invoke(ChangeData.SelectedFace);
+                if (ChangeData.SelectedCostume != null) OnCostumeChanged?.Invoke(ChangeData.SelectedCostume); // 옵션 나갈 때 이벤트 발송
                 if (ChangeData.SelectedMapTheme != null) OnMapChanged?.Invoke(ChangeData.SelectedMapTheme);
             });
         }
@@ -384,11 +384,14 @@ public class UIManager_Game : MonoBehaviour
 
     private void BindSlimeFaceButtons()
     {
+        // 얼굴은 Face로
         BindSprite(btn_slimeNone, spr_slimeNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
-        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeFace);
-        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeFace);
-        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeFace);
+
+        // 악마, 천사, 왕관은 Costume으로 분리 연결
+        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
+        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
+        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
     }
 
     private void BindMapButtons()
@@ -456,6 +459,14 @@ public class UIManager_Game : MonoBehaviour
         if (newSprite == null) return;
         ChangeData.SelectedFace = newSprite;
         OnFaceChanged?.Invoke(newSprite);
+    }
+
+    // 코스튬 전용 메서드 추가
+    private void ChangeSlimeCostume(Sprite newSprite)
+    {
+        if (newSprite == null) return;
+        ChangeData.SelectedCostume = newSprite;
+        OnCostumeChanged?.Invoke(newSprite);
     }
 
     private void ChangeMap(ThemeData newTheme)
