@@ -119,12 +119,12 @@ public class UIManager_Menu : MonoBehaviour
 
         if (Panel_MainMenu != null)
         {
-            Panel_MainMenu.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.mainMenuSprite;
+            Panel_MainMenu.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.MenuSprite;
         }
 
         if (Panel_Option != null)
         {
-            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.optionAndTableSprite;
+            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.TableSprite;
         }
     }
 
@@ -292,8 +292,8 @@ public class UIManager_Menu : MonoBehaviour
 
         ChangeData.SelectedMapTheme = newTheme;
 
-        if (Panel_MainMenu != null) Panel_MainMenu.GetComponent<Image>().sprite = newTheme.mainMenuSprite;
-        if (Panel_Option != null) Panel_Option.GetComponent<Image>().sprite = newTheme.optionAndTableSprite;
+        if (Panel_MainMenu != null) Panel_MainMenu.GetComponent<Image>().sprite = newTheme.MenuSprite;
+        if (Panel_Option != null) Panel_Option.GetComponent<Image>().sprite = newTheme.TableSprite;
 
         OnMapChanged?.Invoke(newTheme);
     }

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 2. Spring
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Spring
-  mainMenuSprite: {fileID: 6937817954938267909, guid: c3a82c4ef20612a418f5e22a78a1fd5a, type: 3}
-  optionAndTableSprite: {fileID: -5099292496197868168, guid: 3225a49f2d3afea45a34902db71f24a0, type: 3}
-  mapFillSprite: {fileID: 2960402581040015946, guid: 655a87e57178594459d84f8aba42529e, type: 3}
-  timerFillSprite: {fileID: -1045133410153605164, guid: d4c5a63b4d3fa44489fa452ecda73b91, type: 3}
+  MenuSprite: {fileID: 1736751061090966224, guid: cef0128a4fe08704d8b9745f5c8509e5, type: 3}
+  TableSprite: {fileID: -3430392972040898859, guid: 55fd695a0383fcb4d95e81cd8e29f9e3, type: 3}
+  SlimeSprite: {fileID: 21300000, guid: f1f407918476a1343ac4a90d1c199854, type: 3}

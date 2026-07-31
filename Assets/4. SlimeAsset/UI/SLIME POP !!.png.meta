@@ -1,0 +1,1040 @@
+fileFormatVersion: 2
+guid: 01ac3b3d79fe8e74ca457b87851d947c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8661673280570430111
+    second: SLIME POP !!_0
+  - first:
+      213: 6178861196978929472
+    second: SLIME POP !!_1
+  - first:
+      213: 1728305331927657932
+    second: SLIME POP !!_2
+  - first:
+      213: -6482354334352512734
+    second: SLIME POP !!_3
+  - first:
+      213: 3891849178211966314
+    second: SLIME POP !!_4
+  - first:
+      213: -6663872082900658279
+    second: SLIME POP !!_5
+  - first:
+      213: -8445207370488396403
+    second: SLIME POP !!_6
+  - first:
+      213: 2961588795924451429
+    second: SLIME POP !!_7
+  - first:
+      213: -6258443679324668808
+    second: SLIME POP !!_8
+  - first:
+      213: -6404925754427904629
+    second: SLIME POP !!_9
+  - first:
+      213: -5509323056758819937
+    second: SLIME POP !!_10
+  - first:
+      213: 1601772323468122079
+    second: SLIME POP !!_11
+  - first:
+      213: -1635535096827678094
+    second: SLIME POP !!_12
+  - first:
+      213: -3906263895070647387
+    second: SLIME POP !!_13
+  - first:
+      213: 8105673988694009990
+    second: SLIME POP !!_14
+  - first:
+      213: -1429689345766462761
+    second: SLIME POP !!_15
+  - first:
+      213: -2734634430351930961
+    second: SLIME POP !!_16
+  - first:
+      213: -5656387894123424520
+    second: SLIME POP !!_17
+  - first:
+      213: 534909998601599326
+    second: SLIME POP !!_18
+  - first:
+      213: -4716933167087684833
+    second: SLIME POP !!_19
+  - first:
+      213: -7503737339394401421
+    second: SLIME POP !!_20
+  - first:
+      213: 478874952717437404
+    second: SLIME POP !!_21
+  - first:
+      213: -4522063984960723503
+    second: SLIME POP !!_22
+  - first:
+      213: -5942100014867932712
+    second: SLIME POP !!_23
+  - first:
+      213: -5797049603710583195
+    second: SLIME POP !!_24
+  - first:
+      213: -2132466021261486148
+    second: SLIME POP !!_25
+  - first:
+      213: -5879558457425869871
+    second: SLIME POP !!_26
+  - first:
+      213: 9058331173452949738
+    second: SLIME POP !!_27
+  - first:
+      213: 5511213418244509205
+    second: SLIME POP !!_28
+  - first:
+      213: 5377091207131796163
+    second: SLIME POP !!_29
+  - first:
+      213: 141680919167711150
+    second: SLIME POP !!_30
+  - first:
+      213: 2389352880656760357
+    second: SLIME POP !!_31
+  - first:
+      213: -3421179219151883466
+    second: SLIME POP !!_32
+  - first:
+      213: 6725194356252028618
+    second: SLIME POP !!_33
+  - first:
+      213: -5400174364795680366
+    second: SLIME POP !!_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SLIME POP !!_0
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 1319
+        width: 25
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9294e805f1743870800000000000000
+      internalID: 8661673280570430111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_1
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 1303
+        width: 33
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04fbf5a8589bfb550800000000000000
+      internalID: 6178861196978929472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_2
+      rect:
+        serializedVersion: 2
+        x: 1927
+        y: 1243
+        width: 130
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccd26fcda8c2cf710800000000000000
+      internalID: 1728305331927657932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_3
+      rect:
+        serializedVersion: 2
+        x: 2381
+        y: 1334
+        width: 37
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22964b0f31d0a06a0800000000000000
+      internalID: -6482354334352512734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_4
+      rect:
+        serializedVersion: 2
+        x: 2390
+        y: 1218
+        width: 139
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6d58ba2530a20630800000000000000
+      internalID: 3891849178211966314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_5
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 1199
+        width: 143
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9975016b5ab2583a0800000000000000
+      internalID: -6663872082900658279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_6
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 1225
+        width: 60
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d85478324a89cca80800000000000000
+      internalID: -8445207370488396403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_7
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 1285
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5609ad7915da91920800000000000000
+      internalID: 2961588795924451429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_8
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 1207
+        width: 102
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87c701fd1aa8529a0800000000000000
+      internalID: -6258443679324668808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_9
+      rect:
+        serializedVersion: 2
+        x: 1852
+        y: 1272
+        width: 37
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8de29a06f12d17a0800000000000000
+      internalID: -6404925754427904629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_10
+      rect:
+        serializedVersion: 2
+        x: 2331
+        y: 1245
+        width: 53
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9375099ed3fa83b0800000000000000
+      internalID: -5509323056758819937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_11
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1246
+        width: 29
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd79e5f0173aa3610800000000000000
+      internalID: 1601772323468122079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_12
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 1208
+        width: 32
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 272f6efae796d49e0800000000000000
+      internalID: -1635535096827678094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_13
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 202
+        width: 957
+        height: 1040
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ab51670fa92ac9c0800000000000000
+      internalID: -3906263895070647387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_14
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 212
+        width: 993
+        height: 1025
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 688ea390c832d7070800000000000000
+      internalID: 8105673988694009990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_15
+      rect:
+        serializedVersion: 2
+        x: 2015
+        y: 740
+        width: 364
+        height: 494
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7daed666d19b82ce0800000000000000
+      internalID: -1429689345766462761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_16
+      rect:
+        serializedVersion: 2
+        x: 2514
+        y: 1218
+        width: 27
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa9025c6970ac0ad0800000000000000
+      internalID: -2734634430351930961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_17
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 1144
+        width: 104
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f414fadd297081b0800000000000000
+      internalID: -5656387894123424520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_18
+      rect:
+        serializedVersion: 2
+        x: 2402
+        y: 1136
+        width: 110
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e59f3754fc16c6700800000000000000
+      internalID: 534909998601599326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_19
+      rect:
+        serializedVersion: 2
+        x: 2409
+        y: 852
+        width: 62
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f13fa72a6461a8eb0800000000000000
+      internalID: -4716933167087684833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_20
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 613
+        width: 185
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37bdf8575ae5dd790800000000000000
+      internalID: -7503737339394401421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_21
+      rect:
+        serializedVersion: 2
+        x: 2029
+        y: 368
+        width: 181
+        height: 350
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd90e887b3e45a600800000000000000
+      internalID: 478874952717437404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_22
+      rect:
+        serializedVersion: 2
+        x: 2380
+        y: 689
+        width: 171
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d524dcb3c66e31c0800000000000000
+      internalID: -4522063984960723503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_23
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 519
+        width: 107
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d914f1e48b698da0800000000000000
+      internalID: -5942100014867932712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_24
+      rect:
+        serializedVersion: 2
+        x: 2214
+        y: 336
+        width: 193
+        height: 349
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ef289791ebc8fa0800000000000000
+      internalID: -5797049603710583195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_25
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 417
+        width: 90
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb75e13b375f762e0800000000000000
+      internalID: -2132466021261486148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_26
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 163
+        width: 127
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d3ccf4fbbc976ea0800000000000000
+      internalID: -5879558457425869871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_27
+      rect:
+        serializedVersion: 2
+        x: 1997
+        y: 207
+        width: 155
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae8a28b8538a5bd70800000000000000
+      internalID: 9058331173452949738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_28
+      rect:
+        serializedVersion: 2
+        x: 2172
+        y: 175
+        width: 155
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51e84db7763cb7c40800000000000000
+      internalID: 5511213418244509205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_29
+      rect:
+        serializedVersion: 2
+        x: 2362
+        y: 219
+        width: 65
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c297fdb6f34f9a40800000000000000
+      internalID: 5377091207131796163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_30
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 117
+        width: 99
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea7317a9b0a57f100800000000000000
+      internalID: 141680919167711150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_31
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 129
+        width: 39
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52e3a9e19cfa82120800000000000000
+      internalID: 2389352880656760357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_32
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 146
+        width: 58
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 633f08950a78580d0800000000000000
+      internalID: -3421179219151883466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_33
+      rect:
+        serializedVersion: 2
+        x: 2325
+        y: 126
+        width: 34
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ace2dd9a2a0b45d50800000000000000
+      internalID: 6725194356252028618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SLIME POP !!_34
+      rect:
+        serializedVersion: 2
+        x: 2353
+        y: 132
+        width: 93
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 299ce2dc60abe05b0800000000000000
+      internalID: -5400174364795680366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      SLIME POP !!_0: 8661673280570430111
+      SLIME POP !!_1: 6178861196978929472
+      SLIME POP !!_10: -5509323056758819937
+      SLIME POP !!_11: 1601772323468122079
+      SLIME POP !!_12: -1635535096827678094
+      SLIME POP !!_13: -3906263895070647387
+      SLIME POP !!_14: 8105673988694009990
+      SLIME POP !!_15: -1429689345766462761
+      SLIME POP !!_16: -2734634430351930961
+      SLIME POP !!_17: -5656387894123424520
+      SLIME POP !!_18: 534909998601599326
+      SLIME POP !!_19: -4716933167087684833
+      SLIME POP !!_2: 1728305331927657932
+      SLIME POP !!_20: -7503737339394401421
+      SLIME POP !!_21: 478874952717437404
+      SLIME POP !!_22: -4522063984960723503
+      SLIME POP !!_23: -5942100014867932712
+      SLIME POP !!_24: -5797049603710583195
+      SLIME POP !!_25: -2132466021261486148
+      SLIME POP !!_26: -5879558457425869871
+      SLIME POP !!_27: 9058331173452949738
+      SLIME POP !!_28: 5511213418244509205
+      SLIME POP !!_29: 5377091207131796163
+      SLIME POP !!_3: -6482354334352512734
+      SLIME POP !!_30: 141680919167711150
+      SLIME POP !!_31: 2389352880656760357
+      SLIME POP !!_32: -3421179219151883466
+      SLIME POP !!_33: 6725194356252028618
+      SLIME POP !!_34: -5400174364795680366
+      SLIME POP !!_4: 3891849178211966314
+      SLIME POP !!_5: -6663872082900658279
+      SLIME POP !!_6: -8445207370488396403
+      SLIME POP !!_7: 2961588795924451429
+      SLIME POP !!_8: -6258443679324668808
+      SLIME POP !!_9: -6404925754427904629
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

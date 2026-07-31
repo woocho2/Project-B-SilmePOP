@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 4. Autumn
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Autumn
-  mainMenuSprite: {fileID: -4178046375966092550, guid: 91865827994952e40848adbc1801773c, type: 3}
-  optionAndTableSprite: {fileID: -1540426309290004842, guid: 13a4cae736baa7e438b1cf6bfa5036e5, type: 3}
-  mapFillSprite: {fileID: 4164744761163438241, guid: 52d507b2be3ebfc4dabf219f03d55cb8, type: 3}
-  timerFillSprite: {fileID: -796155573255488767, guid: ef130e3be1442cd4f8ee63f0492f04ef, type: 3}
+  MenuSprite: {fileID: -2520884516793374094, guid: 8b3c3efebf962904f939ac66ce03ed42, type: 3}
+  TableSprite: {fileID: -813317381007010780, guid: 34b9dffd172861746b743b716114d0f3, type: 3}
+  SlimeSprite: {fileID: 21300000, guid: fbabc0b8edf81824e86f002f33978e75, type: 3}

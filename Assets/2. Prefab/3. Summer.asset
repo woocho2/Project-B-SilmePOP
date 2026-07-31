@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 3. Summer
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Summer
-  mainMenuSprite: {fileID: -6470460504253458178, guid: 27a6318e85f735140b311140756aed7e, type: 3}
-  optionAndTableSprite: {fileID: -2966200626249415253, guid: 594cdcc50da9b754c9dd3969b8bc240a, type: 3}
-  mapFillSprite: {fileID: 7157561037332017152, guid: adec4c435d034574cbedd8ae9d6b62c0, type: 3}
-  timerFillSprite: {fileID: -5622901713081898559, guid: b71fdeb681d8ea941a0fd10b5a52169d, type: 3}
+  MenuSprite: {fileID: 7525894607228934283, guid: 22a955e08bce3484ea24e090d0c13d2c, type: 3}
+  TableSprite: {fileID: -3146999727782344165, guid: 70da718f758e8e04a870352d8c078b56, type: 3}
+  SlimeSprite: {fileID: 21300000, guid: 3ac7dbf399434524b820a90cbefe45bb, type: 3}

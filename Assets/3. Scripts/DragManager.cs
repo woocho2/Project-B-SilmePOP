@@ -5,8 +5,10 @@ using UnityEngine.InputSystem;
 
 public class DragManager : MonoBehaviour
 {
+    public static DragManager Instance { get; private set; } // 외부 접근용 싱글톤 추가
+
     [Header("World Drag Box Prefab/Object")]
-    [SerializeField] private GameObject dragBoxPrefab; // SpriteRenderer + BoxCollider2D + DragBoxArea가 붙은 프리팹
+    [SerializeField] private GameObject dragBoxPrefab;
     private GameObject currentDragBox;
     private DragBoxArea dragBoxArea;
 
@@ -16,9 +18,18 @@ public class DragManager : MonoBehaviour
     private Vector2 startPosWorld;
     private bool isDragging = false;
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private void Start()
     {
-        // 드래그 박스 프리팹을 미리 1개 생성해 두고 비활성화 처리 (성능 최적화)
         if (dragBoxPrefab != null)
         {
             currentDragBox = Instantiate(dragBoxPrefab);
@@ -34,6 +45,12 @@ public class DragManager : MonoBehaviour
     private void Update()
     {
         if (Mouse.current == null) return;
+
+        // 슬라임 단일 파괴 스킬이 켜져 있는 동안에는 드래그 로직을 완전히 차단합니다.
+        if (SlimeManager.Instance != null && SlimeManager.Instance.IsDestroySkillActive)
+        {
+            return;
+        }
 
         // 1. 드래그 시작
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -68,8 +85,6 @@ public class DragManager : MonoBehaviour
             if (dragBoxArea != null)
             {
                 int previousScore = totalScore;
-
-                // 충돌체에 감지된 슬라임 계산 실행
                 dragBoxArea.EvaluateSlimes(ref totalScore);
 
                 if (previousScore != totalScore)
@@ -88,7 +103,6 @@ public class DragManager : MonoBehaviour
     public void ResetDragManager()
     {
         totalScore = 0;
-
         OnScoreChanged?.Invoke(totalScore);
 
         if (currentDragBox != null)
@@ -97,17 +111,23 @@ public class DragManager : MonoBehaviour
         }
     }
 
-    // 월드 좌표 기준 드래그 박스의 위치와 크기를 수정하는 메서드
     private void UpdateDragBoxTransform(Vector2 start, Vector2 end)
     {
-        // 1. 위치 설정 (두점의 중간값)
         Vector2 center = (start + end) / 2f;
         currentDragBox.transform.position = center;
 
-        // 2. 스케일 크기 설정 (기본 Sprite 스케일이 1x1 단위일 때)
         float width = Mathf.Abs(start.x - end.x);
         float height = Mathf.Abs(start.y - end.y);
 
         currentDragBox.transform.localScale = new Vector3(width, height, 1f);
+    }
+
+    /// <summary>
+    /// 외부 스크립트에서 점수를 강제로 올릴 때 호출하는 메서드입니다.
+    /// </summary>
+    public void AddScore(int scoreToAdd)
+    {
+        totalScore += scoreToAdd;
+        OnScoreChanged?.Invoke(totalScore);
     }
 }

@@ -1,20 +1,25 @@
 using UnityEngine;
-using System.Collections.Generic; // List 자료구조 사용을 위해 추가
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class SlimeManager : MonoBehaviour
 {
-    public static SlimeManager Instance { get; private set; } // 외부 접근을 위한 싱글톤
+    public static SlimeManager Instance { get; private set; }
 
     [Header("Slime Settings")]
     [SerializeField] GameObject slimePrefab;
 
     [Header("Grid Settings")]
-    [SerializeField] int columns = 17;       // 가로 칸 수 (X축)
-    [SerializeField] int rows = 10;          // 세로 칸 수 (Y축)
+    [SerializeField] int columns = 17;
+    [SerializeField] int rows = 10;
 
     [SerializeField] Vector2 areaSize = new Vector2(10f, 6f);
 
-    private SlimeController[,] slimeGrid; // 슬라임을 추적할 2차원 배열
+    private SlimeController[,] slimeGrid;
+
+    public bool IsDestroySkillActive { get; private set; } = false;
+
+    private SlimeController currentHoveredSlime;
 
     private void Awake()
     {
@@ -31,6 +36,103 @@ public class SlimeManager : MonoBehaviour
         GenerateSlimeGrid();
     }
 
+    private void Update()
+    {
+        if (IsDestroySkillActive && Mouse.current != null)
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            SlimeController targetSlime = null;
+            if (hit.collider != null)
+            {
+                targetSlime = hit.collider.GetComponent<SlimeController>();
+            }
+
+            if (currentHoveredSlime != targetSlime)
+            {
+                if (currentHoveredSlime != null)
+                {
+                    currentHoveredSlime.SetDestroyHoverHighlight(false);
+                }
+
+                if (targetSlime != null && targetSlime.gameObject.activeInHierarchy)
+                {
+                    targetSlime.SetDestroyHoverHighlight(true);
+                }
+
+                currentHoveredSlime = targetSlime;
+            }
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                if (targetSlime != null && targetSlime.gameObject.activeInHierarchy)
+                {
+                    DestroySpecificSlimeAndAddScore(targetSlime);
+                }
+
+                IsDestroySkillActive = false;
+                ChangeAllSlimesColliderSize(0.1f, 0.1f);
+
+                if (currentHoveredSlime != null)
+                {
+                    currentHoveredSlime.SetDestroyHoverHighlight(false);
+                    currentHoveredSlime = null;
+                }
+            }
+        }
+    }
+
+    public void ActivateDestroySkill()
+    {
+        IsDestroySkillActive = true;
+        ChangeAllSlimesColliderSize(1f, 1f);
+        Debug.Log("파괴 스킬 장전 완료: 타겟 슬라임을 클릭하세요.");
+    }
+
+    private void ChangeAllSlimesColliderSize(float sizeX, float sizeY)
+    {
+        if (slimeGrid == null) return;
+
+        foreach (SlimeController slime in slimeGrid)
+        {
+            if (slime != null && slime.gameObject.activeInHierarchy)
+            {
+                slime.SetColliderSize(sizeX, sizeY);
+            }
+        }
+    }
+
+    private void DestroySpecificSlimeAndAddScore(SlimeController targetSlime)
+    {
+        targetSlime.gameObject.SetActive(false);
+        Destroy(targetSlime.gameObject);
+
+        if (DragManager.Instance != null)
+        {
+            DragManager.Instance.AddScore(1);
+        }
+
+        // 잔여 슬라임 조합 검사
+        if (!HasAvailableMatches())
+        {
+            Debug.Log("더 이상 맞출 수 있는 슬라임이 없습니다");
+
+            bool canUseSkill = false;
+            if (UIManager_Game.Instance != null)
+            {
+                // UIManager_Game에 추가된 메서드로 스킬 잔여 횟수 체크
+                canUseSkill = UIManager_Game.Instance.HasAnySkillLeft();
+            }
+
+            // 스킬을 하나도 쓸 수 없는 상황이라면 게임 오버 처리
+            if (!canUseSkill && GameManager.Instance != null)
+            {
+                GameManager.Instance.GameOver();
+            }
+        }
+    }
+
     private void GenerateSlimeGrid()
     {
         if (slimePrefab == null)
@@ -39,7 +141,6 @@ public class SlimeManager : MonoBehaviour
             return;
         }
 
-        // 새 게임이 시작될 때마다 배열 초기화
         slimeGrid = new SlimeController[columns, rows];
 
         Vector2 startPos = new Vector2(
@@ -60,13 +161,16 @@ public class SlimeManager : MonoBehaviour
                 );
 
                 GameObject newSlime = Instantiate(slimePrefab, spawnPosition, Quaternion.identity, transform);
-                slimeGrid[x, y] = newSlime.GetComponent<SlimeController>(); // 배열에 슬라임 저장
+                slimeGrid[x, y] = newSlime.GetComponent<SlimeController>();
             }
         }
     }
 
     public void ResetSlimeManager()
     {
+        IsDestroySkillActive = false;
+        currentHoveredSlime = null;
+
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
@@ -75,10 +179,6 @@ public class SlimeManager : MonoBehaviour
         GenerateSlimeGrid();
     }
 
-    /// <summary>
-    /// 현재 격자판에서 합계 10을 만들 수 있는 사각형 조합이 단 하나라도 남아있는지 검사합니다.
-    /// (DragBoxArea에서 게임 오버 판정을 위해 호출)
-    /// </summary>
     public bool HasAvailableMatches()
     {
         if (slimeGrid == null) return false;
@@ -120,15 +220,10 @@ public class SlimeManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// 게임 중 스킬 버튼을 눌렀을 때 힌트를 표시합니다.
-    /// (UIManager_Game에서 호출)
-    /// </summary>
     public void ShowHint()
     {
         if (slimeGrid == null) return;
 
-        // 이전에 표시된 힌트를 모두 끕니다.
         ClearAllHints();
 
         for (int startX = 0; startX < columns; startX++)
@@ -159,7 +254,6 @@ public class SlimeManager : MonoBehaviour
 
                         if (hasActiveSlime && sum == 10)
                         {
-                            // 해당 사각형 영역 안의 슬라임들의 힌트를 켭니다.
                             for (int x = startX; x <= endX; x++)
                             {
                                 for (int y = startY; y <= endY; y++)
@@ -171,7 +265,6 @@ public class SlimeManager : MonoBehaviour
                                     }
                                 }
                             }
-
                             return;
                         }
                     }
@@ -180,9 +273,6 @@ public class SlimeManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 모든 슬라임의 힌트 표시를 초기화합니다.
-    /// </summary>
     public void ClearAllHints()
     {
         if (slimeGrid == null) return;
@@ -196,16 +286,12 @@ public class SlimeManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 현재 화면에 남아있는 슬라임들의 숫자를 수집하여 무작위로 재배치합니다.
-    /// </summary>
     public void MixSlimes()
     {
         if (slimeGrid == null) return;
 
         List<int> activeNumbers = new List<int>();
 
-        // 1. 현재 화면에 활성화(존재)되어 있는 슬라임들의 번호를 모두 리스트에 수집
         foreach (SlimeController slime in slimeGrid)
         {
             if (slime != null && slime.gameObject.activeInHierarchy)
@@ -214,10 +300,8 @@ public class SlimeManager : MonoBehaviour
             }
         }
 
-        // 남은 슬라임이 없다면 실행 취소
         if (activeNumbers.Count == 0) return;
 
-        // 2. 피셔-예이츠 셔플(Fisher-Yates Shuffle) 알고리즘을 이용해 리스트의 요소들을 무작위로 섞음
         for (int i = 0; i < activeNumbers.Count; i++)
         {
             int temp = activeNumbers[i];
@@ -226,7 +310,6 @@ public class SlimeManager : MonoBehaviour
             activeNumbers[randomIndex] = temp;
         }
 
-        // 3. 무작위로 섞인 숫자 배열을 활성화된 슬라임들에게 순서대로 재할당
         int index = 0;
         foreach (SlimeController slime in slimeGrid)
         {
@@ -234,7 +317,6 @@ public class SlimeManager : MonoBehaviour
             {
                 slime.SetNumber(activeNumbers[index]);
 
-                // 번호가 재배치되었으므로 기존에 켜져있던 힌트 하이라이트 해제
                 slime.SetHintHighlight(false);
                 slime.SetHighlight(false);
 

@@ -95,9 +95,17 @@ public class DragBoxArea : MonoBehaviour
             // 슬라임이 파괴된 직후 남은 10 조합이 있는지 즉시 확인
             if (SlimeManager.Instance != null && !SlimeManager.Instance.HasAvailableMatches())
             {
-                Debug.Log("남은 조합이 없어 게임을 조기 종료합니다.");
+                Debug.Log("더 이상 맞출 수 있는 슬라임이 없습니다");
 
-                if (GameManager.Instance != null)
+                bool canUseSkill = false;
+                if (UIManager_Game.Instance != null)
+                {
+                    // UIManager_Game에 추가된 메서드로 스킬 잔여 횟수 체크
+                    canUseSkill = UIManager_Game.Instance.HasAnySkillLeft();
+                }
+
+                // 스킬을 하나도 쓸 수 없는 상황이라면 게임 오버 처리
+                if (!canUseSkill && GameManager.Instance != null)
                 {
                     GameManager.Instance.GameOver();
                 }

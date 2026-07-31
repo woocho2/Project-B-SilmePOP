@@ -6,7 +6,6 @@ public static class ChangeData
     public static Color SelectedColor { get; set; } = Color.white;
     public static Sprite SelectedFace { get; set; }
     public static Sprite SelectedCostume { get; set; } // 코스튬 전용 데이터 추가
-
     public static Color LastCustomColor { get; set; } = Color.white;
 
     // 현재 선택된 맵 테마 SO 데이터

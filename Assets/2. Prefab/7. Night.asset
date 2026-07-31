@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: 7. Night
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Night
-  mainMenuSprite: {fileID: 7028616704906629411, guid: 317edc9432c9e9542a6fcb12d51f31c2, type: 3}
-  optionAndTableSprite: {fileID: 4349915267927364619, guid: 424ba7d8778eeb74f92439ea0ef4e62d, type: 3}
-  mapFillSprite: {fileID: 2720535173406242035, guid: 9d042e8c3389c5542bcbae3327f41001, type: 3}
-  timerFillSprite: {fileID: -30749221642623036, guid: f27669b361cbe1249b78ac1c5ef7d8bf, type: 3}
+  MenuSprite: {fileID: -7336557834114836464, guid: 62486520ced1e0f4fb9bb334a57648fa, type: 3}
+  TableSprite: {fileID: -5701434062909859844, guid: f59b8aa94898a2442b54950052a393e9, type: 3}
+  SlimeSprite: {fileID: 21300000, guid: 3fd4e3de68ee69b48a0c793a55f4c460, type: 3}

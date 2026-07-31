@@ -166,12 +166,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6636733472879709596}
-  m_Father: {fileID: 1237203427292177726}
+  m_Father: {fileID: 8566199896502286410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.25, y: 0}
-  m_SizeDelta: {x: 111.5, y: 18}
+  m_AnchoredPosition: {x: 1.5, y: 0}
+  m_SizeDelta: {x: 107.5, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4619179488121892068
 GameObject:
@@ -201,9 +201,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8832687048188822763}
   - {fileID: 6400873043929330293}
-  - {fileID: 1305640033742528744}
+  - {fileID: 8832687048188822763}
   m_Father: {fileID: 8566199896502286410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -239,15 +238,15 @@ RectTransform:
   m_GameObject: {fileID: 6508047911599381818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.95, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1237203427292177726}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.5, y: 0}
-  m_SizeDelta: {x: 18.999998, y: -82}
+  m_AnchoredPosition: {x: 0.75, y: 0}
+  m_SizeDelta: {x: 14.499998, y: -86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &472591891956707284
 MonoBehaviour:
@@ -301,7 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Change
   category: 1
   slimepart: 0
-  mappart: 2
+  mappart: 3
 --- !u!1 &8267637475253567563
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +407,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1237203427292177726}
+  - {fileID: 1305640033742528744}
   - {fileID: 4515145152193711970}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

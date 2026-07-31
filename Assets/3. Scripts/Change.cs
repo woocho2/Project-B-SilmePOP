@@ -20,8 +20,8 @@ public class Change : MonoBehaviour
     {
         Menu,
         GameTable,
+        Slime,
         SliderBar,
-        TimerBar
     }
 
     [SerializeField] private Category category = Category.Slime;
@@ -108,7 +108,7 @@ public class Change : MonoBehaviour
         }
         else if (category == Category.Map)
         {
-            if (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar)
+            if (mappart == MapPart.SliderBar)
             {
                 ApplyColor(ChangeData.SelectedColor);
             }
@@ -131,7 +131,7 @@ public class Change : MonoBehaviour
                 slimeController.SetSlimeColor(color);
             }
         }
-        else if (category == Category.Map && (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar))
+        else if (category == Category.Map && (mappart == MapPart.SliderBar))
         {
             if (targetimg != null) targetimg.color = color;
             if (targetsr != null) targetsr.color = color;
@@ -160,12 +160,13 @@ public class Change : MonoBehaviour
     public void ApplyMap(ThemeData themeData)
     {
         if (category != Category.Map || themeData == null) return;
-        if (mappart == MapPart.SliderBar || mappart == MapPart.TimerBar) return;
+        if (mappart == MapPart.SliderBar) return;
 
         Sprite spriteToApply = mappart switch
         {
-            MapPart.Menu => themeData.mainMenuSprite,
-            MapPart.GameTable => themeData.optionAndTableSprite,
+            MapPart.Menu => themeData.MenuSprite,
+            MapPart.GameTable => themeData.TableSprite,
+            MapPart.Slime => themeData.SlimeSprite,
             _ => null
         };
 

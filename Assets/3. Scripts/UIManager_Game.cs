@@ -10,7 +10,7 @@ public class UIManager_Game : MonoBehaviour
 
     public event UnityAction<Color> OnColorChanged;
     public event UnityAction<Sprite> OnFaceChanged;
-    public event UnityAction<Sprite> OnCostumeChanged; // 코스튬 이벤트 추가
+    public event UnityAction<Sprite> OnCostumeChanged;
     public event UnityAction<ThemeData> OnMapChanged;
 
     [SerializeField] private DragManager m_dragManager;
@@ -21,8 +21,12 @@ public class UIManager_Game : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txt_score;
     [SerializeField] private Slider m_timerSlider;
     [SerializeField] private Button btn_menu;
-    [SerializeField] private Button btn_exact;
+    [SerializeField] private Button btn_magnifier;
     [SerializeField] private Button btn_mix;
+    [SerializeField] private Button btn_destroy;
+    [SerializeField] private TextMeshProUGUI txt_magnifier;
+    [SerializeField] private TextMeshProUGUI txt_mix;
+    [SerializeField] private TextMeshProUGUI txt_destroy;
     [SerializeField] private GameObject m_score;
 
     [Header("MainMenu Panel")]
@@ -94,6 +98,10 @@ public class UIManager_Game : MonoBehaviour
     [SerializeField] private ThemeData themeNight;
     [SerializeField] private ThemeData themeCloudy;
 
+    private int countMagnifier;
+    private int countMix;
+    private int countDestroy;
+
     [SerializeField] string m_sceneName;
 
     private bool isTimerRunning = false;
@@ -110,6 +118,8 @@ public class UIManager_Game : MonoBehaviour
 
     private void Start()
     {
+        ResetSkillCounts();
+
         InitTimerUI();
         InitScoreUI();
         ApplySavedMapUI();
@@ -180,6 +190,13 @@ public class UIManager_Game : MonoBehaviour
         }
     }
 
+    private void UpdateSkillCountUI()
+    {
+        if (txt_magnifier != null) txt_magnifier.text = $"{countMagnifier.ToString()}/1";
+        if (txt_mix != null) txt_mix.text = $"{countMix.ToString()}/1";
+        if (txt_destroy != null) txt_destroy.text = $"{countDestroy.ToString()}/3";
+    }
+
     private void Update()
     {
         if (isTimerRunning && m_timerSlider != null && GameManager.Instance != null)
@@ -193,31 +210,76 @@ public class UIManager_Game : MonoBehaviour
 
         if (isTimerRunning && Keyboard.current != null)
         {
+            if (Keyboard.current.aKey.wasPressedThisFrame)
+            {
+                UseMagnifier();
+            }
             if (Keyboard.current.sKey.wasPressedThisFrame)
             {
-                UseSkill();
+                UseMix();
             }
             if (Keyboard.current.dKey.wasPressedThisFrame)
             {
-                UseMix();
+                UseDestroy();
             }
         }
     }
 
-    private void UseSkill()
+    public bool HasAnySkillLeft()
     {
-        if (SlimeManager.Instance != null)
+        return countMagnifier > 0 || countMix > 0 || countDestroy > 0;
+    }
+
+    private void UseMagnifier()
+    {
+        if (countMagnifier > 0 && SlimeManager.Instance != null)
         {
             SlimeManager.Instance.ShowHint();
+            countMagnifier--;
+
+            UpdateSkillCountUI();
+                        
+            if (countMagnifier <= 0 && btn_magnifier != null) btn_magnifier.interactable = false;
         }
     }
 
     private void UseMix()
     {
-        if (SlimeManager.Instance != null)
+        if (countMix > 0 && SlimeManager.Instance != null)
         {
             SlimeManager.Instance.MixSlimes();
+            countMix--;
+
+            UpdateSkillCountUI();
+
+            if (countMix <= 0 && btn_mix != null) btn_mix.interactable = false;
         }
+    }
+
+    private void UseDestroy()
+    {
+        if (countDestroy > 0 && SlimeManager.Instance != null)
+        {
+            SlimeManager.Instance.ActivateDestroySkill();
+            countDestroy--;
+
+            UpdateSkillCountUI();
+
+            if (countDestroy <= 0 && btn_destroy != null) btn_destroy.interactable = false;
+        }
+    }
+
+    private void ResetSkillCounts()
+    {
+        countMagnifier = 1;
+        countMix = 1;
+        countDestroy = 3;
+
+        if (btn_magnifier != null) btn_magnifier.interactable = true;
+        if (btn_mix != null) btn_mix.interactable = true;
+        if (btn_destroy != null) btn_destroy.interactable = true;
+
+        UpdateSkillCountUI();
     }
 
     private void BindMenuButtons()
@@ -235,16 +297,22 @@ public class UIManager_Game : MonoBehaviour
             });
         }
 
-        if (btn_exact != null)
+        if (btn_magnifier != null)
         {
-            btn_exact.onClick.RemoveAllListeners();
-            btn_exact.onClick.AddListener(UseSkill);
+            btn_magnifier.onClick.RemoveAllListeners();
+            btn_magnifier.onClick.AddListener(UseMagnifier);
         }
 
         if (btn_mix != null)
         {
             btn_mix.onClick.RemoveAllListeners();
             btn_mix.onClick.AddListener(UseMix);
+        }
+
+        if (btn_destroy != null)
+        {
+            btn_destroy.onClick.RemoveAllListeners();
+            btn_destroy.onClick.AddListener(UseDestroy);
         }
 
         BindResumeButtons();
@@ -283,6 +351,7 @@ public class UIManager_Game : MonoBehaviour
                 Panel_Main.SetActive(false);
                 Panel_GameOver.SetActive(false);
                 m_score.SetActive(true);
+                ResetSkillCounts();
                 GameManager.Instance.RestartGame();
             });
         }
@@ -300,6 +369,7 @@ public class UIManager_Game : MonoBehaviour
                 Panel_Main.SetActive(false);
                 Panel_GameOver.SetActive(false);
                 m_score.SetActive(true);
+                ResetSkillCounts();
                 GameManager.Instance.RestartGame();
             });
         }
@@ -329,7 +399,7 @@ public class UIManager_Game : MonoBehaviour
 
                 OnColorChanged?.Invoke(ChangeData.SelectedColor);
                 if (ChangeData.SelectedFace != null) OnFaceChanged?.Invoke(ChangeData.SelectedFace);
-                if (ChangeData.SelectedCostume != null) OnCostumeChanged?.Invoke(ChangeData.SelectedCostume); // 옵션 나갈 때 이벤트 발송
+                if (ChangeData.SelectedCostume != null) OnCostumeChanged?.Invoke(ChangeData.SelectedCostume);
                 if (ChangeData.SelectedMapTheme != null) OnMapChanged?.Invoke(ChangeData.SelectedMapTheme);
             });
         }
@@ -384,11 +454,9 @@ public class UIManager_Game : MonoBehaviour
 
     private void BindSlimeFaceButtons()
     {
-        // 얼굴은 Face로
         BindSprite(btn_slimeNone, spr_slimeNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
 
-        // 악마, 천사, 왕관은 Costume으로 분리 연결
         BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
         BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
         BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
@@ -461,7 +529,6 @@ public class UIManager_Game : MonoBehaviour
         OnFaceChanged?.Invoke(newSprite);
     }
 
-    // 코스튬 전용 메서드 추가
     private void ChangeSlimeCostume(Sprite newSprite)
     {
         if (newSprite == null) return;
@@ -477,7 +544,7 @@ public class UIManager_Game : MonoBehaviour
 
         if (Panel_Option != null)
         {
-            Panel_Option.GetComponent<Image>().sprite = newTheme.optionAndTableSprite;
+            Panel_Option.GetComponent<Image>().sprite = newTheme.TableSprite;
         }
 
         OnMapChanged?.Invoke(newTheme);
@@ -500,7 +567,7 @@ public class UIManager_Game : MonoBehaviour
     {
         if (Panel_Option != null && ChangeData.SelectedMapTheme != null)
         {
-            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.optionAndTableSprite;
+            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.TableSprite;
         }
     }
 
@@ -510,6 +577,7 @@ public class UIManager_Game : MonoBehaviour
         {
             Panel_Main.SetActive(false);
             Panel_Option.SetActive(false);
+            Panel_Game.SetActive(false);
             Panel_GameOver.SetActive(true);
             m_score.SetActive(false);
         }
