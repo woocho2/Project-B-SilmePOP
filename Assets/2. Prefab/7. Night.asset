@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 7. Night
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Night
-  MenuSprite: {fileID: -7336557834114836464, guid: 62486520ced1e0f4fb9bb334a57648fa, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 62486520ced1e0f4fb9bb334a57648fa, type: 3}
   TableSprite: {fileID: -5701434062909859844, guid: f59b8aa94898a2442b54950052a393e9, type: 3}
   SlimeSprite: {fileID: 21300000, guid: 3fd4e3de68ee69b48a0c793a55f4c460, type: 3}

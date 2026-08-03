@@ -1,11 +1,10 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class DragManager : MonoBehaviour
 {
-    public static DragManager Instance { get; private set; } // 외부 접근용 싱글톤 추가
+    public static DragManager Instance { get; private set; }
 
     [Header("World Drag Box Prefab/Object")]
     [SerializeField] private GameObject dragBoxPrefab;
@@ -122,9 +121,6 @@ public class DragManager : MonoBehaviour
         currentDragBox.transform.localScale = new Vector3(width, height, 1f);
     }
 
-    /// <summary>
-    /// 외부 스크립트에서 점수를 강제로 올릴 때 호출하는 메서드입니다.
-    /// </summary>
     public void AddScore(int scoreToAdd)
     {
         totalScore += scoreToAdd;

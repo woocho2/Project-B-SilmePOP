@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 4. Autumn
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Autumn
-  MenuSprite: {fileID: -2520884516793374094, guid: 8b3c3efebf962904f939ac66ce03ed42, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 8b3c3efebf962904f939ac66ce03ed42, type: 3}
   TableSprite: {fileID: -813317381007010780, guid: 34b9dffd172861746b743b716114d0f3, type: 3}
   SlimeSprite: {fileID: 21300000, guid: fbabc0b8edf81824e86f002f33978e75, type: 3}

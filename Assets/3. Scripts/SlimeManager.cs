@@ -113,23 +113,9 @@ public class SlimeManager : MonoBehaviour
             DragManager.Instance.AddScore(1);
         }
 
-        // 잔여 슬라임 조합 검사
-        if (!HasAvailableMatches())
+        if (GameManager.Instance != null)
         {
-            Debug.Log("더 이상 맞출 수 있는 슬라임이 없습니다");
-
-            bool canUseSkill = false;
-            if (UIManager_Game.Instance != null)
-            {
-                // UIManager_Game에 추가된 메서드로 스킬 잔여 횟수 체크
-                canUseSkill = UIManager_Game.Instance.HasAnySkillLeft();
-            }
-
-            // 스킬을 하나도 쓸 수 없는 상황이라면 게임 오버 처리
-            if (!canUseSkill && GameManager.Instance != null)
-            {
-                GameManager.Instance.GameOver();
-            }
+            GameManager.Instance.CheckAndTriggerGameOver();
         }
     }
 
@@ -179,8 +165,10 @@ public class SlimeManager : MonoBehaviour
         GenerateSlimeGrid();
     }
 
-    public bool HasAvailableMatches()
+    private bool TryFindMatch(out int matchStartX, out int matchStartY, out int matchEndX, out int matchEndY)
     {
+        matchStartX = matchStartY = matchEndX = matchEndY = -1;
+
         if (slimeGrid == null) return false;
 
         for (int startX = 0; startX < columns; startX++)
@@ -211,6 +199,10 @@ public class SlimeManager : MonoBehaviour
 
                         if (hasActiveSlime && sum == 10)
                         {
+                            matchStartX = startX;
+                            matchStartY = startY;
+                            matchEndX = endX;
+                            matchEndY = endY;
                             return true;
                         }
                     }
@@ -220,53 +212,27 @@ public class SlimeManager : MonoBehaviour
         return false;
     }
 
+    public bool HasAvailableMatches()
+    {
+        return TryFindMatch(out _, out _, out _, out _);
+    }
+
     public void ShowHint()
     {
         if (slimeGrid == null) return;
 
         ClearAllHints();
 
-        for (int startX = 0; startX < columns; startX++)
+        if (TryFindMatch(out int startX, out int startY, out int endX, out int endY))
         {
-            for (int startY = 0; startY < rows; startY++)
+            for (int x = startX; x <= endX; x++)
             {
-                for (int endX = startX; endX < columns; endX++)
+                for (int y = startY; y <= endY; y++)
                 {
-                    for (int endY = startY; endY < rows; endY++)
+                    SlimeController slime = slimeGrid[x, y];
+                    if (slime != null && slime.gameObject.activeInHierarchy)
                     {
-                        int sum = 0;
-                        bool hasActiveSlime = false;
-
-                        for (int x = startX; x <= endX; x++)
-                        {
-                            for (int y = startY; y <= endY; y++)
-                            {
-                                SlimeController slime = slimeGrid[x, y];
-                                if (slime != null && slime.gameObject.activeInHierarchy)
-                                {
-                                    sum += slime.CurrentNumber;
-                                    hasActiveSlime = true;
-                                }
-                            }
-                        }
-
-                        if (sum > 10) break;
-
-                        if (hasActiveSlime && sum == 10)
-                        {
-                            for (int x = startX; x <= endX; x++)
-                            {
-                                for (int y = startY; y <= endY; y++)
-                                {
-                                    SlimeController slime = slimeGrid[x, y];
-                                    if (slime != null && slime.gameObject.activeInHierarchy)
-                                    {
-                                        slime.SetHintHighlight(true);
-                                    }
-                                }
-                            }
-                            return;
-                        }
+                        slime.SetHintHighlight(true);
                     }
                 }
             }

@@ -1,8 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class UIManager_Game : MonoBehaviour
 {
@@ -28,6 +30,7 @@ public class UIManager_Game : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txt_mix;
     [SerializeField] private TextMeshProUGUI txt_destroy;
     [SerializeField] private GameObject m_score;
+    [SerializeField] private TextMeshProUGUI txt_warning;
 
     [Header("MainMenu Panel")]
     [SerializeField] private GameObject Panel_Main;
@@ -59,21 +62,22 @@ public class UIManager_Game : MonoBehaviour
 
     [Header("Custom Color Settings")]
     [SerializeField] private Button btn_slimeCustom;
+    [SerializeField] private Button btn_slimeCustomApply;
     [SerializeField] private GameObject ColorPallet;
     [SerializeField] private FlexibleColorPicker fcp;
 
     [Header("Slime Face Settings")]
-    [SerializeField] private Button btn_slimeNone;
+    [SerializeField] private Button btn_slimeFaceNone;
     [SerializeField] private Button btn_slimeNormal;
+    [SerializeField] private Sprite spr_slimeFaceNone;
+    [SerializeField] private Sprite spr_slimeNormal;
 
     [Header("Slime Costume Settings")]
+    [SerializeField] private Button btn_slimeCostumeNone;
     [SerializeField] private Button btn_slimeDemon;
     [SerializeField] private Button btn_slimeAngel;
     [SerializeField] private Button btn_slimeKing;
-
-    [SerializeField] private Sprite spr_slimeNone;
-    [SerializeField] private Sprite spr_slimeNormal;
-
+    [SerializeField] private Sprite spr_slimeCostumeNone;
     [SerializeField] private Sprite spr_slimeDemon;
     [SerializeField] private Sprite spr_slimeAngel;
     [SerializeField] private Sprite spr_slimeKing;
@@ -105,6 +109,9 @@ public class UIManager_Game : MonoBehaviour
     [SerializeField] string m_sceneName;
 
     private bool isTimerRunning = false;
+
+    private Coroutine co_warningAnimation;
+    private Coroutine co_skillHighlight;
 
     private void Awake()
     {
@@ -166,6 +173,7 @@ public class UIManager_Game : MonoBehaviour
         if (Panel_GameOver != null) Panel_GameOver.SetActive(false);
 
         if (ColorPallet != null) ColorPallet.SetActive(false);
+        if (txt_warning != null) txt_warning.gameObject.SetActive(false);
     }
 
     private void InitScoreUI()
@@ -434,7 +442,7 @@ public class UIManager_Game : MonoBehaviour
         BindColor(btn_slimeYellowGreen, ChangeData.HEX_YELLOWGREEN);
         BindColor(btn_slimeBrown, ChangeData.HEX_BROWN);
 
-        if (btn_slimeCustom != null && ColorPallet != null)
+        if (btn_slimeCustom != null && ColorPallet != null && btn_slimeCustomApply != null)
         {
             btn_slimeCustom.onClick.RemoveAllListeners();
             btn_slimeCustom.onClick.AddListener(() =>
@@ -443,6 +451,11 @@ public class UIManager_Game : MonoBehaviour
                 Color backupColor = ChangeData.LastCustomColor;
                 ColorPallet.SetActive(willBeActive);
 
+                if (btn_slimeCustomApply != null)
+                {
+                    btn_slimeCustomApply.gameObject.SetActive(willBeActive);
+                }
+
                 if (willBeActive && fcp != null)
                 {
                     ChangeData.LastCustomColor = backupColor;
@@ -450,13 +463,31 @@ public class UIManager_Game : MonoBehaviour
                 }
             });
         }
+
+        if (btn_slimeCustom != null) {
+            btn_slimeCustomApply.onClick.RemoveAllListeners();
+            btn_slimeCustomApply.onClick.AddListener(OnCustomApplyClicked);
+        }
+    }
+    private void OnCustomApplyClicked()
+    {
+        if (ColorPallet != null)
+        {
+            ColorPallet.SetActive(false);
+        }
+
+        if (btn_slimeCustomApply != null)
+        {
+            btn_slimeCustomApply.gameObject.SetActive(false);
+        }
     }
 
     private void BindSlimeFaceButtons()
     {
-        BindSprite(btn_slimeNone, spr_slimeNone, ChangeSlimeFace);
+        BindSprite(btn_slimeFaceNone, spr_slimeFaceNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
 
+        BindSprite(btn_slimeCostumeNone, spr_slimeCostumeNone, ChangeSlimeCostume);
         BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
         BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
         BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
@@ -550,7 +581,7 @@ public class UIManager_Game : MonoBehaviour
         OnMapChanged?.Invoke(newTheme);
     }
 
-    private void UpdateTimerUI(float remainingTime)
+    public void UpdateTimerUI(float remainingTime)
     {
         if (txt_timer != null) txt_timer.text = ((int)remainingTime).ToString();
 
@@ -560,7 +591,14 @@ public class UIManager_Game : MonoBehaviour
             m_timerSlider.value = (maxTime - remainingTime) / maxTime;
         }
 
-        if (remainingTime <= 0f) isTimerRunning = false;
+        if (remainingTime <= 0f)
+        {
+            isTimerRunning = false;
+        }
+        else
+        {
+            isTimerRunning = true;
+        }
     }
 
     private void ApplySavedMapUI()
@@ -569,6 +607,143 @@ public class UIManager_Game : MonoBehaviour
         {
             Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.TableSprite;
         }
+    }
+
+    public void ShowWarningText(string message = "더 이상 맞출 수 있는 슬라임이 없습니다!")
+    {
+        if (txt_warning == null) return;
+
+        // 이미 실행 중인 경고 애니메이션이 있다면 중단하고 새로 시작
+        if (co_warningAnimation != null)
+        {
+            StopCoroutine(co_warningAnimation);
+        }
+
+        co_warningAnimation = StartCoroutine(Co_AnimateWarningText(message));
+    }
+
+    private IEnumerator Co_AnimateWarningText(string message)
+    {
+        txt_warning.text = message;
+        txt_warning.gameObject.SetActive(true);
+
+        // --- 연출 설정 수치 ---
+        float moveDistancePhase1 = 30f; // 1단계 상승 거리 (픽셀)
+        float moveDistancePhase2 = 30f; // 2단계 상승 거리 (픽셀)
+        float fadeDuration = 1f;       // 페이드 인/아웃에 걸리는 시간 (초)
+        float pauseDuration = 0.8f;      // 중간 일시 정지 대기 시간 (초)
+
+        // 초기 위치 저장 및 시작 위치 설정
+        RectTransform rectTransform = txt_warning.rectTransform;
+        Vector2 startPos = rectTransform.anchoredPosition;
+        Vector2 midPos = startPos + new Vector2(0f, moveDistancePhase1);
+        Vector2 endPos = midPos + new Vector2(0f, moveDistancePhase2);
+
+        // 1단계: 투명 -> 불투명 (Fade In) + 위로 이동
+        float timer = 0f;
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = Mathf.Clamp01(timer / fadeDuration);
+
+            // Lerp를 이용해 위치 및 투명도 부드럽게 변경
+            rectTransform.anchoredPosition = Vector2.Lerp(startPos, midPos, progress);
+            txt_warning.color = new Color(txt_warning.color.r, txt_warning.color.g, txt_warning.color.b, progress);
+
+            yield return null;
+        }
+
+        // 1단계 완료 보정
+        rectTransform.anchoredPosition = midPos;
+        txt_warning.color = new Color(txt_warning.color.r, txt_warning.color.g, txt_warning.color.b, 1f);
+
+        // 중간 일시 정지
+        yield return new WaitForSeconds(pauseDuration);
+
+        // 2단계: 불투명 -> 투명 (Fade Out) + 추가 위로 이동
+        timer = 0f;
+        while (timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = Mathf.Clamp01(timer / fadeDuration);
+
+            rectTransform.anchoredPosition = Vector2.Lerp(midPos, endPos, progress);
+            txt_warning.color = new Color(txt_warning.color.r, txt_warning.color.g, txt_warning.color.b, 1f - progress);
+
+            yield return null;
+        }
+
+        // 연출 종료 후 정리
+        txt_warning.gameObject.SetActive(false);
+        rectTransform.anchoredPosition = startPos; // 다음 연출을 위해 원래 위치로 복귀
+        co_warningAnimation = null;
+    }
+
+    public void HighlightAvailableSkills()
+    {
+        if (co_skillHighlight != null)
+        {
+            StopCoroutine(co_skillHighlight);
+        }
+
+        co_skillHighlight = StartCoroutine(Co_HighlightSkills());
+    }
+
+    private IEnumerator Co_HighlightSkills()
+    {
+        // 강조 효과를 줄 잔여 스킬 버튼 리스트 추출
+        List<Button> targetButtons = new List<Button>();
+        if (countMagnifier > 0 && btn_magnifier != null) targetButtons.Add(btn_magnifier);
+        if (countMix > 0 && btn_mix != null) targetButtons.Add(btn_mix);
+        if (countDestroy > 0 && btn_destroy != null) targetButtons.Add(btn_destroy);
+
+        if (targetButtons.Count == 0) yield break;
+
+        // 버튼 원래 색상 저장 (기본 흰색 이미지 기준)
+        Color originColor = Color.white;
+        Color highlightColor = new Color(1f, 0.9f, 0.3f, 1f); // 노란색 강조 빛
+
+        float duration = 0.4f; // 반짝이는 속도
+        int repeatCount = 3;   // 반짝이는 횟수
+
+        for (int i = 0; i < repeatCount; i++)
+        {
+            // 노랗게 강조
+            float timer = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                Color currentColor = Color.Lerp(originColor, highlightColor, timer / duration);
+
+                foreach (Button btn in targetButtons)
+                {
+                    if (btn.image != null) btn.image.color = currentColor;
+                }
+                yield return null;
+            }
+
+            // 원래 색으로 복귀
+            timer = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                Color currentColor = Color.Lerp(highlightColor, originColor, timer / duration);
+
+                foreach (Button btn in targetButtons)
+                {
+                    if (btn.image != null) btn.image.color = currentColor;
+                }
+                yield return null;
+            }
+        }
+
+        // 최종 색상 원복 보정
+        foreach (Button btn in targetButtons)
+        {
+            if (btn.image != null) btn.image.color = originColor;
+        }
+
+        co_skillHighlight = null;
     }
 
     private void GameOverUI()

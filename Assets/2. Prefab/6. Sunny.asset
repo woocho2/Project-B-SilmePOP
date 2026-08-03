@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 6. Sunny
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Sunny
-  MenuSprite: {fileID: -7153744752731018645, guid: 761abb8dfd5c37a4b9808d837e8917fb, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 761abb8dfd5c37a4b9808d837e8917fb, type: 3}
   TableSprite: {fileID: 4541724385532589624, guid: 4df158a1f2aa9614ea9919bf849797f7, type: 3}
   SlimeSprite: {fileID: 21300000, guid: d23a8dfc5289a5e469c8b520835b519f, type: 3}

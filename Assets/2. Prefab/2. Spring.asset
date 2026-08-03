@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 2. Spring
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Spring
-  MenuSprite: {fileID: 1736751061090966224, guid: cef0128a4fe08704d8b9745f5c8509e5, type: 3}
+  MenuSprite: {fileID: 21300000, guid: cef0128a4fe08704d8b9745f5c8509e5, type: 3}
   TableSprite: {fileID: -3430392972040898859, guid: 55fd695a0383fcb4d95e81cd8e29f9e3, type: 3}
   SlimeSprite: {fileID: 21300000, guid: f1f407918476a1343ac4a90d1c199854, type: 3}

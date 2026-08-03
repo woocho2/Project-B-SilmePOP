@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 8. Cloudy
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Cloudy
-  MenuSprite: {fileID: -1579209342222567087, guid: 3f08f5dff95b05c498a9d0a14a5c6b22, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 3f08f5dff95b05c498a9d0a14a5c6b22, type: 3}
   TableSprite: {fileID: 7073474515451689367, guid: b243e3dd80ae3c64b873c5cd5815a5fc, type: 3}
   SlimeSprite: {fileID: 21300000, guid: 954ca515ec1dd5e45a3a8a7b00aa2723, type: 3}

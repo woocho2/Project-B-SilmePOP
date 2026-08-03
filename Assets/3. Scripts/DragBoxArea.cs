@@ -42,6 +42,19 @@ public class DragBoxArea : MonoBehaviour
         }
     }
 
+    private int GetCurrentSum()
+    {
+        int sum = 0;
+        foreach (SlimeController slime in overlappingSlimes)
+        {
+            if (slime != null)
+            {
+                sum += slime.CurrentNumber;
+            }
+        }
+        return sum;
+    }
+
     private void UpdateHighlightsColor()
     {
         int currentSum = GetCurrentSum();
@@ -56,18 +69,6 @@ public class DragBoxArea : MonoBehaviour
         }
     }
 
-    private int GetCurrentSum()
-    {
-        int sum = 0;
-        foreach (SlimeController slime in overlappingSlimes)
-        {
-            if (slime != null)
-            {
-                sum += slime.CurrentNumber;
-            }
-        }
-        return sum;
-    }
 
     public void EvaluateSlimes(ref int totalScore)
     {
@@ -92,28 +93,10 @@ public class DragBoxArea : MonoBehaviour
             totalScore += destroyedCount;
             Debug.Log($"합이 10입니다! 파괴된 슬라임: {destroyedCount}개, 현재 총점: {totalScore}");
 
-            // 슬라임이 파괴된 직후 남은 10 조합이 있는지 즉시 확인
-            if (SlimeManager.Instance != null && !SlimeManager.Instance.HasAvailableMatches())
+            if (GameManager.Instance != null)
             {
-                Debug.Log("더 이상 맞출 수 있는 슬라임이 없습니다");
-
-                bool canUseSkill = false;
-                if (UIManager_Game.Instance != null)
-                {
-                    // UIManager_Game에 추가된 메서드로 스킬 잔여 횟수 체크
-                    canUseSkill = UIManager_Game.Instance.HasAnySkillLeft();
-                }
-
-                // 스킬을 하나도 쓸 수 없는 상황이라면 게임 오버 처리
-                if (!canUseSkill && GameManager.Instance != null)
-                {
-                    GameManager.Instance.GameOver();
-                }
+                GameManager.Instance.CheckAndTriggerGameOver();
             }
-        }
-        else if (sum > 0)
-        {
-            Debug.Log($"선택된 슬라임의 합은 {sum}입니다. 10이 아닙니다.");
         }
 
         ClearSlimesHighlight();

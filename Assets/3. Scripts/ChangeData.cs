@@ -2,16 +2,13 @@ using UnityEngine;
 
 public static class ChangeData
 {
-    // 슬라임 외형 데이터
     public static Color SelectedColor { get; set; } = Color.white;
     public static Sprite SelectedFace { get; set; }
-    public static Sprite SelectedCostume { get; set; } // 코스튬 전용 데이터 추가
+    public static Sprite SelectedCostume { get; set; }
     public static Color LastCustomColor { get; set; } = Color.white;
 
-    // 현재 선택된 맵 테마 SO 데이터
     public static ThemeData SelectedMapTheme { get; set; }
 
-    // 색상 헥사코드 정의
     public const float SLIME_ALPHA = 1.0f;
     public const string HEX_WHITE = "#FFFFFF";
     public const string HEX_BLACK = "#383838";

@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public event UnityAction OnGameOver;
 
     private Coroutine co_LifeTime;
+    private Coroutine co_delayedGameOver;
     private bool isPaused = false;
 
     private void Awake()
@@ -95,13 +96,6 @@ public class GameManager : MonoBehaviour
         m_dragManager.SetActive(false);
     }
 
-    public void StopGame()
-    {
-        isPaused = true;
-        m_slimeManager.SetActive(false);
-        m_dragManager.SetActive(false);
-    }
-
     public void ResumeGame()
     {
         isPaused = false;
@@ -134,11 +128,39 @@ public class GameManager : MonoBehaviour
         StartGameTimer();
     }
 
+    public void CheckAndTriggerGameOver()
+    {
+        if (SlimeManager.Instance != null && !SlimeManager.Instance.HasAvailableMatches())
+        {
+            Debug.Log("더 이상 맞출 수 있는 슬라임이 없습니다.");
+              
+            bool canUseSkill = false;
+
+            if (UIManager_Game.Instance != null)
+            {
+                canUseSkill = UIManager_Game.Instance.HasAnySkillLeft();
+            }
+
+            if (canUseSkill)
+            {
+                if (UIManager_Game.Instance != null)
+                {
+                    UIManager_Game.Instance.ShowWarningText("더 이상 맞출 수 있는 슬라임이 없습니다.\n스킬을 사용하세요");
+                    UIManager_Game.Instance.HighlightAvailableSkills();
+                }
+            }
+            else if (co_delayedGameOver == null)
+            {
+                co_delayedGameOver = StartCoroutine(Co_DelayedGameOver(3.5f));
+            }
+        }
+    }
+
     public void GameOver()
     {
         StopGameTimer();
         OnGameOver?.Invoke();
-        StopGame();
+        PauseGame();
         Debug.Log("게임 종료");
     }
 
@@ -150,5 +172,20 @@ public class GameManager : MonoBehaviour
             StopCoroutine(co_LifeTime);
             co_LifeTime = null;
         }
+    }
+
+    private IEnumerator Co_DelayedGameOver(float delayTime)
+    {
+        StopGameTimer();
+
+        if (UIManager_Game.Instance != null)
+        {
+            UIManager_Game.Instance.ShowWarningText("더 이상 맞출 수 있는 슬라임이 없습니다!");
+        }
+
+        yield return new WaitForSeconds(delayTime);
+
+        co_delayedGameOver = null;
+        GameOver();
     }
 }

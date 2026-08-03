@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 5. Winter
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Winter
-  MenuSprite: {fileID: 5120801669914175929, guid: 86f3994f924ce5142baa749d455a89bc, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 86f3994f924ce5142baa749d455a89bc, type: 3}
   TableSprite: {fileID: -5177212374166596092, guid: 2bfc6e47dbabf8d45a80bbcff6c37242, type: 3}
   SlimeSprite: {fileID: 21300000, guid: 9786fcf1e47322040aab0ca71d59d8c6, type: 3}

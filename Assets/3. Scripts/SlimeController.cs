@@ -40,24 +40,39 @@ public class SlimeController : MonoBehaviour
 
     private void SetRandomNumber()
     {
+        /*// 1. 기준 확률 계산
+        float pMid = 100f / 9f;             // 중간값 확률 (약 11.11%)
+        float pLow = pMid + 0.25f;          // 낮은값 확률 (약 11.36%)
+        float pHigh = pMid - 0.25f;         // 높은값 확률 (약 10.86%)
+
+        // 2. 누적 구간 계산
+        float threshold1 = pLow;
+        float threshold2 = threshold1 + pLow;
+        float threshold3 = threshold2 + pLow;
+
+        float threshold4 = threshold3 + pMid;
+        float threshold5 = threshold4 + pMid;
+        float threshold6 = threshold5 + pMid;
+
+        float threshold7 = threshold6 + pHigh;
+        float threshold8 = threshold7 + pHigh;
+
         float randomValue = Random.Range(0f, 100f);
 
-        if (randomValue < 12f) CurrentNumber = 1;
-        else if (randomValue < 24f) CurrentNumber = 2;
-        else if (randomValue < 36f) CurrentNumber = 3;
+        // 3. 번호 할당
+        if (randomValue < threshold1) CurrentNumber = 1;
+        else if (randomValue < threshold2) CurrentNumber = 2;
+        else if (randomValue < threshold3) CurrentNumber = 3;
 
-        else if (randomValue < 46f) CurrentNumber = 7;
-        else if (randomValue < 56f) CurrentNumber = 8;
-        else if (randomValue < 66f) CurrentNumber = 9;
+        else if (randomValue < threshold4) CurrentNumber = 4;
+        else if (randomValue < threshold5) CurrentNumber = 5;
+        else if (randomValue < threshold6) CurrentNumber = 6;
 
-        else
-        {
-            float third = 34f / 3f;
+        else if (randomValue < threshold7) CurrentNumber = 7;
+        else if (randomValue < threshold8) CurrentNumber = 8;
+        else CurrentNumber = 9;*/
 
-            if (randomValue < 66f + third) CurrentNumber = 4;
-            else if (randomValue < 66f + (third * 2f)) CurrentNumber = 5;
-            else CurrentNumber = 6;
-        }
+        CurrentNumber = 9;
 
         if (numberText != null)
         {
@@ -91,11 +106,6 @@ public class SlimeController : MonoBehaviour
 
     public void SetHighlight(bool isActive)
     {
-        if (isHintActive && !isActive)
-        {
-            // 힌트 유지용 주석
-        }
-
         if (highlightObject != null)
         {
             highlightObject.SetActive(isActive || isHintActive || isDestroyHoverActive);

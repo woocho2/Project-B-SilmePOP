@@ -47,5 +47,8 @@ TagManager:
   - name: DragBox
     uniqueID: 3213349935
     locked: 0
+  - name: Warning
+    uniqueID: 2640862981
+    locked: 0
   m_RenderingLayers:
   - Default

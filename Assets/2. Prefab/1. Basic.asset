@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 1. Basic
   m_EditorClassIdentifier: Assembly-CSharp::ThemeData
   themeName: Basic
-  MenuSprite: {fileID: 623912965283420093, guid: 5ecb7c49c847f2140a9d648061045a3e, type: 3}
+  MenuSprite: {fileID: 21300000, guid: 5ecb7c49c847f2140a9d648061045a3e, type: 3}
   TableSprite: {fileID: -236669613339809719, guid: 054c2440b1ff9554a81fcb0789a9fc0d, type: 3}
   SlimeSprite: {fileID: 21300000, guid: c4f8dc1dc4aec6347af14d052febc0c7, type: 3}
