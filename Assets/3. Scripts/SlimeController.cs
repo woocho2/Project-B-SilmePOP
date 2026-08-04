@@ -40,7 +40,7 @@ public class SlimeController : MonoBehaviour
 
     private void SetRandomNumber()
     {
-        /*// 1. 기준 확률 계산
+        // 1. 기준 확률 계산
         float pMid = 100f / 9f;             // 중간값 확률 (약 11.11%)
         float pLow = pMid + 0.25f;          // 낮은값 확률 (약 11.36%)
         float pHigh = pMid - 0.25f;         // 높은값 확률 (약 10.86%)
@@ -70,9 +70,7 @@ public class SlimeController : MonoBehaviour
 
         else if (randomValue < threshold7) CurrentNumber = 7;
         else if (randomValue < threshold8) CurrentNumber = 8;
-        else CurrentNumber = 9;*/
-
-        CurrentNumber = 9;
+        else CurrentNumber = 9;
 
         if (numberText != null)
         {

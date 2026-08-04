@@ -910,13 +910,13 @@ MonoBehaviour:
   fcp: {fileID: 1596870380}
   btn_slimeNone: {fileID: 835799187}
   btn_slimeNormal: {fileID: 132690330}
-  spr_slimeFaceNone: {fileID: -351076865, guid: 42aff642c1e936a419d8d344646ecb3c, type: 3}
-  spr_slimeNormal: {fileID: 7732417611282412218, guid: c2036370fe623ec43a0eacf07f21b3a0, type: 3}
+  spr_slimeFaceNone: {fileID: 21300000, guid: 42aff642c1e936a419d8d344646ecb3c, type: 3}
+  spr_slimeNormal: {fileID: 21300000, guid: c2036370fe623ec43a0eacf07f21b3a0, type: 3}
   btn_slimeCostumeNone: {fileID: 1439864927}
   btn_slimeDemon: {fileID: 1357568775}
   btn_slimeAngel: {fileID: 1805030324}
   btn_slimeKing: {fileID: 932369743}
-  spr_slimeCostumeNone: {fileID: -351076865, guid: 22be6fb5e7807f248b73dd2b9ec15e36, type: 3}
+  spr_slimeCostumeNone: {fileID: 21300000, guid: 22be6fb5e7807f248b73dd2b9ec15e36, type: 3}
   spr_slimeDemon: {fileID: 6897479667268090689, guid: a266c517a57c5164588d3296a1252795, type: 3}
   spr_slimeAngel: {fileID: 794005853264362711, guid: e6e582060110e7144a806060fc9c4a11, type: 3}
   spr_slimeKing: {fileID: -4821530343430527414, guid: b2dce87ed36240f41980b0587e527132, type: 3}
