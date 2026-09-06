@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     private Coroutine co_LifeTime;
     private Coroutine co_delayedGameOver;
     private bool isPaused = false;
+    private bool hasEnded;
+    public bool IsStarting { get; private set; }
+    public bool IsPaused => isPaused || IsStarting;
 
     private void Awake()
     {
@@ -34,7 +37,27 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartGameTimer();
+        // The UI starts the countdown after its own initialization.
+        if (UIManager_Game.Instance == null || !UIManager_Game.Instance.isActiveAndEnabled)
+            StartGameTimer();
+    }
+
+    public void PrepareStartCountdown()
+    {
+        StopGameTimer();
+        if (co_delayedGameOver != null)
+        {
+            StopCoroutine(co_delayedGameOver);
+            co_delayedGameOver = null;
+        }
+        hasEnded = false;
+        IsStarting = true;
+        isPaused = false;
+        CurrentTime = maxGameTime;
+        // Reveal the board only after the countdown text has finished.
+        if (m_slimeManager != null) m_slimeManager.SetActive(false);
+        if (m_dragManager != null) m_dragManager.SetActive(false);
+        OnTimerUpdated?.Invoke(CurrentTime);
     }
 
     private void OnDestroy()
@@ -47,8 +70,18 @@ public class GameManager : MonoBehaviour
 
     public void StartGameTimer()
     {
+        IsStarting = false;
+        if (co_delayedGameOver != null)
+        {
+            StopCoroutine(co_delayedGameOver);
+            co_delayedGameOver = null;
+        }
+        hasEnded = false;
         CurrentTime = maxGameTime;
         isPaused = false;
+
+        if (m_slimeManager != null) m_slimeManager.SetActive(true);
+        if (m_dragManager != null) m_dragManager.SetActive(true);
 
         if (co_LifeTime != null)
         {
@@ -60,8 +93,6 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Co_GameTimer()
     {
-        WaitForSeconds oneSecond = new WaitForSeconds(1f);
-
         OnTimerUpdated?.Invoke(CurrentTime);
 
         while (CurrentTime > 0f)
@@ -72,19 +103,16 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            yield return oneSecond;
-
-            CurrentTime -= 1f;
-
-            if (CurrentTime < 0f)
-            {
-                CurrentTime = 0f;
-            }
-
-            OnTimerUpdated?.Invoke(CurrentTime);
+            yield return null;
+            if (isPaused) continue;
+            int previousSecond = Mathf.CeilToInt(CurrentTime);
+            CurrentTime = Mathf.Max(0f, CurrentTime - Time.deltaTime);
+            if (Mathf.CeilToInt(CurrentTime) != previousSecond)
+                OnTimerUpdated?.Invoke(CurrentTime);
         }
 
-        // Å¸ÀÌ¸Ó°¡ ³¡³ª¼­ ÀÚ¿¬½º·´°Ô °ÔÀÓ ¿À¹ö µÉ ¶§ È£Ãâ
+        // íƒ€ì´ë¨¸ê°€ ëë‚˜ì„œ ìžì—°ìŠ¤ëŸ½ê²Œ ê²Œìž„ ì˜¤ë²„ ë  ë•Œ í˜¸ì¶œ
+        co_LifeTime = null;
         GameOver();
     }
 
@@ -92,19 +120,21 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         isPaused = true;
-        m_slimeManager.SetActive(false);
-        m_dragManager.SetActive(false);
+        if (m_slimeManager != null) m_slimeManager.SetActive(false);
+        if (m_dragManager != null) m_dragManager.SetActive(false);
     }
 
     public void ResumeGame()
     {
+        if (hasEnded || IsStarting) return;
         isPaused = false;
-        m_slimeManager.SetActive(true);
-        m_dragManager.SetActive(true);
+        if (m_slimeManager != null) m_slimeManager.SetActive(true);
+        if (m_dragManager != null) m_dragManager.SetActive(true);
     }
 
     public void RestartGame()
     {
+        hasEnded = false;
         ResumeGame();
 
         if (m_slimeManager != null)
@@ -125,14 +155,17 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        StartGameTimer();
+        if (UIManager_Game.Instance != null && UIManager_Game.Instance.isActiveAndEnabled)
+            UIManager_Game.Instance.BeginStartCountdown();
+        else
+            StartGameTimer();
     }
 
     public void CheckAndTriggerGameOver()
     {
         if (SlimeManager.Instance != null && !SlimeManager.Instance.HasAvailableMatches())
         {
-            Debug.Log("´õ ÀÌ»ó ¸ÂÃâ ¼ö ÀÖ´Â ½½¶óÀÓÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ë” ì´ìƒ ë§žì¶œ ìˆ˜ ìžˆëŠ” ìŠ¬ë¼ìž„ì´ ì—†ìŠµë‹ˆë‹¤.");
               
             bool canUseSkill = false;
 
@@ -145,7 +178,7 @@ public class GameManager : MonoBehaviour
             {
                 if (UIManager_Game.Instance != null)
                 {
-                    UIManager_Game.Instance.ShowWarningText("´õ ÀÌ»ó ¸ÂÃâ ¼ö ÀÖ´Â ½½¶óÀÓÀÌ ¾ø½À´Ï´Ù.\n½ºÅ³À» »ç¿ëÇÏ¼¼¿ä");
+                    UIManager_Game.Instance.ShowWarningText("ë” ì´ìƒ ë§žì¶œ ìˆ˜ ìžˆëŠ” ìŠ¬ë¼ìž„ì´ ì—†ìŠµë‹ˆë‹¤.\nìŠ¤í‚¬ì„ ì‚¬ìš©í•˜ì„¸ìš”");
                     UIManager_Game.Instance.HighlightAvailableSkills();
                 }
             }
@@ -158,10 +191,18 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (hasEnded) return;
+        hasEnded = true;
+        if (co_delayedGameOver != null)
+        {
+            StopCoroutine(co_delayedGameOver);
+            co_delayedGameOver = null;
+        }
         StopGameTimer();
+        SoundManager.Play(SoundEffect.GameOver);
         OnGameOver?.Invoke();
         PauseGame();
-        Debug.Log("°ÔÀÓ Á¾·á");
+        Debug.Log("ê²Œìž„ ì¢…ë£Œ");
     }
 
 
@@ -180,7 +221,7 @@ public class GameManager : MonoBehaviour
 
         if (UIManager_Game.Instance != null)
         {
-            UIManager_Game.Instance.ShowWarningText("´õ ÀÌ»ó ¸ÂÃâ ¼ö ÀÖ´Â ½½¶óÀÓÀÌ ¾ø½À´Ï´Ù!");
+            UIManager_Game.Instance.ShowWarningText("ë” ì´ìƒ ë§žì¶œ ìˆ˜ ìžˆëŠ” ìŠ¬ë¼ìž„ì´ ì—†ìŠµë‹ˆë‹¤!");
         }
 
         yield return new WaitForSeconds(delayTime);

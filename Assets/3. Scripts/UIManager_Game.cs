@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class UIManager_Game : MonoBehaviour
 {
+    [Header("Audio Volume Sliders")]
+    [SerializeField] private Slider slider_masterVolume;
+    [SerializeField] private Slider slider_bgmVolume;
+    [SerializeField] private Slider slider_sfxVolume;
     public static UIManager_Game Instance { get; private set; }
 
     public event UnityAction<Color> OnColorChanged;
@@ -16,6 +20,13 @@ public class UIManager_Game : MonoBehaviour
     public event UnityAction<ThemeData> OnMapChanged;
 
     [SerializeField] private DragManager m_dragManager;
+
+    [Header("Start Countdown")]
+    [SerializeField] private TextMeshProUGUI txt_startCountdown;
+    [SerializeField, Min(0.1f)] private float countdownInterval = 1f;
+    [SerializeField, Min(0.1f)] private float gameStartDuration = 0.7f;
+    private Coroutine co_startCountdown;
+    private bool isCountingDown;
 
     [Header("Game Panel")]
     [SerializeField] private GameObject Panel_Game;
@@ -125,6 +136,9 @@ public class UIManager_Game : MonoBehaviour
 
     private void Start()
     {
+        AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
+        AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
+        AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
         ResetSkillCounts();
 
         InitTimerUI();
@@ -146,6 +160,70 @@ public class UIManager_Game : MonoBehaviour
         {
             GameManager.Instance.OnGameOver += GameOverUI;
         }
+        BeginStartCountdown();
+    }
+
+    public void BeginStartCountdown()
+    {
+        if (co_startCountdown != null) StopCoroutine(co_startCountdown);
+        co_startCountdown = null;
+        if (GameManager.Instance == null) return;
+
+        if (txt_startCountdown == null)
+        {
+            Debug.LogWarning("Assign a TMP UI text to Start Countdown / Txt Start Countdown.", this);
+            isCountingDown = false;
+            GameManager.Instance.StartGameTimer();
+            return;
+        }
+
+        isCountingDown = true;
+        GameManager.Instance.PrepareStartCountdown();
+        isTimerRunning = false;
+        SetCountdownButtons(false);
+        co_startCountdown = StartCoroutine(Co_StartCountdown());
+    }
+
+    private IEnumerator Co_StartCountdown()
+    {
+        txt_startCountdown.raycastTarget = false;
+        txt_startCountdown.gameObject.SetActive(true);
+        var interval = new WaitForSecondsRealtime(Mathf.Max(0.1f, countdownInterval));
+        for (int count = 3; count >= 1; count--)
+        {
+            txt_startCountdown.text = count + "!";
+            SoundManager.Play(SoundEffect.Countdown);
+            yield return interval;
+        }
+
+        txt_startCountdown.text = "GameStart!";
+        SoundManager.Play(SoundEffect.GameStart);
+        yield return new WaitForSecondsRealtime(Mathf.Max(0.1f, gameStartDuration));
+        txt_startCountdown.gameObject.SetActive(false);
+        isCountingDown = false;
+        co_startCountdown = null;
+        SetCountdownButtons(true);
+        if (GameManager.Instance != null) GameManager.Instance.StartGameTimer();
+    }
+
+    private void SetCountdownButtons(bool ready)
+    {
+        if (btn_menu != null) btn_menu.interactable = ready;
+        if (btn_magnifier != null) btn_magnifier.interactable = ready && countMagnifier > 0;
+        if (btn_mix != null) btn_mix.interactable = ready && countMix > 0;
+        if (btn_destroy != null) btn_destroy.interactable = ready && countDestroy > 0;
+    }
+
+    private void OnDisable()
+    {
+        if (co_startCountdown != null) StopCoroutine(co_startCountdown);
+        co_startCountdown = null;
+        if (txt_startCountdown != null) txt_startCountdown.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        if (isCountingDown) BeginStartCountdown();
     }
 
     private void InitTimerUI()
@@ -207,12 +285,13 @@ public class UIManager_Game : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
         if (isTimerRunning && m_timerSlider != null && GameManager.Instance != null)
         {
             float maxTime = GameManager.Instance.MaxGameTime;
             if (maxTime > 0f)
             {
-                m_timerSlider.value += (1f / maxTime) * Time.deltaTime;
+                m_timerSlider.value = 1f - GameManager.Instance.CurrentTime / maxTime;
             }
         }
 
@@ -240,8 +319,10 @@ public class UIManager_Game : MonoBehaviour
 
     private void UseMagnifier()
     {
+        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
         if (countMagnifier > 0 && SlimeManager.Instance != null)
         {
+            SoundManager.Play(SoundEffect.Hint);
             SlimeManager.Instance.ShowHint();
             countMagnifier--;
 
@@ -253,8 +334,10 @@ public class UIManager_Game : MonoBehaviour
 
     private void UseMix()
     {
+        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
         if (countMix > 0 && SlimeManager.Instance != null)
         {
+            SoundManager.Play(SoundEffect.Mix);
             SlimeManager.Instance.MixSlimes();
             countMix--;
 
@@ -266,6 +349,7 @@ public class UIManager_Game : MonoBehaviour
 
     private void UseDestroy()
     {
+        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
         if (countDestroy > 0 && SlimeManager.Instance != null)
         {
             SlimeManager.Instance.ActivateDestroySkill();
@@ -295,6 +379,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_menu != null)
         {
             btn_menu.onClick.RemoveAllListeners();
+            btn_menu.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_menu.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(false);
@@ -308,18 +393,21 @@ public class UIManager_Game : MonoBehaviour
         if (btn_magnifier != null)
         {
             btn_magnifier.onClick.RemoveAllListeners();
+            btn_magnifier.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_magnifier.onClick.AddListener(UseMagnifier);
         }
 
         if (btn_mix != null)
         {
             btn_mix.onClick.RemoveAllListeners();
+            btn_mix.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_mix.onClick.AddListener(UseMix);
         }
 
         if (btn_destroy != null)
         {
             btn_destroy.onClick.RemoveAllListeners();
+            btn_destroy.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_destroy.onClick.AddListener(UseDestroy);
         }
 
@@ -336,6 +424,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_Resume != null)
         {
             btn_Resume.onClick.RemoveAllListeners();
+            btn_Resume.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_Resume.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(true);
@@ -352,6 +441,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_Restart != null)
         {
             btn_Restart.onClick.RemoveAllListeners();
+            btn_Restart.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_Restart.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(true);
@@ -370,6 +460,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_GameOverRestart != null)
         {
             btn_GameOverRestart.onClick.RemoveAllListeners();
+            btn_GameOverRestart.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_GameOverRestart.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(true);
@@ -388,6 +479,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_Option != null)
         {
             btn_Option.onClick.RemoveAllListeners();
+            btn_Option.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_Option.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(false);
@@ -399,6 +491,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_quit != null)
         {
             btn_quit.onClick.RemoveAllListeners();
+            btn_quit.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_quit.onClick.AddListener(() =>
             {
                 Panel_Game.SetActive(false);
@@ -415,7 +508,9 @@ public class UIManager_Game : MonoBehaviour
 
     private void BindHomeButtons()
     {
+        if (btn_Home == null) return;
         btn_Home.onClick.RemoveAllListeners();
+        btn_Home.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn_Home.onClick.AddListener(() =>
         {
             SceneLoader.StartLoad(m_sceneName);
@@ -424,7 +519,9 @@ public class UIManager_Game : MonoBehaviour
 
     private void BindGameOverHomeButtons()
     {
+        if (btn_GameOverHome == null) return;
         btn_GameOverHome.onClick.RemoveAllListeners();
+        btn_GameOverHome.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn_GameOverHome.onClick.AddListener(() =>
         {
             SceneLoader.StartLoad(m_sceneName);
@@ -445,6 +542,7 @@ public class UIManager_Game : MonoBehaviour
         if (btn_slimeCustom != null && ColorPallet != null && btn_slimeCustomApply != null)
         {
             btn_slimeCustom.onClick.RemoveAllListeners();
+            btn_slimeCustom.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_slimeCustom.onClick.AddListener(() =>
             {
                 bool willBeActive = !ColorPallet.activeSelf;
@@ -464,8 +562,9 @@ public class UIManager_Game : MonoBehaviour
             });
         }
 
-        if (btn_slimeCustom != null) {
+        if (btn_slimeCustomApply != null) {
             btn_slimeCustomApply.onClick.RemoveAllListeners();
+            btn_slimeCustomApply.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_slimeCustomApply.onClick.AddListener(OnCustomApplyClicked);
         }
     }
@@ -511,6 +610,7 @@ public class UIManager_Game : MonoBehaviour
         {
             parsedColor.a = ChangeData.SLIME_ALPHA;
             btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn.onClick.AddListener(() => ChangeSlimeColor(parsedColor));
         }
     }
@@ -519,6 +619,7 @@ public class UIManager_Game : MonoBehaviour
     {
         if (btn == null || sprite == null) return;
         btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn.onClick.AddListener(() => action(sprite));
     }
 
@@ -526,6 +627,7 @@ public class UIManager_Game : MonoBehaviour
     {
         if (btn == null || theme == null) return;
         btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn.onClick.AddListener(() => ChangeMap(theme));
     }
 
@@ -583,7 +685,7 @@ public class UIManager_Game : MonoBehaviour
 
     public void UpdateTimerUI(float remainingTime)
     {
-        if (txt_timer != null) txt_timer.text = ((int)remainingTime).ToString();
+        if (txt_timer != null) txt_timer.text = Mathf.CeilToInt(remainingTime).ToString();
 
         if (GameManager.Instance != null && GameManager.Instance.MaxGameTime > 0f && m_timerSlider != null)
         {
@@ -609,11 +711,11 @@ public class UIManager_Game : MonoBehaviour
         }
     }
 
-    public void ShowWarningText(string message = "´õ ÀÌ»ó ¸ÂÃâ ¼ö ÀÖ´Â ½½¶óÀÓÀÌ ¾ø½À´Ï´Ù!")
+    public void ShowWarningText(string message = "ë” ì´ìƒ ë§ì¶œ ìˆ˜ ìˆëŠ” ìŠ¬ë¼ì„ì´ ì—†ìŠµë‹ˆë‹¤!")
     {
         if (txt_warning == null) return;
 
-        // ÀÌ¹Ì ½ÇÇà ÁßÀÎ °æ°í ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ÀÖ´Ù¸é Áß´ÜÇÏ°í »õ·Î ½ÃÀÛ
+        // ì´ë¯¸ ì‹¤í–‰ ì¤‘ì¸ ê²½ê³  ì• ë‹ˆë©”ì´ì…˜ì´ ìˆë‹¤ë©´ ì¤‘ë‹¨í•˜ê³  ìƒˆë¡œ ì‹œì‘
         if (co_warningAnimation != null)
         {
             StopCoroutine(co_warningAnimation);
@@ -627,40 +729,40 @@ public class UIManager_Game : MonoBehaviour
         txt_warning.text = message;
         txt_warning.gameObject.SetActive(true);
 
-        // --- ¿¬Ãâ ¼³Á¤ ¼öÄ¡ ---
-        float moveDistancePhase1 = 30f; // 1´Ü°è »ó½Â °Å¸® (ÇÈ¼¿)
-        float moveDistancePhase2 = 30f; // 2´Ü°è »ó½Â °Å¸® (ÇÈ¼¿)
-        float fadeDuration = 1f;       // ÆäÀÌµå ÀÎ/¾Æ¿ô¿¡ °É¸®´Â ½Ã°£ (ÃÊ)
-        float pauseDuration = 0.8f;      // Áß°£ ÀÏ½Ã Á¤Áö ´ë±â ½Ã°£ (ÃÊ)
+        // --- ì—°ì¶œ ì„¤ì • ìˆ˜ì¹˜ ---
+        float moveDistancePhase1 = 30f; // 1ë‹¨ê³„ ìƒìŠ¹ ê±°ë¦¬ (í”½ì…€)
+        float moveDistancePhase2 = 30f; // 2ë‹¨ê³„ ìƒìŠ¹ ê±°ë¦¬ (í”½ì…€)
+        float fadeDuration = 1f;       // í˜ì´ë“œ ì¸/ì•„ì›ƒì— ê±¸ë¦¬ëŠ” ì‹œê°„ (ì´ˆ)
+        float pauseDuration = 0.8f;      // ì¤‘ê°„ ì¼ì‹œ ì •ì§€ ëŒ€ê¸° ì‹œê°„ (ì´ˆ)
 
-        // ÃÊ±â À§Ä¡ ÀúÀå ¹× ½ÃÀÛ À§Ä¡ ¼³Á¤
+        // ì´ˆê¸° ìœ„ì¹˜ ì €ì¥ ë° ì‹œì‘ ìœ„ì¹˜ ì„¤ì •
         RectTransform rectTransform = txt_warning.rectTransform;
         Vector2 startPos = rectTransform.anchoredPosition;
         Vector2 midPos = startPos + new Vector2(0f, moveDistancePhase1);
         Vector2 endPos = midPos + new Vector2(0f, moveDistancePhase2);
 
-        // 1´Ü°è: Åõ¸í -> ºÒÅõ¸í (Fade In) + À§·Î ÀÌµ¿
+        // 1ë‹¨ê³„: íˆ¬ëª… -> ë¶ˆíˆ¬ëª… (Fade In) + ìœ„ë¡œ ì´ë™
         float timer = 0f;
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
             float progress = Mathf.Clamp01(timer / fadeDuration);
 
-            // Lerp¸¦ ÀÌ¿ëÇØ À§Ä¡ ¹× Åõ¸íµµ ºÎµå·´°Ô º¯°æ
+            // Lerpë¥¼ ì´ìš©í•´ ìœ„ì¹˜ ë° íˆ¬ëª…ë„ ë¶€ë“œëŸ½ê²Œ ë³€ê²½
             rectTransform.anchoredPosition = Vector2.Lerp(startPos, midPos, progress);
             txt_warning.color = new Color(txt_warning.color.r, txt_warning.color.g, txt_warning.color.b, progress);
 
             yield return null;
         }
 
-        // 1´Ü°è ¿Ï·á º¸Á¤
+        // 1ë‹¨ê³„ ì™„ë£Œ ë³´ì •
         rectTransform.anchoredPosition = midPos;
         txt_warning.color = new Color(txt_warning.color.r, txt_warning.color.g, txt_warning.color.b, 1f);
 
-        // Áß°£ ÀÏ½Ã Á¤Áö
+        // ì¤‘ê°„ ì¼ì‹œ ì •ì§€
         yield return new WaitForSeconds(pauseDuration);
 
-        // 2´Ü°è: ºÒÅõ¸í -> Åõ¸í (Fade Out) + Ãß°¡ À§·Î ÀÌµ¿
+        // 2ë‹¨ê³„: ë¶ˆíˆ¬ëª… -> íˆ¬ëª… (Fade Out) + ì¶”ê°€ ìœ„ë¡œ ì´ë™
         timer = 0f;
         while (timer < fadeDuration)
         {
@@ -673,9 +775,9 @@ public class UIManager_Game : MonoBehaviour
             yield return null;
         }
 
-        // ¿¬Ãâ Á¾·á ÈÄ Á¤¸®
+        // ì—°ì¶œ ì¢…ë£Œ í›„ ì •ë¦¬
         txt_warning.gameObject.SetActive(false);
-        rectTransform.anchoredPosition = startPos; // ´ÙÀ½ ¿¬ÃâÀ» À§ÇØ ¿ø·¡ À§Ä¡·Î º¹±Í
+        rectTransform.anchoredPosition = startPos; // ë‹¤ìŒ ì—°ì¶œì„ ìœ„í•´ ì›ë˜ ìœ„ì¹˜ë¡œ ë³µê·€
         co_warningAnimation = null;
     }
 
@@ -691,7 +793,7 @@ public class UIManager_Game : MonoBehaviour
 
     private IEnumerator Co_HighlightSkills()
     {
-        // °­Á¶ È¿°ú¸¦ ÁÙ ÀÜ¿© ½ºÅ³ ¹öÆ° ¸®½ºÆ® ÃßÃâ
+        // ê°•ì¡° íš¨ê³¼ë¥¼ ì¤„ ì”ì—¬ ìŠ¤í‚¬ ë²„íŠ¼ ë¦¬ìŠ¤íŠ¸ ì¶”ì¶œ
         List<Button> targetButtons = new List<Button>();
         if (countMagnifier > 0 && btn_magnifier != null) targetButtons.Add(btn_magnifier);
         if (countMix > 0 && btn_mix != null) targetButtons.Add(btn_mix);
@@ -699,16 +801,16 @@ public class UIManager_Game : MonoBehaviour
 
         if (targetButtons.Count == 0) yield break;
 
-        // ¹öÆ° ¿ø·¡ »ö»ó ÀúÀå (±âº» Èò»ö ÀÌ¹ÌÁö ±âÁØ)
+        // ë²„íŠ¼ ì›ë˜ ìƒ‰ìƒ ì €ì¥ (ê¸°ë³¸ í°ìƒ‰ ì´ë¯¸ì§€ ê¸°ì¤€)
         Color originColor = Color.white;
-        Color highlightColor = new Color(1f, 0.9f, 0.3f, 1f); // ³ë¶õ»ö °­Á¶ ºû
+        Color highlightColor = new Color(1f, 0.9f, 0.3f, 1f); // ë…¸ë€ìƒ‰ ê°•ì¡° ë¹›
 
-        float duration = 0.4f; // ¹İÂ¦ÀÌ´Â ¼Óµµ
-        int repeatCount = 3;   // ¹İÂ¦ÀÌ´Â È½¼ö
+        float duration = 0.4f; // ë°˜ì§ì´ëŠ” ì†ë„
+        int repeatCount = 3;   // ë°˜ì§ì´ëŠ” íšŸìˆ˜
 
         for (int i = 0; i < repeatCount; i++)
         {
-            // ³ë¶ş°Ô °­Á¶
+            // ë…¸ë—ê²Œ ê°•ì¡°
             float timer = 0f;
             while (timer < duration)
             {
@@ -722,7 +824,7 @@ public class UIManager_Game : MonoBehaviour
                 yield return null;
             }
 
-            // ¿ø·¡ »öÀ¸·Î º¹±Í
+            // ì›ë˜ ìƒ‰ìœ¼ë¡œ ë³µê·€
             timer = 0f;
             while (timer < duration)
             {
@@ -737,7 +839,7 @@ public class UIManager_Game : MonoBehaviour
             }
         }
 
-        // ÃÖÁ¾ »ö»ó ¿øº¹ º¸Á¤
+        // ìµœì¢… ìƒ‰ìƒ ì›ë³µ ë³´ì •
         foreach (Button btn in targetButtons)
         {
             if (btn.image != null) btn.image.color = originColor;
@@ -748,6 +850,7 @@ public class UIManager_Game : MonoBehaviour
 
     private void GameOverUI()
     {
+        isTimerRunning = false;
         if (Panel_Main != null && Panel_Option != null && Panel_GameOver)
         {
             Panel_Main.SetActive(false);
@@ -760,6 +863,8 @@ public class UIManager_Game : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (m_dragManager != null) m_dragManager.OnScoreChanged -= UpdateScoreUI;
+        if (GameManager.Instance != null) GameManager.Instance.OnGameOver -= GameOverUI;
         if (GameManager.Instance != null) GameManager.Instance.OnTimerUpdated -= UpdateTimerUI;
 
         if (fcp != null)

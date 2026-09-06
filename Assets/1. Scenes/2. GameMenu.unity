@@ -216,6 +216,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &368915711 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3229212417642566402, guid: 8a32dd0ca02c7034ead85ee07f5b2964, type: 3}
+  m_PrefabInstance: {fileID: 6269656079019559549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!114 &407191838 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4355605034567168065, guid: 8a32dd0ca02c7034ead85ee07f5b2964, type: 3}
+  m_PrefabInstance: {fileID: 6269656079019559549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +375,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &532628552 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2712016293925476776, guid: 8a32dd0ca02c7034ead85ee07f5b2964, type: 3}
+  m_PrefabInstance: {fileID: 6269656079019559549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!114 &593832526 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 327809670916473468, guid: deeec13220953e34782eac41cf878d44, type: 3}
@@ -887,6 +920,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c9439150b7c1a4786c26b016206bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager_Menu
+  slider_masterVolume: {fileID: 368915711}
+  slider_bgmVolume: {fileID: 532628552}
+  slider_sfxVolume: {fileID: 407191838}
   Panel_MainMenu: {fileID: 103124980}
   Panel_Option: {fileID: 37958766}
   Panel_Help: {fileID: 0}

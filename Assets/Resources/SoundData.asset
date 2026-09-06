@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aa33ccb16334084a50de76af2c0a121, type: 3}
+  m_Name: SoundData
+  m_EditorClassIdentifier:
+  backgroundMusic: {fileID: 8300000, guid: 888af56592f6da24da28fdee474a0cc0, type: 3}
+  musicVolume: 0.5
+  effectsVolume: 1
+  click: {fileID: 8300000, guid: 887966faf0ea1de42a3a3bffaae1926f, type: 3}
+  match: {fileID: 8300000, guid: d42f32eed2e554343ba64ff54a9849f5, type: 3}
+  miss: {fileID: 8300000, guid: be7a80b97a1ee22409f648eaa1a7aaa6, type: 3}
+  hint: {fileID: 8300000, guid: 931505566026fa14cae1a8c24d634516, type: 3}
+  mix: {fileID: 8300000, guid: 508f9cc370d9f064d9756aca6716676a, type: 3}
+  destroy: {fileID: 8300000, guid: 0e69a845ff19e3343b2d033da9a42a54, type: 3}
+  gameOver: {fileID: 8300000, guid: f58828d807e69f84aab9195c9f542686, type: 3}
+  countdown: {fileID: 8300000, guid: 725547cac74cb714f8807d92e2b2f580, type: 3}
+  gameStart: {fileID: 8300000, guid: cc658c1dd28c9f64b94908c109d9212f, type: 3}

@@ -83,15 +83,16 @@ public class DragBoxArea : MonoBehaviour
             {
                 if (slime != null)
                 {
-                    // Destroy´Â ÇÁ·¹ÀÓ Á¾·á ½ÃÁ¡¿¡ °´Ã¼¸¦ ÆÄ±«ÇÏ¹Ç·Î, ³í¸®Àû Áï½Ã °è»êÀ» À§ÇØ ºñÈ°¼ºÈ­ ¿ì¼± Àû¿ë
+                    // DestroyëŠ” í”„ë ˆìž„ ì¢…ë£Œ ì‹œì ì— ê°ì²´ë¥¼ íŒŒê´´í•˜ë¯€ë¡œ, ë…¼ë¦¬ì  ì¦‰ì‹œ ê³„ì‚°ì„ ìœ„í•´ ë¹„í™œì„±í™” ìš°ì„  ì ìš©
                     slime.gameObject.SetActive(false);
                     Destroy(slime.gameObject);
                     destroyedCount++;
                 }
             }
 
+            SoundManager.Play(SoundEffect.Match);
             totalScore += destroyedCount;
-            Debug.Log($"ÇÕÀÌ 10ÀÔ´Ï´Ù! ÆÄ±«µÈ ½½¶óÀÓ: {destroyedCount}°³, ÇöÀç ÃÑÁ¡: {totalScore}");
+            Debug.Log($"í•©ì´ 10ìž…ë‹ˆë‹¤! íŒŒê´´ëœ ìŠ¬ë¼ìž„: {destroyedCount}ê°œ, í˜„ìž¬ ì´ì : {totalScore}");
 
             if (GameManager.Instance != null)
             {
@@ -99,6 +100,7 @@ public class DragBoxArea : MonoBehaviour
             }
         }
 
+        if (sum != 10 && overlappingSlimes.Count > 0) SoundManager.Play(SoundEffect.Miss);
         ClearSlimesHighlight();
         overlappingSlimes.Clear();
     }

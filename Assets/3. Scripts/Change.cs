@@ -28,6 +28,9 @@ public class Change : MonoBehaviour
     [SerializeField] private SlimePart slimepart;
     [SerializeField] private MapPart mappart;
 
+    private bool started;
+    private UIManager_Menu menuPublisher;
+    private UIManager_Game gamePublisher;
     private Image targetimg;
     private SpriteRenderer targetsr;
     private SlimeController m_slimeController;
@@ -39,8 +42,16 @@ public class Change : MonoBehaviour
         m_slimeController = GetComponentInParent<SlimeController>();
     }
 
+    private void Start()
+    {
+        started = true;
+        ManageEvents(true);
+        ApplySavedData();
+    }
+
     private void OnEnable()
     {
+        if (!started) return;
         ManageEvents(true);
         ApplySavedData();
     }
@@ -52,39 +63,44 @@ public class Change : MonoBehaviour
 
     private void ManageEvents(bool subscribe)
     {
-        if (UIManager_Menu.Instance != null)
+        if (subscribe)
+        {
+            menuPublisher = UIManager_Menu.Instance;
+            gamePublisher = UIManager_Game.Instance;
+        }
+        if (menuPublisher != null)
         {
             if (subscribe)
             {
-                UIManager_Menu.Instance.OnColorChanged += ApplyColor;
-                UIManager_Menu.Instance.OnFaceChanged += ApplyFace;
-                UIManager_Menu.Instance.OnCostumeChanged += ApplyCostume;
-                UIManager_Menu.Instance.OnMapChanged += ApplyMap;
+                if (category == Category.Slime && (slimepart == SlimePart.Color || slimepart == SlimePart.SliderBar)) menuPublisher.OnColorChanged += ApplyColor;
+                if (category == Category.Slime && slimepart == SlimePart.Face) menuPublisher.OnFaceChanged += ApplyFace;
+                if (category == Category.Slime && slimepart == SlimePart.Costume) menuPublisher.OnCostumeChanged += ApplyCostume;
+                if (category == Category.Map) menuPublisher.OnMapChanged += ApplyMap;
             }
             else
             {
-                UIManager_Menu.Instance.OnColorChanged -= ApplyColor;
-                UIManager_Menu.Instance.OnFaceChanged -= ApplyFace;
-                UIManager_Menu.Instance.OnCostumeChanged -= ApplyCostume;
-                UIManager_Menu.Instance.OnMapChanged -= ApplyMap;
+                menuPublisher.OnColorChanged -= ApplyColor;
+                menuPublisher.OnFaceChanged -= ApplyFace;
+                menuPublisher.OnCostumeChanged -= ApplyCostume;
+                menuPublisher.OnMapChanged -= ApplyMap;
             }
         }
 
-        if (UIManager_Game.Instance != null)
+        if (gamePublisher != null)
         {
             if (subscribe)
             {
-                UIManager_Game.Instance.OnColorChanged += ApplyColor;
-                UIManager_Game.Instance.OnFaceChanged += ApplyFace;
-                UIManager_Game.Instance.OnCostumeChanged += ApplyCostume;
-                UIManager_Game.Instance.OnMapChanged += ApplyMap;
+                if (category == Category.Slime && (slimepart == SlimePart.Color || slimepart == SlimePart.SliderBar)) gamePublisher.OnColorChanged += ApplyColor;
+                if (category == Category.Slime && slimepart == SlimePart.Face) gamePublisher.OnFaceChanged += ApplyFace;
+                if (category == Category.Slime && slimepart == SlimePart.Costume) gamePublisher.OnCostumeChanged += ApplyCostume;
+                if (category == Category.Map) gamePublisher.OnMapChanged += ApplyMap;
             }
             else
             {
-                UIManager_Game.Instance.OnColorChanged -= ApplyColor;
-                UIManager_Game.Instance.OnFaceChanged -= ApplyFace;
-                UIManager_Game.Instance.OnCostumeChanged -= ApplyCostume;
-                UIManager_Game.Instance.OnMapChanged -= ApplyMap;
+                gamePublisher.OnColorChanged -= ApplyColor;
+                gamePublisher.OnFaceChanged -= ApplyFace;
+                gamePublisher.OnCostumeChanged -= ApplyCostume;
+                gamePublisher.OnMapChanged -= ApplyMap;
             }
         }
     }

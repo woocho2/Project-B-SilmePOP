@@ -508,6 +508,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &863973225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 863973227}
+  - component: {fileID: 863973226}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &863973226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863973225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20add8030ae42818e4afb7bf400ca5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+--- !u!4 &863973227
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863973225}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.33333, y: -12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1413165494
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +564,7 @@ GameObject:
   - component: {fileID: 1413165498}
   - component: {fileID: 1413165497}
   - component: {fileID: 1413165496}
+  - component: {fileID: 1413165499}
   m_Layer: 5
   m_Name: Btn_GameStart
   m_TagString: Untagged
@@ -628,6 +673,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1413165494}
   m_CullTransparentMesh: 1
+--- !u!114 &1413165499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413165494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f63f18cc29f4b9194678ce404a611f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundPlayer
+  clip: {fileID: 8300000, guid: cc658c1dd28c9f64b94908c109d9212f, type: 3}
+  effect: 8
+  playOnEnable: 0
 --- !u!1 &1483245441
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   rect_Logo: {fileID: 1680274983}
   img_Logo: {fileID: 1680274984}
-  sr_SlimePOP: {fileID: 0}
   rect_GameStart: {fileID: 1413165495}
   img_GameStart: {fileID: 1413165497}
   btn_GameStart: {fileID: 1413165496}
@@ -769,6 +828,7 @@ GameObject:
   - component: {fileID: 1680274983}
   - component: {fileID: 1680274985}
   - component: {fileID: 1680274984}
+  - component: {fileID: 1680274986}
   m_Layer: 0
   m_Name: SLIME POP !!
   m_TagString: Untagged
@@ -833,6 +893,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680274981}
   m_CullTransparentMesh: 1
+--- !u!114 &1680274986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680274981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f63f18cc29f4b9194678ce404a611f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundPlayer
+  clip: {fileID: 8300000, guid: cc658c1dd28c9f64b94908c109d9212f, type: 3}
+  effect: 8
+  playOnEnable: 0
 --- !u!1 &2120657274
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,3 +1020,4 @@ SceneRoots:
   - {fileID: 2120657278}
   - {fileID: 170107216}
   - {fileID: 1597154226}
+  - {fileID: 863973227}

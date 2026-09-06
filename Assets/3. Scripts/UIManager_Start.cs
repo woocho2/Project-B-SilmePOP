@@ -7,11 +7,11 @@ public class UIManager_Start : MonoBehaviour
     public static UIManager_Start Instance { get; private set; }
 
     [Header("Logo Settings")]
-    [SerializeField] private RectTransform rect_Logo; // ·Î°í Å©±â ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ RectTransform
-    [SerializeField] private Image img_Logo;          // ·Î°í ÀÌ¹ÌÁö¸¦ Ç¥½ÃÇÒ Image ÄÄÆ÷³ÍÆ®
+    [SerializeField] private RectTransform rect_Logo; // ë¡œê³  í¬ê¸° ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ RectTransform
+    [SerializeField] private Image img_Logo;          // ë¡œê³  ì´ë¯¸ì§€ë¥¼ í‘œì‹œí•  Image ì»´í¬ë„ŒíŠ¸
     
     [Header("Start Button Settings")]
-    [SerializeField] private RectTransform rect_GameStart; // ¹öÆ° Å©±â ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ RectTransform
+    [SerializeField] private RectTransform rect_GameStart; // ë²„íŠ¼ í¬ê¸° ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ RectTransform
     [SerializeField] private Image img_GameStart;
     [SerializeField] private Button btn_GameStart;
 
@@ -33,20 +33,21 @@ public class UIManager_Start : MonoBehaviour
 
     private void Start()
     { 
-        // 2. ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¼¼ÆÃ ¹× ¿¬Ãâ Áß Å¬¸¯ ¹æÁö
+        // 2. ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ ì„¸íŒ… ë° ì—°ì¶œ ì¤‘ í´ë¦­ ë°©ì§€
         if (btn_GameStart != null)
         {
             btn_GameStart.onClick.RemoveAllListeners();
+            btn_GameStart.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_GameStart.onClick.AddListener(() =>
             {
                 SceneLoader.StartLoad(m_sceneName);
             });
 
-            // ¿¬ÃâÀÌ ³¡³ª±â Àü±îÁö À¯Àú°¡ ´©¸¦ ¼ö ¾øµµ·Ï ¹öÆ° ºñÈ°¼ºÈ­
+            // ì—°ì¶œì´ ëë‚˜ê¸° ì „ê¹Œì§€ ìœ ì €ê°€ ëˆ„ë¥¼ ìˆ˜ ì—†ë„ë¡ ë²„íŠ¼ ë¹„í™œì„±í™”
             btn_GameStart.interactable = false;
         }
 
-        // 3. ÀÎÆ®·Î ¿¬Ãâ ½ÃÀÛ
+        // 3. ì¸íŠ¸ë¡œ ì—°ì¶œ ì‹œì‘
         StartCoroutine(IntroSequence());
     }
 
@@ -59,30 +60,30 @@ public class UIManager_Start : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ ½ÃÀÛ ½Ã ¼øÂ÷ÀûÀÎ UI ¿¬ÃâÀ» ´ã´çÇÏ´Â ÄÚ·çÆ¾ÀÔ´Ï´Ù.
+    /// ê²Œì„ ì‹œì‘ ì‹œ ìˆœì°¨ì ì¸ UI ì—°ì¶œì„ ë‹´ë‹¹í•˜ëŠ” ì½”ë£¨í‹´ì…ë‹ˆë‹¤.
     /// </summary>
     private IEnumerator IntroSequence()
     {
-        // 1. ÃÊ±â »óÅÂ ¼¼ÆÃ: µÎ ¿ÀºêÁ§Æ®¸¦ º¸ÀÌÁö ¾Ê°Ô(Scale 0) Ã³¸®
+        // 1. ì´ˆê¸° ìƒíƒœ ì„¸íŒ…: ë‘ ì˜¤ë¸Œì íŠ¸ë¥¼ ë³´ì´ì§€ ì•Šê²Œ(Scale 0) ì²˜ë¦¬
         if (rect_Logo != null) rect_Logo.localScale = Vector3.zero;
         if (rect_GameStart != null) rect_GameStart.localScale = Vector3.zero;
 
-        // 2. ·Î°í°¡ È­¸é¿¡ ²ÈÈ÷´Â ¿¬Ãâ ½ÇÇà ¹× ´ë±â
+        // 2. ë¡œê³ ê°€ í™”ë©´ì— ê½‚íˆëŠ” ì—°ì¶œ ì‹¤í–‰ ë° ëŒ€ê¸°
         if (rect_Logo != null)
         {
             yield return StartCoroutine(SlamAnimation(rect_Logo));
         }
 
-        // 3. Á¤È®È÷ 1ÃÊ ´ë±â
+        // 3. ì •í™•íˆ 1ì´ˆ ëŒ€ê¸°
         yield return new WaitForSeconds(1f);
 
-        // 4. °ÔÀÓ ½ÃÀÛ ¹öÆ°ÀÌ È­¸é¿¡ ²ÈÈ÷´Â ¿¬Ãâ ½ÇÇà ¹× ´ë±â
+        // 4. ê²Œì„ ì‹œì‘ ë²„íŠ¼ì´ í™”ë©´ì— ê½‚íˆëŠ” ì—°ì¶œ ì‹¤í–‰ ë° ëŒ€ê¸°
         if (rect_GameStart != null)
         {
             yield return StartCoroutine(SlamAnimation(rect_GameStart));
         }
 
-        // 5. ¿¬ÃâÀÌ ¸ğµÎ ³¡³ª¸é ¹öÆ° Å¬¸¯À» Çã¿ëÇÏ°í ±âÁ¸ÀÇ ¹İÂ¦ÀÓ È¿°ú ½ÃÀÛ
+        // 5. ì—°ì¶œì´ ëª¨ë‘ ëë‚˜ë©´ ë²„íŠ¼ í´ë¦­ì„ í—ˆìš©í•˜ê³  ê¸°ì¡´ì˜ ë°˜ì§ì„ íš¨ê³¼ ì‹œì‘
         if (btn_GameStart != null)
         {
             btn_GameStart.interactable = true;
@@ -95,14 +96,14 @@ public class UIManager_Start : MonoBehaviour
     }
 
     /// <summary>
-    /// Å¸°Ù UI°¡ ÇÃ·¹ÀÌ¾î ÂÊ(Scale 5)¿¡¼­ È­¸é(Scale 1)À¸·Î °­ÇÏ°Ô ²ÈÈ÷´Â ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÕ´Ï´Ù.
+    /// íƒ€ê²Ÿ UIê°€ í”Œë ˆì´ì–´ ìª½(Scale 5)ì—ì„œ í™”ë©´(Scale 1)ìœ¼ë¡œ ê°•í•˜ê²Œ ê½‚íˆëŠ” ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•©ë‹ˆë‹¤.
     /// </summary>
     private IEnumerator SlamAnimation(RectTransform target)
     {
-        float duration = 0.25f; // ²ÈÈ÷´Â µ¥ °É¸®´Â ½Ã°£ (ºü¸¦¼ö·Ï Å¸°İ°¨ÀÌ ÁÁ½À´Ï´Ù)
+        float duration = 0.25f; // ê½‚íˆëŠ” ë° ê±¸ë¦¬ëŠ” ì‹œê°„ (ë¹ ë¥¼ìˆ˜ë¡ íƒ€ê²©ê°ì´ ì¢‹ìŠµë‹ˆë‹¤)
         float elapsed = 0f;
 
-        // ½ÃÀÛ ½ºÄÉÀÏ(¾ÆÁÖ Å©°Ô)°ú ¸ñÇ¥ ½ºÄÉÀÏ(¿ø·¡ Å©±â 1) ¼³Á¤
+        // ì‹œì‘ ìŠ¤ì¼€ì¼(ì•„ì£¼ í¬ê²Œ)ê³¼ ëª©í‘œ ìŠ¤ì¼€ì¼(ì›ë˜ í¬ê¸° 1) ì„¤ì •
         Vector3 startScale = new Vector3(5f, 5f, 5f);
         Vector3 endScale = new Vector3(0.75f,0.75f,0.75f);
 
@@ -113,18 +114,18 @@ public class UIManager_Start : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
 
-            // Ease-In È¿°ú: Ã³À½¿£ ºü¸£°Ô ´Ù°¡¿À°í ¸¶Áö¸·¿¡ È® ¸ØÃß´Â ¼öÇĞÀû ¿¬Ãâ
+            // Ease-In íš¨ê³¼: ì²˜ìŒì—” ë¹ ë¥´ê²Œ ë‹¤ê°€ì˜¤ê³  ë§ˆì§€ë§‰ì— í™• ë©ˆì¶”ëŠ” ìˆ˜í•™ì  ì—°ì¶œ
             t = Mathf.Sin(t * Mathf.PI * 0.5f);
 
             target.localScale = Vector3.Lerp(startScale, endScale, t);
             yield return null;
         }
 
-        target.localScale = endScale; // ¿ÀÂ÷ º¸Á¤À» À§ÇØ Á¤È®È÷ 1·Î °íÁ¤
+        target.localScale = endScale; // ì˜¤ì°¨ ë³´ì •ì„ ìœ„í•´ ì •í™•íˆ 1ë¡œ ê³ ì •
     }
 
     /// <summary>
-    /// °ÔÀÓ ½ÃÀÛ ¹öÆ°ÀÌ ¼­¼­È÷ ¹İÂ¦°Å¸®´Â ±âÁ¸ ÄÚ·çÆ¾ÀÔ´Ï´Ù.
+    /// ê²Œì„ ì‹œì‘ ë²„íŠ¼ì´ ì„œì„œíˆ ë°˜ì§ê±°ë¦¬ëŠ” ê¸°ì¡´ ì½”ë£¨í‹´ì…ë‹ˆë‹¤.
     /// </summary>
     private IEnumerator TwinkleGameStart()
     {

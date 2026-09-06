@@ -16,6 +16,7 @@ public class SlimeManager : MonoBehaviour
     [SerializeField] Vector2 areaSize = new Vector2(10f, 6f);
 
     private SlimeController[,] slimeGrid;
+    private int[,] prefixSums;
 
     public bool IsDestroySkillActive { get; private set; } = false;
 
@@ -38,6 +39,7 @@ public class SlimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsPaused) return;
         if (IsDestroySkillActive && Mouse.current != null)
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -87,7 +89,7 @@ public class SlimeManager : MonoBehaviour
     {
         IsDestroySkillActive = true;
         ChangeAllSlimesColliderSize(1f, 1f);
-        Debug.Log("ÆÄ±« ½ºÅ³ ÀåÀü ¿Ï·á: Å¸°Ù ½½¶óÀÓÀ» Å¬¸¯ÇÏ¼¼¿ä.");
+        Debug.Log("íŒŒê´´ ìŠ¤í‚¬ ì¥ì „ ì™„ë£Œ: íƒ€ê²Ÿ ìŠ¬ë¼ì„ì„ í´ë¦­í•˜ì„¸ìš”.");
     }
 
     private void ChangeAllSlimesColliderSize(float sizeX, float sizeY)
@@ -105,6 +107,7 @@ public class SlimeManager : MonoBehaviour
 
     private void DestroySpecificSlimeAndAddScore(SlimeController targetSlime)
     {
+        SoundManager.Play(SoundEffect.Destroy);
         targetSlime.gameObject.SetActive(false);
         Destroy(targetSlime.gameObject);
 
@@ -123,7 +126,7 @@ public class SlimeManager : MonoBehaviour
     {
         if (slimePrefab == null)
         {
-            Debug.LogError("½½¶óÀÓ ÇÁ¸®ÆÕÀÌ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("ìŠ¬ë¼ì„ í”„ë¦¬íŒ¹ì´ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -159,6 +162,7 @@ public class SlimeManager : MonoBehaviour
 
         foreach (Transform child in transform)
         {
+            child.gameObject.SetActive(false);
             Destroy(child.gameObject);
         }
 
@@ -171,6 +175,19 @@ public class SlimeManager : MonoBehaviour
 
         if (slimeGrid == null) return false;
 
+        if (prefixSums == null || prefixSums.GetLength(0) != columns + 1 || prefixSums.GetLength(1) != rows + 1)
+            prefixSums = new int[columns + 1, rows + 1];
+        for (int x = 0; x < columns; x++)
+        {
+            for (int y = 0; y < rows; y++)
+            {
+                SlimeController slime = slimeGrid[x, y];
+                int value = slime != null && slime.gameObject.activeInHierarchy ? slime.CurrentNumber : 0;
+                prefixSums[x + 1, y + 1] = value + prefixSums[x, y + 1]
+                    + prefixSums[x + 1, y] - prefixSums[x, y];
+            }
+        }
+
         for (int startX = 0; startX < columns; startX++)
         {
             for (int startY = 0; startY < rows; startY++)
@@ -179,25 +196,12 @@ public class SlimeManager : MonoBehaviour
                 {
                     for (int endY = startY; endY < rows; endY++)
                     {
-                        int sum = 0;
-                        bool hasActiveSlime = false;
-
-                        for (int x = startX; x <= endX; x++)
-                        {
-                            for (int y = startY; y <= endY; y++)
-                            {
-                                SlimeController slime = slimeGrid[x, y];
-                                if (slime != null && slime.gameObject.activeInHierarchy)
-                                {
-                                    sum += slime.CurrentNumber;
-                                    hasActiveSlime = true;
-                                }
-                            }
-                        }
+                        int sum = prefixSums[endX + 1, endY + 1] - prefixSums[startX, endY + 1]
+                            - prefixSums[endX + 1, startY] + prefixSums[startX, startY];
 
                         if (sum > 10) break;
 
-                        if (hasActiveSlime && sum == 10)
+                        if (sum == 10)
                         {
                             matchStartX = startX;
                             matchStartY = startY;

@@ -37,21 +37,27 @@ public class DragManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("DragManager¿¡ dragBoxPrefabÀÌ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogError("DragManagerì— dragBoxPrefabì´ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
         }
     }
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsPaused)
+        {
+            CancelDrag();
+            return;
+        }
         if (Mouse.current == null) return;
 
-        // ½½¶óÀÓ ´ÜÀÏ ÆÄ±« ½ºÅ³ÀÌ ÄÑÁ® ÀÖ´Â µ¿¾È¿¡´Â µå·¡±× ·ÎÁ÷À» ¿ÏÀüÈ÷ Â÷´ÜÇÕ´Ï´Ù.
+        // ìŠ¬ë¼ìž„ ë‹¨ì¼ íŒŒê´´ ìŠ¤í‚¬ì´ ì¼œì ¸ ìžˆëŠ” ë™ì•ˆì—ëŠ” ë“œëž˜ê·¸ ë¡œì§ì„ ì™„ì „ížˆ ì°¨ë‹¨í•©ë‹ˆë‹¤.
         if (SlimeManager.Instance != null && SlimeManager.Instance.IsDestroySkillActive)
         {
+            CancelDrag();
             return;
         }
 
-        // 1. µå·¡±× ½ÃÀÛ
+        // 1. ë“œëž˜ê·¸ ì‹œìž‘
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             isDragging = true;
@@ -66,7 +72,7 @@ public class DragManager : MonoBehaviour
             }
         }
 
-        // 2. µå·¡±× ÁøÇà Áß
+        // 2. ë“œëž˜ê·¸ ì§„í–‰ ì¤‘
         if (Mouse.current.leftButton.isPressed && isDragging)
         {
             if (currentDragBox != null)
@@ -76,7 +82,7 @@ public class DragManager : MonoBehaviour
             }
         }
 
-        // 3. µå·¡±× Á¾·á ¹× Á¶°Ç ÆÇÁ¤
+        // 3. ë“œëž˜ê·¸ ì¢…ë£Œ ë° ì¡°ê±´ íŒì •
         if (Mouse.current.leftButton.wasReleasedThisFrame && isDragging)
         {
             isDragging = false;
@@ -101,6 +107,7 @@ public class DragManager : MonoBehaviour
 
     public void ResetDragManager()
     {
+        CancelDrag();
         totalScore = 0;
         OnScoreChanged?.Invoke(totalScore);
 
@@ -125,5 +132,19 @@ public class DragManager : MonoBehaviour
     {
         totalScore += scoreToAdd;
         OnScoreChanged?.Invoke(totalScore);
+    }
+
+    private void CancelDrag()
+    {
+        isDragging = false;
+        if (currentDragBox != null) currentDragBox.SetActive(false);
+    }
+
+    private void OnDisable() => CancelDrag();
+
+    private void OnDestroy()
+    {
+        if (currentDragBox != null) Destroy(currentDragBox);
+        if (Instance == this) Instance = null;
     }
 }

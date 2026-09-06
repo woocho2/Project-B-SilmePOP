@@ -4,11 +4,15 @@ using UnityEngine.Events;
 
 public class UIManager_Menu : MonoBehaviour
 {
+    [Header("Audio Volume Sliders")]
+    [SerializeField] private Slider slider_masterVolume;
+    [SerializeField] private Slider slider_bgmVolume;
+    [SerializeField] private Slider slider_sfxVolume;
     public static UIManager_Menu Instance { get; private set; }
 
     public event UnityAction<Color> OnColorChanged;
     public event UnityAction<Sprite> OnFaceChanged;
-    public event UnityAction<Sprite> OnCostumeChanged; // ÄÚ½ºÆ¬ ÀÌº¥Æ® Ãß°¡
+    public event UnityAction<Sprite> OnCostumeChanged; // ì½”ìŠ¤íŠ¬ ì´ë²¤íŠ¸ ì¶”ê°€
     public event UnityAction<ThemeData> OnMapChanged;
 
     [Header("Panels & UI Elements")]
@@ -88,6 +92,9 @@ public class UIManager_Menu : MonoBehaviour
 
     private void Start()
     {
+        AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
+        AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
+        AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
         ApplySavedMapUI();
         InitUI();
         BindMenuButtons();
@@ -136,6 +143,7 @@ public class UIManager_Menu : MonoBehaviour
         if (btn_optionQuit != null)
         {
             btn_optionQuit.onClick.RemoveAllListeners();
+            btn_optionQuit.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_optionQuit.onClick.AddListener(() => SwitchPanel(Panel_Option, Panel_MainMenu));
         }
     }
@@ -154,6 +162,7 @@ public class UIManager_Menu : MonoBehaviour
         if (btn_slimeCustom != null && ColorPallet != null && btn_slimeCustomApply != null)
         {
             btn_slimeCustom.onClick.RemoveAllListeners();
+            btn_slimeCustom.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_slimeCustom.onClick.AddListener(() =>
             {
                 bool willBeActive = !ColorPallet.activeSelf;
@@ -173,9 +182,10 @@ public class UIManager_Menu : MonoBehaviour
             });
         }
 
-        if (btn_slimeCustom != null)
+        if (btn_slimeCustomApply != null)
         {
             btn_slimeCustomApply.onClick.RemoveAllListeners();
+            btn_slimeCustomApply.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_slimeCustomApply.onClick.AddListener(OnCustomApplyClicked);
         }
     }
@@ -195,11 +205,11 @@ public class UIManager_Menu : MonoBehaviour
 
     private void BindSlimeFaceButtons()
     {
-        // ¾ó±¼Àº Face·Î
+        // ì–¼êµ´ì€ Faceë¡œ
         BindSprite(btn_slimeNone, spr_slimeFaceNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
 
-        // ¾Ç¸¶, Ãµ»ç, ¿Õ°üÀº CostumeÀ¸·Î ºĞ¸® ¿¬°á
+        // ì•…ë§ˆ, ì²œì‚¬, ì™•ê´€ì€ Costumeìœ¼ë¡œ ë¶„ë¦¬ ì—°ê²°
         BindSprite(btn_slimeCostumeNone, spr_slimeCostumeNone, ChangeSlimeCostume);
         BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
         BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
@@ -228,6 +238,7 @@ public class UIManager_Menu : MonoBehaviour
     {
         if (btn == null) return;
         btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn.onClick.AddListener(() => {
             action?.Invoke();
         });
@@ -240,6 +251,7 @@ public class UIManager_Menu : MonoBehaviour
         {
             parsedColor.a = ChangeData.SLIME_ALPHA;
             btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn.onClick.AddListener(() => ChangeSlimeColor(parsedColor));
         }
     }
@@ -248,6 +260,7 @@ public class UIManager_Menu : MonoBehaviour
     {
         if (btn == null || sprite == null) return;
         btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn.onClick.AddListener(() => action(sprite));
     }
 
@@ -255,6 +268,7 @@ public class UIManager_Menu : MonoBehaviour
     {
         if (btn == null || theme == null) return;
         btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
         btn.onClick.AddListener(() => ChangeMap(theme));
     }
 
@@ -289,7 +303,7 @@ public class UIManager_Menu : MonoBehaviour
         OnFaceChanged?.Invoke(newSprite);
     }
 
-    // ÄÚ½ºÆ¬ Àü¿ë ¸Ş¼­µå Ãß°¡
+    // ì½”ìŠ¤íŠ¬ ì „ìš© ë©”ì„œë“œ ì¶”ê°€
     private void ChangeSlimeCostume(Sprite newSprite)
     {
         if (newSprite == null) return;
