@@ -28,6 +28,9 @@ public class UIManager_Menu : MonoBehaviour
     [SerializeField] private Button btn_quit;
     [SerializeField] private Button btn_optionQuit;
 
+    [Header("Help Buttons")]
+    [SerializeField] private Button btn_helpBack;
+
     [Header("Slime Color Buttons")]
     [SerializeField] private Button btn_slimeWhite;
     [SerializeField] private Button btn_slimeBlack;
@@ -137,8 +140,10 @@ public class UIManager_Menu : MonoBehaviour
     {
         BindMenuButton(btn_gameStart, 170f, () => SceneLoader.StartLoad(m_sceneName));
         BindMenuButton(btn_option, 20f, () => SwitchPanel(Panel_MainMenu, Panel_Option));
-        BindMenuButton(btn_help, -130f, () => SwitchPanel(Panel_MainMenu, Panel_Help));
-        BindMenuButton(btn_quit, -280f);
+        BindMenuButton(btn_help, -130f, () => SwitchPanel(Panel_Help, Panel_MainMenu));
+        
+        // btn_quit 클릭 시 게임 종료 로직(QuitGame) 실행 바인딩
+        BindMenuButton(btn_quit, -280f, QuitGame);
 
         if (btn_optionQuit != null)
         {
@@ -146,6 +151,28 @@ public class UIManager_Menu : MonoBehaviour
             btn_optionQuit.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
             btn_optionQuit.onClick.AddListener(() => SwitchPanel(Panel_Option, Panel_MainMenu));
         }
+
+        if (btn_helpBack != null)
+        {
+            btn_helpBack.onClick.RemoveAllListeners();
+            btn_helpBack.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
+            btn_helpBack.onClick.AddListener(() => SwitchPanel(Panel_Help, Panel_MainMenu));
+        }
+    }
+
+    /// <summary>
+    /// 게임을 완전히 종료하는 메서드
+    /// 에디터 환경에서는 재생 모드를 정지하고, 빌드된 파일에서는 프로세스를 종료합니다.
+    /// </summary>
+    private void QuitGame()
+    {
+#if UNITY_EDITOR
+        // 유니티 에디터 환경에서 플레이 모드 정지
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // 빌드된 실행 파일(.exe / .apk 등)에서 애플리케이션 완전 종료
+        Application.Quit();
+#endif
     }
 
     private void BindSlimeColorButtons()
@@ -243,7 +270,6 @@ public class UIManager_Menu : MonoBehaviour
             action?.Invoke();
         });
     }
-
 
     private void BindColor(Button btn, string hexCode)
     {
