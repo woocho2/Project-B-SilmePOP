@@ -1,0 +1,1 @@
+PASS: Unity import and C# compilation; 170 active slimes; digits 1-9; 0.48 bold centered numbers; black on bright colors, white on dark; color, face-none and three costumes; mix; option preview; no game runtime errors.

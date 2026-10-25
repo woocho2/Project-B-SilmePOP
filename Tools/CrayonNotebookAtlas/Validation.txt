@@ -1,0 +1,1 @@
+PASS: 3072 x 2048 RGBA atlas; eight 768 x 1024 cells; transparent cell padding and opaque centers; existing SpriteMultiple names, rectangles, GUID and IDs preserved; order Basic Spring Summer Autumn Winter Sunny Night Cloudy.

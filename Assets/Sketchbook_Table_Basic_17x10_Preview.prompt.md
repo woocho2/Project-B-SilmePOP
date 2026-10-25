@@ -1,0 +1,14 @@
+# Basic sketchbook table: taller 17 x 10 board preview
+
+Tool: built-in image_gen.
+Final sprite: 2100 x 1320 RGBA PNG. Design reserves a central 17:10 playing area plus binding and decoration margins. The original preview and scene bindings are unchanged.
+
+## Prompt
+
+Use case: precise-object-edit. Edit target: the supplied BASIC brown-and-sprout crayon sketchbook game-board prototype.
+Primary correction: The game has SEVENTEEN COLUMNS by TEN ROWS of cells. The existing wide 2:1 sketchbook is TOO SHALLOW. REDRAW THE SKETCHBOOK NOTICEABLY TALLER while keeping approximately the same width and the existing art style. Do NOT just stretch or distort the artwork: extend the blank drawing-page area vertically and reposition edges and motifs cleanly. The final OUTER asset should be about 1.59:1 landscape (requested delivery 2100 x 1320), including top spiral binding and margins, rather than 2:1. The reserved INNER playing rectangle is 17:10, distinct from the outer asset proportions.
+Layout guide for a 2100 x 1320 canvas: reserve a completely clear 1700 x 1000 central play rectangle roughly from x=200..1900 and y=180..1180. This is a placement guide ONLY: do NOT draw this rectangle, grid, cells, numbers, labels or placeholders. It should stay uninterrupted blank tan sketchbook paper. The extra vertical room must be visibly noticeable compared with the input.
+Keep the same rounded brown cover, simple top long-edge charcoal/brown C-loop spiral binding, two or three understated page-edge strokes along the bottom/right, medium uneven dark pencil/crayon contour, gentle flat LIGHT WARM CARAMEL / tan drawing-page fill, and children's pastel wax-crayon / colored-pencil texture. Keep all spirals entirely inside the image and approximately the same natural proportions, no oversized binding. Reduce the two green two-leaf sprout doodles to SMALL peripheral motifs: one tucked into the narrow upper-right outer page margin, one into the lower-left outer margin. Both must sit OUTSIDE the reserved central play rectangle and never cover any potential gameplay cell.
+The whole sketchbook silhouette should be almost as wide as the canvas with small even transparent exterior padding, and much taller than the input. Fully opaque drawing page, genuine transparent background outside, no desk or room behind it. Still unruled: NO notebook horizontal ruling, NO left margin line, NO grid. No slimes, text, UI, title, logo, buttons, arrows, dimensions or guide marks. Preserve the warm brown + green sprout BASIC theme and simple childlike crayon drawing, avoid photorealistic paper, glossy 3D or realistic metal. One finished isolated transparent PNG sketchbook asset preview.
+
+Generated source: C:\Users\user\.codex\generated_images\01a14e90-c8a9-73b3-bd99-38092c686ea9\exec-7eed9c57-e3c9-4e00-957e-df4bf04d2c12.png

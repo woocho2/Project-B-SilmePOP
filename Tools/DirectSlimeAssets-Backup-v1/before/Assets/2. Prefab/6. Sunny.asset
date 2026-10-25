@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489e1f6948168864ab2ffc613ddebf7e, type: 3}
+  m_Name: 6. Sunny
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeData
+  themeName: Sunny
+  MenuSprite: {fileID: 21300006, guid: ea2fffb35494d8022250fe965c5b70c3, type: 3}
+  TableSprite: {fileID: 21300006, guid: 9da566edf21d79f2fe62b334fe023615, type: 3}
+  SlimeSprite: {fileID: 21300006, guid: 4f27bb85d4049310773bf44972c12739, type: 3}

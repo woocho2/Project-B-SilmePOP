@@ -1,0 +1,1 @@
+PASS: 5 atlases / 40 sprites, eight equal cells per atlas; standardized size, centered pivot, PPU100, no mipmaps and uncompressed alpha; preserved lookup names; old mixed Resources sheets absent; all eight menu and game themes; ThemeData references; timer/mascot/table/menu/option bindings; Night pause/options/resume; 170 slimes; no game runtime errors.

@@ -143,7 +143,9 @@ public class UIManager_Game : MonoBehaviour
 
         InitTimerUI();
         InitScoreUI();
+        if (ChangeData.SelectedMapTheme == null) ChangeData.SelectedMapTheme = themeBasic;
         ApplySavedMapUI();
+        DoodleLabSkin.ApplyMapTheme(ChangeData.SelectedMapTheme);
         InitUI();
         BindMenuButtons();
         BindSlimeColorButtons();
@@ -160,6 +162,7 @@ public class UIManager_Game : MonoBehaviour
         {
             GameManager.Instance.OnGameOver += GameOverUI;
         }
+        DoodleLabSkin.ConfigureHeader(Panel_Game, m_timerSlider, txt_timer, txt_score);
         BeginStartCountdown();
     }
 
@@ -291,7 +294,7 @@ public class UIManager_Game : MonoBehaviour
             float maxTime = GameManager.Instance.MaxGameTime;
             if (maxTime > 0f)
             {
-                m_timerSlider.value = 1f - GameManager.Instance.CurrentTime / maxTime;
+                m_timerSlider.value = GameManager.Instance.CurrentTime / maxTime;
             }
         }
 
@@ -634,6 +637,7 @@ public class UIManager_Game : MonoBehaviour
     private void ChangeSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
+        ChangeData.UseDoodlePalette = false;
         ChangeData.SelectedColor = newColor;
         OnColorChanged?.Invoke(newColor);
     }
@@ -641,6 +645,7 @@ public class UIManager_Game : MonoBehaviour
     private void ChangeCustomSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
+        ChangeData.UseDoodlePalette = false;
         ChangeData.SelectedColor = newColor;
         ChangeData.LastCustomColor = newColor;
         OnColorChanged?.Invoke(newColor);
@@ -681,16 +686,17 @@ public class UIManager_Game : MonoBehaviour
         }
 
         OnMapChanged?.Invoke(newTheme);
+        DoodleLabSkin.ApplyMapTheme(newTheme);
     }
 
     public void UpdateTimerUI(float remainingTime)
     {
-        if (txt_timer != null) txt_timer.text = Mathf.CeilToInt(remainingTime).ToString();
+        if (txt_timer != null) txt_timer.text = "TIME  " + Mathf.CeilToInt(remainingTime).ToString();
 
         if (GameManager.Instance != null && GameManager.Instance.MaxGameTime > 0f && m_timerSlider != null)
         {
             float maxTime = GameManager.Instance.MaxGameTime;
-            m_timerSlider.value = (maxTime - remainingTime) / maxTime;
+            m_timerSlider.value = remainingTime / maxTime;
         }
 
         if (remainingTime <= 0f)

@@ -1,0 +1,461 @@
+[
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Autumn_Bar.png",
+        "Before":  "e3314103dce521b4ba51e469873c2b2ca351edf7cb3fbf859bc10cfeaa4ef454",
+        "After":  "bedab5b4e9f6146a6ca53848285b646826140fc9fe221c0f53c3f06df94100f9",
+        "MetaHash":  "80a4ab0f17acc6ee107e26f195c37edab18017c43295642b278094a81d044ebe",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Basic_Bar.png",
+        "Before":  "0892de44842c2fb7cc0ab3093cf51e368c649ee570f36c2e35ba61a76c076a50",
+        "After":  "ce0343cffaa2b4ac049c3826f589df77be87c2282e3f2fb1c0ee12c2c890e0c0",
+        "MetaHash":  "59416b23e613cebdc556f4a86f8e31d58007df5dc0fe94cc6d42be125dbe7076",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Cloudy_Bar.png",
+        "Before":  "ee6d733d0fe59bdcfd9a64f43327546cb093a04e09b0754f9f3c2876c872a245",
+        "After":  "b9f6276e7870c137b2f2cb5f52fa5df5750970dfbdfc545fe35e8d8e34d02e15",
+        "MetaHash":  "3be9d3cb36a759c9035a55ec86613d4089ee7e707e3e7ce53cdb11ca728d1398",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Night_Bar.png",
+        "Before":  "28ce4b1a3f0b978bd82e21398214bcad55f0eafa33597edd6bd597f5b6cfda8b",
+        "After":  "54384ff65accdc29851c1596342678521ba67cf1662db2b1ac48847637807ab9",
+        "MetaHash":  "15ab1345fefd670d6a8e63f737aac3429eef4c71f6fbfe31087a20d7a77bf3c2",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Spring_Bar.png",
+        "Before":  "421d6daee828089210ede9064fb5426cd3c3392ac1edd7687c8b8784ffbcc45d",
+        "After":  "e4c06ab6a3860a9b07ce90f90fe4fb4f6491dcbcc419fcc789a8ac62a0c4ae3c",
+        "MetaHash":  "f53d804671084996c9f9550a0f225b6b52f10f790afcf72866d06e6b06715247",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Summer_Bar.png",
+        "Before":  "4b18f010eab8b9147910841071fc544bb7f922c6696fec1cd24fc1ad1154d8de",
+        "After":  "5f6e75b82b831d0d1bc6a4be37a68b05c7c7918938249416546c054149065bbf",
+        "MetaHash":  "be0bc3960e6ec48bdc43e965d2b550bd738b1bc557f65ff6711ddde632b5ffb9",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Sunny_Bar.png",
+        "Before":  "c85c338bde4ef1090637c901dce992a3fe089c2231d8934c96d0bce12b2ffb3e",
+        "After":  "0a80f053fb91bbe780e2f3edc0d48e830aba2498c972266370d7dcbbd2edf916",
+        "MetaHash":  "63508522c13bc4e5c6c3dc68544d962ddcc69f1b85106a80c797c14551139dd8",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Winter_Bar.png",
+        "Before":  "191a35ba861599742cd63b547ca46e1c99f31d46e64ac7c3a65d84099fa02432",
+        "After":  "f52a1df900817727c8cd4c441673d9ec0cb55305267d858f5337338432e14fe0",
+        "MetaHash":  "2b72d2ef3e8646e1c5cc2bc053520985eadcaaa31037bc5eefd66fd6532c80ef",
+        "Role":  "Cream",
+        "Width":  5856,
+        "Height":  586
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Autumn_Menu.png",
+        "Before":  "491d4ecc097659187f0141aca863272167eb21e8ff39a5b6888b27c8749745ba",
+        "After":  "d0e9a863cbf50bb5ebad4dcade517f5665197675e1e78439b764fa024c081cc2",
+        "MetaHash":  "06ad47b7350368e383708458360e807d04eaaabd066262faeec2a61c6116cce4",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Basic_Menu.png",
+        "Before":  "2b39875093c5eca971953866a21371e348e24f47522bb6f58af3987ea2140271",
+        "After":  "08a518f58932c8f03117c6d44bf1a4884944bdf90936416ccf0aca3471fd4c94",
+        "MetaHash":  "43edb1af0813f72481e2521cf6e46701a6178be7dbb4fe96ce29c31e304bc51c",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Cloudy_Menu.png",
+        "Before":  "c8c6cc7260de8ef16d0b0fafb59d0d9f8124be28a02c0dcac69929e97c69695b",
+        "After":  "25128f0fbaea0dcaa0668ee275b455ba1fcee822fa517269d2305ec725a723fb",
+        "MetaHash":  "be1b457be3d33e5b7605824ca62d45c9ca0c1e1e8ca48920aeb12ad7a91a2d54",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Night_Menu.png",
+        "Before":  "8cbd18b1647b3d1c0c9d0990cb9e7409d6afc90c23adffbaf7e6b6a2e719ade9",
+        "After":  "ce1a59320cb379f0c6bee4ef304aed873e3515637c40029a7e2823b185e1143b",
+        "MetaHash":  "86fe580ee4685891df200bc80997c2f6c96d0d8c360ff16248dc9947cb63000d",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Spring_Menu.png",
+        "Before":  "7dacd527f2b97ced80bc4045180e12e891a29f2cbc4c669728b463524d3f0d94",
+        "After":  "2fc787a32d93f9b4fe7f902ce6e6eb1d5dfcb28d19b453628cdaa94b26594761",
+        "MetaHash":  "2520aed846cb2984f512310086e1d87d926a3844c321d2773c0392c8fa460d5d",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Summer_Menu.png",
+        "Before":  "2b636ccdcee5ae4e3e72763b7b45ef343691c844bf6ad67b7cb9f0e0bbf935fb",
+        "After":  "8f09cb6b0b14f4d6eaa94fb753ec0c1f797599fff38e0a7375d47b555ef26d13",
+        "MetaHash":  "dad19f2706b9531ba24c3f35a840e3b2a356f0b6654e7ae7607cd6efb0f433a2",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Sunny_Menu.png",
+        "Before":  "78f91f0c2842efa68ecb515bd3918a4bc910ac76e1d2aeb0b95e6d2a5c261e8c",
+        "After":  "c1d622883fe5d0fc8ca6bd1573f420d0bf6e922e8d1f622f69d2f421f97b8a00",
+        "MetaHash":  "727c816579a55c7c46b142fea18a946367abe81a8c7d86cb9e20aa4b4ae7d4dc",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Winter_Menu.png",
+        "Before":  "7f0352fb6225205e658d34f924c66d43cdfff3447c2734e962dda845bd6f0d4a",
+        "After":  "e6d4ff033e656cb0b977f92c6411d011531fdc19489cd9b0247f592280f13b44",
+        "MetaHash":  "370d09c055f6ff5fafb7e46b7e82d2d5993b1232d45725157313cbb801b4f555",
+        "Role":  "Cream",
+        "Width":  2400,
+        "Height":  3200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Autumn.png",
+        "Before":  "93b08d2a76c85127a162f93739ffd1bfeab2e7d4d3a00031012861c6631c3990",
+        "After":  "3b9b5be5387bacda5c2a390867a442df26573dc09ee795a6bc34afa229d24a2a",
+        "MetaHash":  "e86a797501d3a372697f926fa2ca04c8aa04fc8af4c0692a74a1a8480e612d0f",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Basic.png",
+        "Before":  "cc61d58ce5368d8c8593cf6b1a9532cc1ed387f395dd88a372aba2850afd2d67",
+        "After":  "06708390797927a430ac005e7b8717a53255603832724614e8e4440f53745d57",
+        "MetaHash":  "9de9d41a28a0aaf667dc60503c926951bcc5c2c7789118982d4f1699636075a5",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Cloudy.png",
+        "Before":  "add6a71bb830875ddfb361c6a963de2ad97fecebe4e047077e2cb0f71b736d65",
+        "After":  "72b773570671ac287f317f2a5fae28e22cbd161a207362cef7f56743963a9c2f",
+        "MetaHash":  "d3b1558e0fb7faed821b13fd2745ee4305b4faa585ce9c078050484d45687488",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Night.png",
+        "Before":  "d9b60e246053a270e222f9964ce4fced567ee4ec5ec3d8ef677989619bd74834",
+        "After":  "01feb4692d61a8f76c3ae16fe96f41be1e0e5782b79bbe7f96240db2ede46d2e",
+        "MetaHash":  "de6e71fac9a6b3371e795fc1bd15afa2866818afba5197ad6a28e07bfcf97716",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Spring.png",
+        "Before":  "05611fdb14b6310fba033973271fd6034977b3364f6e07201ccb1894b25537da",
+        "After":  "9e4793ca929eee532b1a1da619d216dc790bccda0ed9e2c4b2f1ee67da3638e6",
+        "MetaHash":  "dc1dcb8435533aa61069ce74d4d7071f01cb72c8672d3ce7eedb58954ef8889e",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Summer.png",
+        "Before":  "52d4da0dae88fa6a6e6a22a1a1cad0091bc642d9a04e067b57fcfc03a61c919f",
+        "After":  "86657b669653cb676ac8fa05e9e134f488d97329b3430eecac4ea17bcfeb7eb5",
+        "MetaHash":  "03f717da958521244ab8632ee25888cdc0b063d2190ecb42ee306d636fb29072",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Sunny.png",
+        "Before":  "d6048247272a6a8d8c4c6615970a7184d55e9da8b65d77c2c46a2946faf5a965",
+        "After":  "12b3c9b6ca4e4cd216b063e205eb161b7f9016841bc2d446ace53603d7662165",
+        "MetaHash":  "7af5f077882e3bcefeb974f26da376d985073083e5a0ce3f90253089a45ea3a9",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Winter.png",
+        "Before":  "1a3a8a609052876f9c51438e2f007f568be9a276ccd7fc626f699c62f5d9e614",
+        "After":  "3d46071bc6811903f80da4fcf4db1bbc2274316f44e9a3134e0fa1af4bfb07c5",
+        "MetaHash":  "ecf09243fd53e7381c95a3fe3bf1d6d80f360d24acdbba32a06477d86ca8e963",
+        "Role":  "Mascot",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Autumn_Table.png",
+        "Before":  "3ee3459dda028a2ef1da6a9c13db7999f359e2ac3a1eb8357027cff283e893d2",
+        "After":  "6df39a8b2058509d69a4355dcfb040294e9e43ccd3aa72f1c81ff0790cbc61ec",
+        "MetaHash":  "661a1e94abe63eb220b4e1c4938be8ceeea92267c64cc07840b99de3eece643b",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Basic_Table.png",
+        "Before":  "667026ae9324c7a337d502da0d47734751426f26ae8a179ba0c53862999c4f79",
+        "After":  "91c7d98144c32253d4f5b620ad61a02236f02eff43443ee1b3fd677ae66543b5",
+        "MetaHash":  "8fcc6dc8b36f13d7de462dc93ac6ee9cf81af1c219ca7432b85ddad546975907",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Cloudy_Table.png",
+        "Before":  "ad58d28b0a5cf0df976a08bb7244c4e9f053bb3877e00ceffd359cc0632ee720",
+        "After":  "c3cf56ac8c032f3047e81a1cb5a927fce0f8bb6d0cc87c13aff2b2c4f3a2c393",
+        "MetaHash":  "ad13a03688f7ab848fecac48b8df850f16cbf8ebf999a45092c7d60394677cfa",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Night_Table.png",
+        "Before":  "3f21dc882a65c54bf648cf63a6ba6f69aa2d72338ccdfc799fe3719d93caf698",
+        "After":  "450ce04dd92c43efbfb71c6c359c3766458a479c76702c42bbc2e4df9cd8ba03",
+        "MetaHash":  "dde6fc681ac07db0187ebb131fdaaa09d21eeca7804f56c3015f3329c5438690",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Spring_Table.png",
+        "Before":  "1332ddb9d5d27f99ca63611644c445ebd9f0c46b9abd66482c59d1c3fd1ef8b4",
+        "After":  "f758124d07f8a9fb0b24a84c8466afa6d39aea508dabac9d14e7d6f717b4166d",
+        "MetaHash":  "bda2d8f6f5f3d93a2a164ee36dbc3881ea74fba4099bdf3cef817c6650d47042",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Summer_Table.png",
+        "Before":  "e8ad66b343d68181a8a3b0b18c6da051cf13e1711eb24ef60d5804f487232d9c",
+        "After":  "3b585110a40f4d68e1231dcd3d2fef620426d74e7dc0925b910ec15342a591f0",
+        "MetaHash":  "09a0c552408123a1aac8dcaae700e550b25a2530465f0a7391d3d98f7243de30",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Sunny_Table.png",
+        "Before":  "06123a65d3cd39576d276ae31351ec5c2bc61636ec194fd56e2999e0f0c01e62",
+        "After":  "f1a8a1878075e6de9961bf6c670539611f0c18824a7a3eb08d654abed251354a",
+        "MetaHash":  "f7f497c6ccb4420b8689729a50ad380a8afe2994903ad12f6b20ad58e73a3090",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Winter_Table.png",
+        "Before":  "03ff8b6d2c1e3e065ebcfdba7890e5438a847a86dcbb5f17b382cfe10af92497",
+        "After":  "03381b5aa13a166680215050d97e3c4f322b8d0c70f3d4a260b3b796d7e1e6f2",
+        "MetaHash":  "5988a2f52f1af1b23ed22c9226e7311a060feeb5f749f54a10f613f28c9b302c",
+        "Role":  "Cream",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_Angel.png",
+        "Before":  "a5f9bda686f746cc3f5587166eb87407e2149bb4285defffcf1205e11e7d8343",
+        "After":  "5514cbe45f69f7bf0e28ce3634ac3ecef5aaf178d1afc4bdf2dec30e0f7c39c5",
+        "MetaHash":  "9975ebbb2c1085471c20c5d1967f28e55369d5050aad90df368786bb47441d30",
+        "Role":  "Angel",
+        "Width":  2400,
+        "Height":  1200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_Demon.png",
+        "Before":  "a4ee02c20679aa598b2659b77297c0bd0f2b401e4f5eca7c2d148ac57ff3a625",
+        "After":  "69f1894e42879df45e467828c2c224e2acce39a55c9deab82c44677b7f61a62a",
+        "MetaHash":  "3d50183cce455c454453328c2adb03c8a281987774292250c3cb27f140a775b5",
+        "Role":  "Horns",
+        "Width":  2400,
+        "Height":  1200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_King.png",
+        "Before":  "62f3d9f603588e09a3d92aafe1b8b7dd72230097478e121acfb1407bcba36d19",
+        "After":  "670340e58c94b48083b682b7439363401710ddbb6af39a76665dafb9d7cc0bbb",
+        "MetaHash":  "1dbbc4ce913c750a8f1e97869dfcc4926010725120f24923c0d76b7d6d2c371a",
+        "Role":  "Crown",
+        "Width":  2400,
+        "Height":  1200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Face_1.png",
+        "Before":  "71bac88f9b33967bac254d39bf8a8995739c651f176f4490b95c5afa38ebbcb1",
+        "After":  "c103bc538072f73ee76c993511c4f0080a069e2dba2df9e41e7733a684bc6928",
+        "MetaHash":  "cbae85032fd4ee026b75486f0a828a804772e4839bda520ed1a3a03bc3f863d4",
+        "Role":  "Face",
+        "Width":  2400,
+        "Height":  1200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Slime.png",
+        "Before":  "9166cc652c525fa50e4bad900c2523d754cc4320831f7503a848a08d7b6404b9",
+        "After":  "ca2d809d003f37673cad59d1558c3df8795d7a1868d74b62a8d38f5605d1dd9c",
+        "MetaHash":  "e62aa3361244207e164755a67c7a8fd76d3ba3514f6143360eac166c7c84aa02",
+        "Role":  "Body",
+        "Width":  2400,
+        "Height":  1200
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/BackGround_1.png",
+        "Before":  "31bde475aa90d7181807dacb5f8e5399e908169b0fb839250888996f2637c21f",
+        "After":  "bb035c24339348dcb5300a0be6e11ce00770dd923ea16b92bcf5315d99749f00",
+        "MetaHash":  "16daf082fb69ab963ff9925fc752aa41563c971d8da295cef178978e24ee7a97",
+        "Role":  "Notebook",
+        "Width":  2752,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/BackGround_2.png",
+        "Before":  "ec7b5428d9317191ecf556d82bdd66fe0b3c6ef54b94993616a4006566af72bb",
+        "After":  "270257076a81b2a903f5d9061c47b8ccbe4a0f9b64789e0c8ba6f3e32edfb3c3",
+        "MetaHash":  "f0baddca2dd29198bc686d509fdf429b310fa4ef298fc6ec7fb449d17180960e",
+        "Role":  "Notebook",
+        "Width":  2754,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/ButtonIcon_option.png",
+        "Before":  "af9eefdef8d3bb70932238ac1afeba0b2079f7d536f4fefaa517a91e5590a5f2",
+        "After":  "19f59de344efed0d77e6d5f7182eb298223fd910635325bff760b5f9778bfb36",
+        "MetaHash":  "24f1a2630387fc5bfb88ad1aacbc989c4a6545f6a136b2725e02ecc7e6eea590",
+        "Role":  "Gear",
+        "Width":  44,
+        "Height":  44
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/ButtonIcon_quit.png",
+        "Before":  "810804e5d629b972fa1612db7686fd51fb51b1e294f2e0f09276f0cc89370744",
+        "After":  "d0d50b637623b935c1de70e81e0fc115264131e6465b546241672ef111499207",
+        "MetaHash":  "02b20e58bfc263eb56d3bdb0e0a6939c8d109770eb33efa8775054b91f523d6c",
+        "Role":  "Close",
+        "Width":  44,
+        "Height":  44
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/ButtonUI_1.png",
+        "Before":  "8b18cbc3e701083114f20861637c61691e174c02ae2dd60ca557975a853ec047",
+        "After":  "c15c8ef5c1bff1183833fbc1e84436bb5cc217b8faf15adb6facadc19103a49c",
+        "MetaHash":  "64af116c5d88da4e990f4b12bf0072a6292ca2f3d1c34c5a91daab52a229668b",
+        "Role":  "Cream",
+        "Width":  2754,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Destroy.png",
+        "Before":  "291459c1c61ec36a3d902e72f2781ffc194f25f895a26f69c250d88dbb66eb6c",
+        "After":  "36ed985436729dc20dd6850f058b30c3c47aab2a5684c10a0fc91242612a9013",
+        "MetaHash":  "ea2178310900dc69c5b68c2aca6ddaeae8e75d29c9db2b0a2263f4fefb9cbae8",
+        "Role":  "Eraser",
+        "Width":  2048,
+        "Height":  2048
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Frame.png",
+        "Before":  "899530ae70c173614928eb1681ab209d42ba50282afe2944f5c69d2affefe864",
+        "After":  "257dc66bbb917b9024eed5e638e1e78cfb254ad7a50ea8c97487797f812122aa",
+        "MetaHash":  "588db55d9185505b0109ed75d3d5caf7c41f6bd63d26a9d2132e137aa1aa153c",
+        "Role":  "Hollow",
+        "Width":  2730,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/GAME START.png",
+        "Before":  "458f7fb60082c1fa3342b418b5e6a0caf8c1d9cbda8dd1b9f4af15aef6e0827b",
+        "After":  "918b56146e9603dc8d1219f1490136303cae1f0973c3857fdbab769af43bb7cb",
+        "MetaHash":  "e9ba3c3fe76c87eefab4cb4b3567b87cb986f1d19fd60b59ef2b4f5cb7e4be81",
+        "Role":  "Start",
+        "Width":  2880,
+        "Height":  1440
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/GameStartUI.png",
+        "Before":  "f1c4b05623c0f42f4df800340f7b20358e7af2d9b3ca647d8e70ce31ef91ae55",
+        "After":  "9ad69ef0bf044af9bf2eb6896a390201c18ca765678652fbc38b5624bd6615d3",
+        "MetaHash":  "a34758647affb0f9e2adaed7c521521bbe91f8a94572a52088c9e03c99644e0e",
+        "Role":  "Start",
+        "Width":  2760,
+        "Height":  1504
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Magnifier.png",
+        "Before":  "9e8f2c0563d5c33ea5f9dd8b515861f01d564afd327c479e51cbcdf9eb47ff63",
+        "After":  "beded4f7e4645567e15b31c4fda6e47424530d1bea55f0d6011af2a0c44fc76a",
+        "MetaHash":  "5cad268461bf20277b0d3cdaa70c95094e2088a4cc8c495621d8b0775f0d9712",
+        "Role":  "Magnifier",
+        "Width":  2148,
+        "Height":  1952
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Mix.png",
+        "Before":  "66ef62b24c8bb696d169729c2d8a88190082a4c4dac4030ccd4ab424df76c82b",
+        "After":  "a0090b3cd48882ddd8a489fff16cbede5dcfe19d1758dce6477534451203d8a0",
+        "MetaHash":  "a304ceac95b0130f08ff03bb70cfc7e399a27f7c87013d4027cd0d0c901cee4b",
+        "Role":  "Mix",
+        "Width":  2146,
+        "Height":  1952
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Slider_BackGround.png",
+        "Before":  "db82b5b7f5890643f7fce4560e30db59aac200cf57d5653c1b260f020eeaeccb",
+        "After":  "d7c6385bcf096d18fb1c48affa1e5b2a8b07fec1a16d6376c45bea0bd963f027",
+        "MetaHash":  "928da5e318594eb8c083e30b9e29dbbb1233c3544e4580f9a235dbf535fb966c",
+        "Role":  "Outline",
+        "Width":  2814,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/Slider_Fill.png",
+        "Before":  "1a8c656225ef1cd7171bb3780d3896fdba229bbe637888b73f7973d319c3dd58",
+        "After":  "c4412747ca20dbc30102f751cffa0094a5c6977a9b5b72b9af249d1673b3a5c7",
+        "MetaHash":  "13d5e78c67914cb78505188edefc8836d3276f6e295a70763bd92de93c6e8965",
+        "Role":  "Mint",
+        "Width":  2814,
+        "Height":  1536
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/UI/SLIME POP !!.png",
+        "Before":  "c81550647c605feed820637c1b86193f49b60619c13c65888ce8a8bd546daeba",
+        "After":  "0d10badb7b3c30f19933716681744fbd5132c62bae0e307829fac8305fc5dd45",
+        "MetaHash":  "a6acc4ac179f8de292f6dfe0fd646740ea728d086ae363745daaaaa9479fd5e1",
+        "Role":  "Logo",
+        "Width":  2880,
+        "Height":  1440
+    }
+]

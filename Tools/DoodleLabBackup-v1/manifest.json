@@ -1,0 +1,195 @@
+{
+    "source":  "C:/Users/user/Desktop/Programing/Project-B-SilmePOP",
+    "files":  [
+                  {
+                      "path":  "Assets/1. Scenes/1. GameStart.unity",
+                      "before":  "d75fc7a75b90f800bbecc26f3b3533953d016e887b84f6c34636b4d544281438",
+                      "after":  "bcefcf0c0730b5795d784979439e8cf8af6560cac3c4062f2148d69cfa1be957"
+                  },
+                  {
+                      "path":  "Assets/1. Scenes/2. GameMenu.unity",
+                      "before":  "f196ffdcc53b9f4f99e3560129a67c3c9abbbc60e591d936edcc3aac7818194d",
+                      "after":  "94e96365760f68589400722d899a7619230fd4382240502f39c01e7561783017"
+                  },
+                  {
+                      "path":  "Assets/1. Scenes/3. GameScene.unity",
+                      "before":  "0a41b4d9df03b57672a3c92bc49aff1dd446cee278bf974cfbebbe10a3858dc1",
+                      "after":  "9e7e5dc4b605081ea8d7e57747f1eb31ef66af14add886c45678736b31185295"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/1. Basic.asset",
+                      "before":  "3ff81fd7650c7d12f4fa4fc30e32e33fdca0739859fe6d0e7794df0c43374de9",
+                      "after":  "1db465b52d8491bb7d04ca07c1c33b64896349b7e19515a76fb725eb7d1f0785"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/2. Spring.asset",
+                      "before":  "23a5956157a6f1ed32c130f0a04f1b282616d276faf089514f5042864137ee14",
+                      "after":  "b22dcd8c3ebf76cdb686698887ae374986ca3ecfdae7cb6b1fbbeb8b423bd58e"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/3. Summer.asset",
+                      "before":  "15a0e231cf81bdb8d912c6a18741781104fd8d6a888931d09c0087258937f63e",
+                      "after":  "6c2d216284525cc47bf425148c56f498b36028f03490213e227d03793a7360b8"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/4. Autumn.asset",
+                      "before":  "c455d091f94ab30ddc7481c4a93d03d5ae38cd96137c8208c616fd0565be45d8",
+                      "after":  "0500d454f6aeb893642f7aeea46d05a012096931d4390a16e1d82c2296afee5b"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/5. Winter.asset",
+                      "before":  "8b5a9364de171dad3aa1679322d1051af07ebd66bdc74b28450e33e8e2a85ebb",
+                      "after":  "d078075a8ba5aef2407a2ac3ab2b02c267940cab6eddc78f630b766a69d14e5c"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/6. Sunny.asset",
+                      "before":  "db7bc5721838871da7e02d48dc8e06b1bcdb56a07a7c6d9bb283a5c677ea36d8",
+                      "after":  "d631fcf1eb934c8ba85088851628187e3c668e1bd817dbc14563000941af4c86"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/7. Night.asset",
+                      "before":  "06900c39bb867f4330bccde651cdafe0d6fd97574341604093d6a3da772753cf",
+                      "after":  "646650eceb9c5953f4d8378dcd81494dca92954ee23c31d2644c10788b8757e0"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/8. Cloudy.asset",
+                      "before":  "04a1aafab83aca8bb0ae1726455036dc5a25f64535845a2e560f1c3b22e3237b",
+                      "after":  "4a3938103959e49e9289483e00e873fa9575bcb44c1b88d6042f23242921c1ad"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/MenuPanel.prefab",
+                      "before":  "59482d4a2b6384964bbd0a957a868c4584cff41ac1e6af3c267da0589f039e60",
+                      "after":  "8ccb71d1a5f2c8d764dcf30fa15dec820f729d713e7025e08604b7b29a7fe05c"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/OptionPanel.prefab",
+                      "before":  "797c48b65b2fa35545bb97cf945ebece578f3d9fbffa93e17ef888d0a1d70496",
+                      "after":  "767fd1db340585301e24b85596736c9f92df2b57289ce97aa619e58c86a49f76"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/Slider.prefab",
+                      "before":  "3c7c9a88e3cc2512c53ae1552922e4eb16065b17236bc5e47bbc972df819d0fb",
+                      "after":  "bf6465e2862e3e211c15bf6dc513236df178f0815e79d7c72f1884558c48897a"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/Slime_Img.prefab",
+                      "before":  "ed8d0b7f9a956c0dcd9c901746297bd4da889ab6ce7aa79fb9fdceed69e77e72",
+                      "after":  "c53876b0865d422e109a01afe4be92fdd6cd5fabfa3fe4096ec7078a22c4813d"
+                  },
+                  {
+                      "path":  "Assets/2. Prefab/Slime_Sprite.prefab",
+                      "before":  "03f4340b30cede22587f6aed3f0434dd8f18ebaaa4b1f9cec9762842d81fac8b",
+                      "after":  "afeb6ad199e856bee2644c12a033396abc0e5f8546a5e1550e30615830e76104"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/ChangeData.cs",
+                      "before":  "07a6a31599118eee95f80e0a7322a2d6f0ddd2c927284ef657dfb63354f3a28b",
+                      "after":  "db948252edc16d5aa4967211b75ba493d86572cba3c3517951973ec04eeb9c62"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/SlimeController.cs",
+                      "before":  "5810648bd98b365626258b982dc388657bf4bf5337363510fdcd7019a6d51475",
+                      "after":  "b567c17ee378faa5432ec31eebf381cbbc66b3ada06c2535ac749278c7b2646f"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/Change.cs",
+                      "before":  "603789d9c0d0c46ced0052120e83ba8613a5883c752108b6d701bd080647dd4a",
+                      "after":  "654761d3761e1750114afb18f28a24b10dc5286db266a38826c3ca2dbba7c819"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/UIManager_Menu.cs",
+                      "before":  "87b84eaa7fac53fd8833891563ddb5db6cc9b7d8b316614584179f4148d511af",
+                      "after":  "b65546c4c68f7eb37d649f1139ebabd7f3df4420c566139a7eace2df5705ab88"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/UIManager_Game.cs",
+                      "before":  "95e116d13ccfe9186117cc2238d4e48fd75a545fc6e3e8ef13c7c884123ddb66",
+                      "after":  "21ac8223cc33bc5bd2489449dd83d1af36e6ecaad798f9e303e963dd6a734e33"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/DoodleLabSkin.cs",
+                      "before":  null,
+                      "after":  "71fe1c943765a49bce103dd21911cc4e833466911dc704277ca74e1e9b928403"
+                  },
+                  {
+                      "path":  "Assets/3. Scripts/DoodleLabSkin.cs.meta",
+                      "before":  null,
+                      "after":  "121c16d47dff6b936d66a0dbd9bd76afa6b2a7c87b9637fec2e008c969082929"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Frames.png",
+                      "before":  null,
+                      "after":  "b4eca5b611867e2d096983c23989021e5dd6b3d8d192aeda110bca62bccb3533"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Frames.png.meta",
+                      "before":  null,
+                      "after":  "555fe898164cd95b2224e594a090017a5b5c3cc0a88e367d059628e3b95900e3"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Logo.png",
+                      "before":  null,
+                      "after":  "703b9756869b28ac352d5ec24baffd71e68692b3726b08225ee7cc966c40e82f"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Logo.png.meta",
+                      "before":  null,
+                      "after":  "0b9464b13fb3ee6968219dd6836fc84cbbe68469be2ee27f2d9eb3e5b8d49cb9"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Notebook.png",
+                      "before":  null,
+                      "after":  "94b5eee41ec8a9dcdf63a971c6356bc41b85b7fa700d8978a01003fa1b75d2b9"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Notebook.png.meta",
+                      "before":  null,
+                      "after":  "d999d93d3c98f893626ddf6d3b8976a1fd6546764ddaecd66a5b9acb44a17357"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Sprites.png",
+                      "before":  null,
+                      "after":  "7ff9a1ca4b6544a0c1fb8ccb787a29555f058ca8c34bbe6d3b8bfef9e6b9a3da"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab/Sprites.png.meta",
+                      "before":  null,
+                      "after":  "49c9e7c7d63050cb3069f7113a2f313babde0b8527567f7b9cb807d019a45147"
+                  },
+                  {
+                      "path":  "Assets/Resources/DoodleLab.meta",
+                      "before":  null,
+                      "after":  "7ea5269c35b9625f16e8d988de6d40dc73561ccca03792e725fdbabfdb759d3a"
+                  },
+                  {
+                      "path":  "DOODLE_STYLE.md",
+                      "before":  null,
+                      "after":  "6516aa1a732f91da629868b758535f947c8393fe96f1be8a315c0d1077da4b9c"
+                  },
+                  {
+                      "path":  "Tools/DoodleLabPreview/ApprovedConcept.png",
+                      "before":  null,
+                      "after":  "120e9dfcbe52874169e4a1eecec3374f582c84cf1547112dc0d2aa366bbd9557"
+                  },
+                  {
+                      "path":  "Tools/DoodleLabPreview/FinalVisualCheck.txt",
+                      "before":  null,
+                      "after":  "4d4fdb8059828f3f4720d359db5206f264d0dafbc14ea68824a084be78374618"
+                  },
+                  {
+                      "path":  "Tools/DoodleLabPreview/Game.png",
+                      "before":  null,
+                      "after":  "f4e719eefb983dd697dabc67a05066f076c842194e99b3f8458cb94327f13f47"
+                  },
+                  {
+                      "path":  "Tools/DoodleLabPreview/Options.png",
+                      "before":  null,
+                      "after":  "390eb9360f2bb8e09c5b661b48d596665847a0e1716dc8e5a66415cc1537ed74"
+                  },
+                  {
+                      "path":  "Tools/DoodleLabPreview/Validation.txt",
+                      "before":  null,
+                      "after":  "bf8e64044800811118161aeae43d4431b70ca997d0fce3007a1ad468e31640a9"
+                  }
+              ]
+}

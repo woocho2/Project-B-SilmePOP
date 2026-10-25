@@ -35,6 +35,7 @@ public class SlimeController : MonoBehaviour
     private void Start()
     {
         SetRandomNumber();
+        DoodleLabSkin.ApplySlime(this);
         SetHighlight(false);
     }
 
@@ -85,6 +86,7 @@ public class SlimeController : MonoBehaviour
         {
             numberText.text = CurrentNumber.ToString();
         }
+        DoodleLabSkin.ApplySlime(this);
     }
 
     public void SetSlimeColor(Color slimeColor)
@@ -93,6 +95,7 @@ public class SlimeController : MonoBehaviour
         {
             Color oppositeColor = GetOppositeColor(slimeColor);
             numberText.color = oppositeColor;
+            DoodleLabSkin.StyleSlimeNumber(numberText);
         }
     }
 

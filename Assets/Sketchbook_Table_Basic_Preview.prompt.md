@@ -1,0 +1,14 @@
+# Basic sketchbook table preview
+
+Tool: built-in image_gen. A new preview sprite only; existing game assets and scene bindings are unchanged.
+
+## Prompt
+
+Use case: stylized-concept. Input image role: STYLE AND BASIC THEME COLOR REFERENCE ONLY, the supplied approved childlike crayon brown notebook with green sprouts. Create a NEW game-table asset, not another notebook sheet: a WIDE LANDSCAPE SPIRAL-BOUND SKETCHBOOK / DRAWING PAD, viewed straight overhead with no perspective.
+Game: SlimePop, a cute hand-drawn puzzle game on a white artist's canvas. This is the BASIC theme table prototype: BROWN plus GREEN SPROUTS, matching the reference's warm brown/caramel color family and simple pencil/pastel-wax-crayon artwork.
+Shape and construction: a wide horizontal sketchbook approximately 2:1 (requested canvas 2400 x 1200), softly rounded rectangular corners, a very narrow dark chocolate-brown backing cover visible around the edges, and one unruled blank drawing page. About ten simple small charcoal/brown C-shaped spiral loops or rings run along the TOP LONG EDGE only, as an unmistakable sketchbook binding. Rings should be childishly drawn crayon/graphite strokes, no realistic shiny metal. A couple of fine slightly offset page-edge strokes along the bottom/right can suggest a short stack of drawing pages, with very restrained flat shading.
+The large drawing page is a gentle LIGHT WARM CARAMEL / tan color, clearly a light brown theme but quiet and much paler than the dark brown cover; mostly flat opaque fill with a very subtle colored-pencil grain, NOT realistic fibrous aged paper. Small cute two-leaf GREEN SPROUT crayon doodles with a few brown earth scribbles are confined to the upper-right and lower-left corners. Keep them small, leave at least 80% of the page completely empty to hold 170 gameplay slimes later. NO notebook ruling, NO horizontal lines, NO vertical margin line, NO square grid, NO torn binding holes along the left, NO loose ripped-sheet silhouette. It must read as a simple drawing/sketchbook rather than lined school notebook paper or a plain framed rectangle.
+Medium: charming naive children's pencil and pastel wax-crayon drawing; medium-weight slightly uneven dark graphite contour, visible gentle waxy grain in the drawn strokes, simple soft shapes. No photorealism, glossy 3D, ornate border, leather, wood, heavy drop shadow or elaborate decorations.
+Output one isolated sketchbook cutout with a genuine TRANSPARENT background all around it and a small even transparent margin. The entire drawing page remains OPAQUE. All rings and corners fully within frame. No desk, no canvas room background, no hands, no slimes/characters on this board, no UI, title, labels, letters, numbers or buttons. One horizontal high-quality preview sprite only.
+
+Generated source: C:\Users\user\.codex\generated_images\01a14e90-c8a9-73b3-bd99-38092c686ea9\exec-94ca79bd-92de-4f59-916f-43e6bc3918fd.png

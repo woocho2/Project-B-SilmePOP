@@ -1,0 +1,331 @@
+﻿{
+    "Atlases":  [
+                    {
+                        "Role":  "Bar",
+                        "Path":  "Assets/Resources/DoodleLab/Map_Bars.png",
+                        "Guid":  "398f14b849b0429ae49c986158c83084",
+                        "CellWidth":  512,
+                        "CellHeight":  128,
+                        "Columns":  2,
+                        "Rows":  4
+                    },
+                    {
+                        "Role":  "Mascot",
+                        "Path":  "Assets/Resources/DoodleLab/Map_Mascots.png",
+                        "Guid":  "4f27bb85d4049310773bf44972c12739",
+                        "CellWidth":  512,
+                        "CellHeight":  512,
+                        "Columns":  4,
+                        "Rows":  2
+                    },
+                    {
+                        "Role":  "MenuPaper",
+                        "Path":  "Assets/Resources/DoodleLab/Map_MenuPapers.png",
+                        "Guid":  "ea2fffb35494d8022250fe965c5b70c3",
+                        "CellWidth":  768,
+                        "CellHeight":  1024,
+                        "Columns":  4,
+                        "Rows":  2
+                    },
+                    {
+                        "Role":  "Table",
+                        "Path":  "Assets/Resources/DoodleLab/Map_Tables.png",
+                        "Guid":  "9da566edf21d79f2fe62b334fe023615",
+                        "CellWidth":  512,
+                        "CellHeight":  512,
+                        "Columns":  4,
+                        "Rows":  2
+                    },
+                    {
+                        "Role":  "Menu",
+                        "Path":  "Assets/Resources/DoodleLab/Map_Panels.png",
+                        "Guid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                        "CellWidth":  512,
+                        "CellHeight":  512,
+                        "Columns":  4,
+                        "Rows":  2
+                    }
+                ],
+    "References":  [
+                       {
+                           "OldGuid":  "b3c65388247fe29eeb6a164c1d168d24",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300001",
+                           "Name":  "Map_Basic_Bar"
+                       },
+                       {
+                           "OldGuid":  "c001f442bad65016ac62a29add29c395",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300002",
+                           "Name":  "Map_Spring_Bar"
+                       },
+                       {
+                           "OldGuid":  "f0562e45733d2942c21cf85f8979bdce",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300003",
+                           "Name":  "Map_Summer_Bar"
+                       },
+                       {
+                           "OldGuid":  "fa3bbfb7d6c8ec12b6143f88437432d5",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300004",
+                           "Name":  "Map_Autumn_Bar"
+                       },
+                       {
+                           "OldGuid":  "d0952ce78a749aea378f16e7563cec59",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300005",
+                           "Name":  "Map_Winter_Bar"
+                       },
+                       {
+                           "OldGuid":  "8a89afbf36e3d3dd3416a2cfd252289b",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300006",
+                           "Name":  "Map_Sunny_Bar"
+                       },
+                       {
+                           "OldGuid":  "f9c7545ae369d219f4220c05c4fb9ca2",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300007",
+                           "Name":  "Map_Night_Bar"
+                       },
+                       {
+                           "OldGuid":  "7f5425734fd712017a233075b3cdc40e",
+                           "OldId":  "21300004",
+                           "NewGuid":  "398f14b849b0429ae49c986158c83084",
+                           "NewId":  "21300008",
+                           "Name":  "Map_Cloudy_Bar"
+                       },
+                       {
+                           "OldGuid":  "b3c65388247fe29eeb6a164c1d168d24",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300001",
+                           "Name":  "Map_Basic_Mascot"
+                       },
+                       {
+                           "OldGuid":  "c001f442bad65016ac62a29add29c395",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300002",
+                           "Name":  "Map_Spring_Mascot"
+                       },
+                       {
+                           "OldGuid":  "f0562e45733d2942c21cf85f8979bdce",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300003",
+                           "Name":  "Map_Summer_Mascot"
+                       },
+                       {
+                           "OldGuid":  "fa3bbfb7d6c8ec12b6143f88437432d5",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300004",
+                           "Name":  "Map_Autumn_Mascot"
+                       },
+                       {
+                           "OldGuid":  "d0952ce78a749aea378f16e7563cec59",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300005",
+                           "Name":  "Map_Winter_Mascot"
+                       },
+                       {
+                           "OldGuid":  "8a89afbf36e3d3dd3416a2cfd252289b",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300006",
+                           "Name":  "Map_Sunny_Mascot"
+                       },
+                       {
+                           "OldGuid":  "f9c7545ae369d219f4220c05c4fb9ca2",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300007",
+                           "Name":  "Map_Night_Mascot"
+                       },
+                       {
+                           "OldGuid":  "7f5425734fd712017a233075b3cdc40e",
+                           "OldId":  "21300003",
+                           "NewGuid":  "4f27bb85d4049310773bf44972c12739",
+                           "NewId":  "21300008",
+                           "Name":  "Map_Cloudy_Mascot"
+                       },
+                       {
+                           "OldGuid":  "5ecb7c49c847f2140a9d648061045a3e",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300001",
+                           "Name":  "Map_Basic_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "cef0128a4fe08704d8b9745f5c8509e5",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300002",
+                           "Name":  "Map_Spring_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "22a955e08bce3484ea24e090d0c13d2c",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300003",
+                           "Name":  "Map_Summer_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "8b3c3efebf962904f939ac66ce03ed42",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300004",
+                           "Name":  "Map_Autumn_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "86f3994f924ce5142baa749d455a89bc",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300005",
+                           "Name":  "Map_Winter_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "761abb8dfd5c37a4b9808d837e8917fb",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300006",
+                           "Name":  "Map_Sunny_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "62486520ced1e0f4fb9bb334a57648fa",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300007",
+                           "Name":  "Map_Night_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "3f08f5dff95b05c498a9d0a14a5c6b22",
+                           "OldId":  "21300000",
+                           "NewGuid":  "ea2fffb35494d8022250fe965c5b70c3",
+                           "NewId":  "21300008",
+                           "Name":  "Map_Cloudy_MenuPaper"
+                       },
+                       {
+                           "OldGuid":  "b3c65388247fe29eeb6a164c1d168d24",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300001",
+                           "Name":  "Map_Basic_Table"
+                       },
+                       {
+                           "OldGuid":  "c001f442bad65016ac62a29add29c395",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300002",
+                           "Name":  "Map_Spring_Table"
+                       },
+                       {
+                           "OldGuid":  "f0562e45733d2942c21cf85f8979bdce",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300003",
+                           "Name":  "Map_Summer_Table"
+                       },
+                       {
+                           "OldGuid":  "fa3bbfb7d6c8ec12b6143f88437432d5",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300004",
+                           "Name":  "Map_Autumn_Table"
+                       },
+                       {
+                           "OldGuid":  "d0952ce78a749aea378f16e7563cec59",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300005",
+                           "Name":  "Map_Winter_Table"
+                       },
+                       {
+                           "OldGuid":  "8a89afbf36e3d3dd3416a2cfd252289b",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300006",
+                           "Name":  "Map_Sunny_Table"
+                       },
+                       {
+                           "OldGuid":  "f9c7545ae369d219f4220c05c4fb9ca2",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300007",
+                           "Name":  "Map_Night_Table"
+                       },
+                       {
+                           "OldGuid":  "7f5425734fd712017a233075b3cdc40e",
+                           "OldId":  "21300002",
+                           "NewGuid":  "9da566edf21d79f2fe62b334fe023615",
+                           "NewId":  "21300008",
+                           "Name":  "Map_Cloudy_Table"
+                       },
+                       {
+                           "OldGuid":  "b3c65388247fe29eeb6a164c1d168d24",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300001",
+                           "Name":  "Map_Basic_Menu"
+                       },
+                       {
+                           "OldGuid":  "c001f442bad65016ac62a29add29c395",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300002",
+                           "Name":  "Map_Spring_Menu"
+                       },
+                       {
+                           "OldGuid":  "f0562e45733d2942c21cf85f8979bdce",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300003",
+                           "Name":  "Map_Summer_Menu"
+                       },
+                       {
+                           "OldGuid":  "fa3bbfb7d6c8ec12b6143f88437432d5",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300004",
+                           "Name":  "Map_Autumn_Menu"
+                       },
+                       {
+                           "OldGuid":  "d0952ce78a749aea378f16e7563cec59",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300005",
+                           "Name":  "Map_Winter_Menu"
+                       },
+                       {
+                           "OldGuid":  "8a89afbf36e3d3dd3416a2cfd252289b",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300006",
+                           "Name":  "Map_Sunny_Menu"
+                       },
+                       {
+                           "OldGuid":  "f9c7545ae369d219f4220c05c4fb9ca2",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300007",
+                           "Name":  "Map_Night_Menu"
+                       },
+                       {
+                           "OldGuid":  "7f5425734fd712017a233075b3cdc40e",
+                           "OldId":  "21300001",
+                           "NewGuid":  "be1f998f6310bd8dc6d1ba9ede610608",
+                           "NewId":  "21300008",
+                           "Name":  "Map_Cloudy_Menu"
+                       }
+                   ]
+}

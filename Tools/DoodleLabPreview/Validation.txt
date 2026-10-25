@@ -1,0 +1,1 @@
+PASS: all four textures imported, 24 atlas sprites resolved, start/menu/options/game/gameover rendered; 170 slimes; number colors; pause/resume; mix; restart; custom color; map theme; no runtime errors.

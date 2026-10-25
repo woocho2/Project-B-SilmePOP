@@ -1,0 +1,96 @@
+﻿{
+    "Path":  "Assets/4. SlimeAsset/Atlases/Map_MenuPapers.png",
+    "Before":  "EEE5E038F45C2EC503C3D2F00645D828A6365418A1C1F93EA597BBCC53C9EBD6",
+    "After":  "BC0BDA32FEAC32FFAFC4E00CD85504631B38C4C4481AC8F83FDD68F0BE404C4C",
+    "MetaHash":  "568F3B4F53342FE12A6C9C910A4163BF70F50465FC294143ED49A0E3B627D0FC",
+    "Sources":  [
+                    {
+                        "Theme":  "Basic",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Basic_Menu.png",
+                        "Hash":  "E1BA055758F2674673F7F5C9742A40041AF53FDFB370118BBA6FB551F6C90281",
+                        "Name":  "Map_Basic_MenuPaper",
+                        "FileID":  21300001,
+                        "X":  0,
+                        "Y":  1024,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Spring",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Spring_Menu.png",
+                        "Hash":  "6771208DD954144697F1B96B4C978CB397395B73C2E8ACC77E3380CF54BE81EF",
+                        "Name":  "Map_Spring_MenuPaper",
+                        "FileID":  21300002,
+                        "X":  768,
+                        "Y":  1024,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Summer",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Summer_Menu.png",
+                        "Hash":  "7962565B442267EF78E23136BF027F35838B871C3532FA89FF2F97EC72FD9CDA",
+                        "Name":  "Map_Summer_MenuPaper",
+                        "FileID":  21300003,
+                        "X":  1536,
+                        "Y":  1024,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Autumn",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Autumn_Menu.png",
+                        "Hash":  "CEB06CB7B2B29145D7A9A03855312DB0E796AF7212AA37AEADAC07D4F2E1CFF0",
+                        "Name":  "Map_Autumn_MenuPaper",
+                        "FileID":  21300004,
+                        "X":  2304,
+                        "Y":  1024,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Winter",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Winter_Menu.png",
+                        "Hash":  "7AA22EF41DB104F6E881375265A57A016B3DA67DA789BCB758BCDBE996686047",
+                        "Name":  "Map_Winter_MenuPaper",
+                        "FileID":  21300005,
+                        "X":  0,
+                        "Y":  0,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Sunny",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Sunny_Menu.png",
+                        "Hash":  "E5B253987D1CF7D62E172F63BEEA3E35BE4D2EEF29B42E2F5ADE050B66C5F512",
+                        "Name":  "Map_Sunny_MenuPaper",
+                        "FileID":  21300006,
+                        "X":  768,
+                        "Y":  0,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Night",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Night_Menu.png",
+                        "Hash":  "30445D0D860973CF6986C463C00865EE01D7C50C2E7CD8600B3D978D1C7FE5F4",
+                        "Name":  "Map_Night_MenuPaper",
+                        "FileID":  21300007,
+                        "X":  1536,
+                        "Y":  0,
+                        "Width":  768,
+                        "Height":  1024
+                    },
+                    {
+                        "Theme":  "Cloudy",
+                        "Path":  "Assets/4. SlimeAsset/Map/Menu/Cloudy_Menu.png",
+                        "Hash":  "7EA11115C85C29B1BDE675C777590193E2D75FEC77952AE0987DCD47CFF1D6B2",
+                        "Name":  "Map_Cloudy_MenuPaper",
+                        "FileID":  21300008,
+                        "X":  2304,
+                        "Y":  0,
+                        "Width":  768,
+                        "Height":  1024
+                    }
+                ]
+}

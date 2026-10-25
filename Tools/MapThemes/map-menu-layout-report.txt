@@ -1,0 +1,1 @@
+PASS: final Night menu mascot position and options rendered without game errors.

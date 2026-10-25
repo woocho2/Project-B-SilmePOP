@@ -1,0 +1,9 @@
+PASS: eight 2400 x 3200 menu sprites; genuine alpha exterior and binding notches; opaque colored centers. Original metadata and scene bindings will be preserved.
+Basic: 2400 x 3200; transparent exterior and binding notches; opaque center; 9 clear intervals
+Spring: 2400 x 3200; transparent exterior and binding notches; opaque center; 8 clear intervals
+Summer: 2400 x 3200; transparent exterior and binding notches; opaque center; 8 clear intervals
+Autumn: 2400 x 3200; transparent exterior and binding notches; opaque center; 9 clear intervals
+Winter: 2400 x 3200; transparent exterior and binding notches; opaque center; 9 clear intervals
+Sunny: 2400 x 3200; transparent exterior and binding notches; opaque center; 9 clear intervals
+Night: 2400 x 3200; transparent exterior and binding notches; opaque center; 8 clear intervals
+Cloudy: 2400 x 3200; transparent exterior and binding notches; opaque center; 8 clear intervals

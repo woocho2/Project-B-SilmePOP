@@ -1,0 +1,224 @@
+﻿[
+    {
+        "Path":  "DOODLE_STYLE.md",
+        "Action":  "write",
+        "Before":  "4405E7264144B69F3C223B0BF61EC27BAA5F1E28C35BEA6CE85D76941E5FDAF4",
+        "After":  "97D4206F272EA4E9B616137916F2641A5652BAB049F211E9D48A712F9628A90C"
+    },
+    {
+        "Path":  "Assets/1. Scenes/2. GameMenu.unity",
+        "Action":  "write",
+        "Before":  "E34C326246A08822C483243145C6BDC9A01A114D835E55402409AAB50416588A",
+        "After":  "47802291EE3A1DB2AE95EFF397C686BD1493BFFDBAA44FDFD8F7E2880EE65068"
+    },
+    {
+        "Path":  "Assets/2. Prefab/1. Basic.asset",
+        "Action":  "write",
+        "Before":  "868D02B83950B71BE34836947A416A4CFE68AA62EF722DE527FB08B3C9ED8061",
+        "After":  "C9FE262AD2351C623D5B7934AF0096AFA15B17DA132218FF01FEE8204992D8A2"
+    },
+    {
+        "Path":  "Assets/2. Prefab/2. Spring.asset",
+        "Action":  "write",
+        "Before":  "A604FA4D1A1FF5CFDF9568576BB00A99EB7EF9549FF9FF7C30E2D4D24F4338E1",
+        "After":  "664338C746DD773C092FE9556FBE5DB3AEDBDCF2FE9961A5724ACB654631BB9F"
+    },
+    {
+        "Path":  "Assets/2. Prefab/3. Summer.asset",
+        "Action":  "write",
+        "Before":  "AA84090DC4696259AF4A19224FF8AF9C7E18291E64AC491049C97F58539018B1",
+        "After":  "C4E4A5C3A9DB249CB352FAF265C319445AFA339160ECCE655066F2B18C2050C0"
+    },
+    {
+        "Path":  "Assets/2. Prefab/4. Autumn.asset",
+        "Action":  "write",
+        "Before":  "4528162BCECC7A143DCE320D0092B153D5DD5F97CB9C204AC507CE32EE29FEBC",
+        "After":  "BE47CB4BD9BF11B29D9E7A1390DC0C67D9556A04491B615A265C0CC3C4FB4AEA"
+    },
+    {
+        "Path":  "Assets/2. Prefab/5. Winter.asset",
+        "Action":  "write",
+        "Before":  "81C33F228C2B36C994F467B3FED04FEAFDFCCB8CC803CDE19D4FE4104FDF8889",
+        "After":  "7742FF315F0B70FB8ACFC1B8ADF906D3A1F997C70C3E63A974C3A6668E1794F9"
+    },
+    {
+        "Path":  "Assets/2. Prefab/6. Sunny.asset",
+        "Action":  "write",
+        "Before":  "2B600979938B00C6596772448FE545E3DC554F3F4C2153AACC5A0AFF57E6B035",
+        "After":  "1FD1C982DA3BC7AB29958053A9E892BE6AB7057AC2995E3A3A617AAED8BF3A47"
+    },
+    {
+        "Path":  "Assets/2. Prefab/7. Night.asset",
+        "Action":  "write",
+        "Before":  "DECF1822F7A258B0ECFB82E4668EBB43933979C870702DD28C88984C54F4EDD3",
+        "After":  "FFD5F64A6B25E4EE5CE7F96CCD8FD2E2C975D84B01F1E75578E126588C8EEB06"
+    },
+    {
+        "Path":  "Assets/2. Prefab/8. Cloudy.asset",
+        "Action":  "write",
+        "Before":  "A1E7CB48DFC13F98C9C4CAB84BA27FE4AB4D7295823902FD3A399086B90554FC",
+        "After":  "20D50159B1CEF7E8C53D446D8DF55DCC1A7AD97A747CAD1184AD4E09E6DFD7CA"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Bars.png",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "670C0896EEBBB3AD6BA1A4FF1E315029C279943ADD7E797D3B0CD08C1522E787"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Bars.png.meta",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "333855E9E9F4540D6249240ADB1595F155FE3CF5BE9A06F54F27AE9129E8FADA"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Mascots.png",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "E72013EEF65C6C361D9E970E786795F59EC5BE328D8D2DC5B9170424FAFA975B"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Mascots.png.meta",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "6775BAF9892876349D0F7348D5275FE1B701B4C5EAD7AEC89B2FAFB780428FF2"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_MenuPapers.png",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "6C789F7040DA00C6893486EF8384968DDA8151C8AE31DFD822887B15C03A29E3"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_MenuPapers.png.meta",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "568F3B4F53342FE12A6C9C910A4163BF70F50465FC294143ED49A0E3B627D0FC"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Panels.png",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "09F84150AC6D5BB8E7B9422FD1275D0B7DCAE1F0561A834F0DAA50274E7CA4C2"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Panels.png.meta",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "39144C644054F31CA76458070F958D4505536959BEE9C287DBDAA7EC24E7C390"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Tables.png",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "03DE46740CE023AA90191777B0D313C950E90942F358C9EEEE1AB8862D396DDC"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Tables.png.meta",
+        "Action":  "write",
+        "Before":  null,
+        "After":  "0983AF8AD4A50523B9AD94C9D52835768A5EDE14A84958EC996C552EFAEB73FF"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Basic.png",
+        "Action":  "remove",
+        "Before":  "C99B69CE6AEBEE02EEC2C7B9ACA53EB7FAF8C1967C5A7C6EE6DB5FFA98276B79",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Basic.png.meta",
+        "Action":  "remove",
+        "Before":  "018590D657B8A0B9B25ECC9F4EA7ADC67EC41AED6108D936C376B42B94283136",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Spring.png",
+        "Action":  "remove",
+        "Before":  "BCB02819EE76C69C126D97BDD4BA8F25D07136670A2E01B7D82410DC3C028B49",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Spring.png.meta",
+        "Action":  "remove",
+        "Before":  "F40E87551415BA0BB0B1044C3442A7AA53F6BD1072ABC077BE147F7A3D88B114",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Summer.png",
+        "Action":  "remove",
+        "Before":  "8D512926BFE4F7BEF45B8976AE10B201B23E046A49ABD1B437B85BDB4C7365BA",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Summer.png.meta",
+        "Action":  "remove",
+        "Before":  "CE8968768AB9C89AEEB1EC84C868ADF83C001A29A2426C590084597161167476",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Autumn.png",
+        "Action":  "remove",
+        "Before":  "C974FC0B3F3D71435D4016EC77431DAC8DA99B8A67D6308B2F6CF525D42C328A",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Autumn.png.meta",
+        "Action":  "remove",
+        "Before":  "598044F6857F8DA2BE877BBEB13552B593ECA0A5E29AAC4E565FB8494CE1C7E5",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Winter.png",
+        "Action":  "remove",
+        "Before":  "F91530BA40F1C48EBA06E3FA36E17CB2A77854EA36E6E651F2455F2CA737C613",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Winter.png.meta",
+        "Action":  "remove",
+        "Before":  "E468668B9BDE11AB29E1A932BC1BA0B6404E24013DC3F48C5E32E199DC390FB1",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Sunny.png",
+        "Action":  "remove",
+        "Before":  "49BB4834D25AB1C8D74DCD2E7965DD20B23195C38270A17A9223F876EA6B0180",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Sunny.png.meta",
+        "Action":  "remove",
+        "Before":  "0C6545718D925ABE78D2B3DF94362F3FB9A45274FBFE7BC8FEBA714C53C60E86",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Night.png",
+        "Action":  "remove",
+        "Before":  "9C63815D1616CA7928544C860C44A946079063C572C9C4CC8EF3BC0C4255F4AC",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Night.png.meta",
+        "Action":  "remove",
+        "Before":  "1E30141360B25E84CC70762D83D18B1E04BE8735B2FC06553D1BA22F6F698146",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Cloudy.png",
+        "Action":  "remove",
+        "Before":  "B30A22E92B9B3FAC7ADC31B229BFB66C64A0B016C55EF61DDD74FA64F2BF0B76",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Map_Cloudy.png.meta",
+        "Action":  "remove",
+        "Before":  "761C7815B1E85691E39A891A08C7EA27DA215C96E56386CF7B472D264F8960A1",
+        "After":  null
+    },
+    {
+        "Path":  "Assets/3. Scripts/DoodleLabSkin.cs",
+        "Action":  "write",
+        "Before":  "238C2F892E978670A95F7B954E6AAF66311C373EFCD5C11787289942FA4355CF",
+        "After":  "7440D0EE6C6AF0164C6E4BF28B6FD0DC56F6D14A98B4CF66BF8AD1E370606327"
+    }
+]

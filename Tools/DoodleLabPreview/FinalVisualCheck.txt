@@ -1,0 +1,1 @@
+PASS: final option frame and slider handle proportions rendered without runtime errors.

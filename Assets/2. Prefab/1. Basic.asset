@@ -16,3 +16,5 @@ MonoBehaviour:
   MenuSprite: {fileID: 21300000, guid: 5ecb7c49c847f2140a9d648061045a3e, type: 3}
   TableSprite: {fileID: -236669613339809719, guid: 054c2440b1ff9554a81fcb0789a9fc0d, type: 3}
   SlimeSprite: {fileID: 21300000, guid: c4f8dc1dc4aec6347af14d052febc0c7, type: 3}
+  BarSprite: {fileID: -817825220206466096, guid: fd425e2c2b5b61643b7be5986f6bb1ad, type: 3}
+  OptionPanelSprite: {fileID: 21300001, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}

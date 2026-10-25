@@ -98,7 +98,9 @@ public class UIManager_Menu : MonoBehaviour
         AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
         AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
         AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
+        if (ChangeData.SelectedMapTheme == null) ChangeData.SelectedMapTheme = themeBasic;
         ApplySavedMapUI();
+        DoodleLabSkin.ApplyMapTheme(ChangeData.SelectedMapTheme);
         InitUI();
         BindMenuButtons();
         BindSlimeColorButtons();
@@ -301,6 +303,7 @@ public class UIManager_Menu : MonoBehaviour
     private void ChangeSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
+        ChangeData.UseDoodlePalette = false;
         ChangeData.SelectedColor = newColor;
         OnColorChanged?.Invoke(newColor);
     }
@@ -308,6 +311,7 @@ public class UIManager_Menu : MonoBehaviour
     private void ChangeCustomSlimeColor(Color newColor)
     {
         newColor.a = ChangeData.SLIME_ALPHA;
+        ChangeData.UseDoodlePalette = false;
         ChangeData.SelectedColor = newColor;
         ChangeData.LastCustomColor = newColor;
         OnColorChanged?.Invoke(newColor);
@@ -347,6 +351,7 @@ public class UIManager_Menu : MonoBehaviour
         if (Panel_Option != null) Panel_Option.GetComponent<Image>().sprite = newTheme.TableSprite;
 
         OnMapChanged?.Invoke(newTheme);
+        DoodleLabSkin.ApplyMapTheme(newTheme);
     }
 
     private void OnDestroy()

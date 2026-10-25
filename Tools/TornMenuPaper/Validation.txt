@@ -1,0 +1,1 @@
+PASS: 8 original Menu PNG imports and ThemeData references; default Basic; all 8 menu themes; simple paper sprites without frame override; option round trips; Night theme into game; pause paper; resume with 170 slimes; C# compilation; no game runtime errors.

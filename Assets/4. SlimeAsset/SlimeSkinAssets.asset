@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cfbc4aed25848f4a01e788095d15792, type: 3}
+  m_Name: SlimeSkinAssets
+  m_EditorClassIdentifier: 
+  sprites:
+  - name: Map_Basic_MenuPaper
+    sprite: {fileID: 21300000, guid: 5ecb7c49c847f2140a9d648061045a3e, type: 3}
+  - name: Map_Basic_Table
+    sprite: {fileID: -236669613339809719, guid: 054c2440b1ff9554a81fcb0789a9fc0d, type: 3}
+  - name: Map_Basic_Mascot
+    sprite: {fileID: 21300000, guid: c4f8dc1dc4aec6347af14d052febc0c7, type: 3}
+  - name: Map_Basic_Bar
+    sprite: {fileID: -817825220206466096, guid: fd425e2c2b5b61643b7be5986f6bb1ad, type: 3}
+  - name: Map_Basic_Menu
+    sprite: {fileID: 21300001, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Spring_MenuPaper
+    sprite: {fileID: 21300000, guid: cef0128a4fe08704d8b9745f5c8509e5, type: 3}
+  - name: Map_Spring_Table
+    sprite: {fileID: -3430392972040898859, guid: 55fd695a0383fcb4d95e81cd8e29f9e3, type: 3}
+  - name: Map_Spring_Mascot
+    sprite: {fileID: 21300000, guid: f1f407918476a1343ac4a90d1c199854, type: 3}
+  - name: Map_Spring_Bar
+    sprite: {fileID: -380423378477126484, guid: 2463976f24bdb8b4fba5ad79d1cca8b7, type: 3}
+  - name: Map_Spring_Menu
+    sprite: {fileID: 21300002, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Summer_MenuPaper
+    sprite: {fileID: 21300000, guid: 22a955e08bce3484ea24e090d0c13d2c, type: 3}
+  - name: Map_Summer_Table
+    sprite: {fileID: -3146999727782344165, guid: 70da718f758e8e04a870352d8c078b56, type: 3}
+  - name: Map_Summer_Mascot
+    sprite: {fileID: 21300000, guid: 3ac7dbf399434524b820a90cbefe45bb, type: 3}
+  - name: Map_Summer_Bar
+    sprite: {fileID: -5352933210067388377, guid: 1cc31dbf9fba54e45b2e6ed43bff1c26, type: 3}
+  - name: Map_Summer_Menu
+    sprite: {fileID: 21300003, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Autumn_MenuPaper
+    sprite: {fileID: 21300000, guid: 8b3c3efebf962904f939ac66ce03ed42, type: 3}
+  - name: Map_Autumn_Table
+    sprite: {fileID: -813317381007010780, guid: 34b9dffd172861746b743b716114d0f3, type: 3}
+  - name: Map_Autumn_Mascot
+    sprite: {fileID: 21300000, guid: fbabc0b8edf81824e86f002f33978e75, type: 3}
+  - name: Map_Autumn_Bar
+    sprite: {fileID: 7778199169812334221, guid: 313a0d69d7c91d84a8879b37ae16f043, type: 3}
+  - name: Map_Autumn_Menu
+    sprite: {fileID: 21300004, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Winter_MenuPaper
+    sprite: {fileID: 21300000, guid: 86f3994f924ce5142baa749d455a89bc, type: 3}
+  - name: Map_Winter_Table
+    sprite: {fileID: -5177212374166596092, guid: 2bfc6e47dbabf8d45a80bbcff6c37242, type: 3}
+  - name: Map_Winter_Mascot
+    sprite: {fileID: 21300000, guid: 9786fcf1e47322040aab0ca71d59d8c6, type: 3}
+  - name: Map_Winter_Bar
+    sprite: {fileID: 7375276971370686677, guid: 29ca077026ee3e947b75c322af6a1fa1, type: 3}
+  - name: Map_Winter_Menu
+    sprite: {fileID: 21300005, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Sunny_MenuPaper
+    sprite: {fileID: 21300000, guid: 761abb8dfd5c37a4b9808d837e8917fb, type: 3}
+  - name: Map_Sunny_Table
+    sprite: {fileID: 4541724385532589624, guid: 4df158a1f2aa9614ea9919bf849797f7, type: 3}
+  - name: Map_Sunny_Mascot
+    sprite: {fileID: 21300000, guid: d23a8dfc5289a5e469c8b520835b519f, type: 3}
+  - name: Map_Sunny_Bar
+    sprite: {fileID: 4708465994050406396, guid: c22623f38da99ab4ea4f220fa1ea9c3f, type: 3}
+  - name: Map_Sunny_Menu
+    sprite: {fileID: 21300006, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Night_MenuPaper
+    sprite: {fileID: 21300000, guid: 62486520ced1e0f4fb9bb334a57648fa, type: 3}
+  - name: Map_Night_Table
+    sprite: {fileID: -5701434062909859844, guid: f59b8aa94898a2442b54950052a393e9, type: 3}
+  - name: Map_Night_Mascot
+    sprite: {fileID: 21300000, guid: 3fd4e3de68ee69b48a0c793a55f4c460, type: 3}
+  - name: Map_Night_Bar
+    sprite: {fileID: -6694470235972033088, guid: b453a51441f13994ebb0f36005d768c8, type: 3}
+  - name: Map_Night_Menu
+    sprite: {fileID: 21300007, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Map_Cloudy_MenuPaper
+    sprite: {fileID: 21300000, guid: 3f08f5dff95b05c498a9d0a14a5c6b22, type: 3}
+  - name: Map_Cloudy_Table
+    sprite: {fileID: 7073474515451689367, guid: b243e3dd80ae3c64b873c5cd5815a5fc, type: 3}
+  - name: Map_Cloudy_Mascot
+    sprite: {fileID: 21300000, guid: 954ca515ec1dd5e45a3a8a7b00aa2723, type: 3}
+  - name: Map_Cloudy_Bar
+    sprite: {fileID: 349981259081308435, guid: c0ffc52889c9c9f4ebece89cb361802c, type: 3}
+  - name: Map_Cloudy_Menu
+    sprite: {fileID: 21300008, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
+  - name: Body
+    sprite: {fileID: -7282886668606283007, guid: 04f4d77a776ebbb44a57ee1ff0679c7d, type: 3}
+  - name: Face
+    sprite: {fileID: 21300000, guid: c2036370fe623ec43a0eacf07f21b3a0, type: 3}
+  - name: Crown
+    sprite: {fileID: -4821530343430527414, guid: b2dce87ed36240f41980b0587e527132, type: 3}
+  - name: Horns
+    sprite: {fileID: 6897479667268090689, guid: a266c517a57c5164588d3296a1252795, type: 3}
+  - name: Angel
+    sprite: {fileID: 794005853264362711, guid: e6e582060110e7144a806060fc9c4a11, type: 3}
+  - name: Magnifier
+    sprite: {fileID: -4976215857643454600, guid: 0ee1ad77f02f99045bde101ea4b82983, type: 3}
+  - name: Mix
+    sprite: {fileID: 5082878022139364959, guid: c42eb58581d1b474faa4834ede748825, type: 3}
+  - name: Eraser
+    sprite: {fileID: 826589370387393781, guid: df7de44b318d36747a22dd351a14a6a5, type: 3}
+  - name: Pause
+    sprite: {fileID: 21300009, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Gear
+    sprite: {fileID: -7178103831166666218, guid: 0877fe405fa3913448e891149ca73136, type: 3}
+  - name: Close
+    sprite: {fileID: -5575691569416931856, guid: 69d6785054d54af42894eecc0c481849, type: 3}
+  - name: Home
+    sprite: {fileID: 21300012, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Mascot
+    sprite: {fileID: 21300013, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Star
+    sprite: {fileID: 21300014, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Hourglass
+    sprite: {fileID: 21300015, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Help
+    sprite: {fileID: 21300016, guid: 0558184fb7f9dcf213b7a1d2a0969b6a, type: 3}
+  - name: Logo
+    sprite: {fileID: 21300000, guid: 01ac3b3d79fe8e74ca457b87851d947c, type: 3}
+  - name: Notebook
+    sprite: {fileID: -3498336094683241577, guid: 1dc2480a7a351764086c587593fa4615, type: 3}
+  - name: Frame_Cream
+    sprite: {fileID: 21300001, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Yellow
+    sprite: {fileID: 21300002, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Mint
+    sprite: {fileID: 21300003, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Coral
+    sprite: {fileID: 21300004, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Blue
+    sprite: {fileID: 21300005, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Paper
+    sprite: {fileID: 21300006, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Outline
+    sprite: {fileID: 21300007, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Frame_Tape
+    sprite: {fileID: 21300008, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}

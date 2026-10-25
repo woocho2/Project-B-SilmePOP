@@ -1,0 +1,1 @@
+PASS: 8 theme atlases / 32 sprites; all ThemeData references; themed game table, options, timer and mascot; 170 board slimes; pause/options/resume cycles for all 8 themes; no double tint; no duplicate timer decorations; Night selection persists from game to menu; C# compilation; no game runtime errors.

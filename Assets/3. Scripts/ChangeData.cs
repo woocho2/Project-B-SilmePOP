@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class ChangeData
 {
+    public static bool UseDoodlePalette { get; set; } = true;
     public static Color SelectedColor { get; set; } = Color.white;
     public static Sprite SelectedFace { get; set; }
     public static Sprite SelectedCostume { get; set; }

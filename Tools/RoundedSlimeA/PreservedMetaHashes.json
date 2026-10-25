@@ -1,0 +1,38 @@
+﻿[
+    {
+        "Path":  "Assets/2. Prefab/Slime_Sprite.prefab.meta",
+        "Hash":  "802BC4DD67F201E6971E0CD72EC6880C16CCF174E95A9959B575E2F62FED8ED9"
+    },
+    {
+        "Path":  "Assets/3. Scripts/DoodleLabSkin.cs.meta",
+        "Hash":  "121C16D47DFF6B936D66A0DBD9BD76AFA6B2A7C87B9637FEC2E008C969082929"
+    },
+    {
+        "Path":  "Assets/3. Scripts/SlimeController.cs.meta",
+        "Hash":  "7821C6270A7826AA501428B1C78D68496C157C05F258CBD30F0608D20B4BD48E"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_Angel.png.meta",
+        "Hash":  "9975EBBB2C1085471C20C5D1967F28E55369D5050AAD90DF368786BB47441D30"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_Demon.png.meta",
+        "Hash":  "3D50183CCE455C454453328C2ADB03C8A281987774292250C3CB27F140A775B5"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Costume_King.png.meta",
+        "Hash":  "1DBBC4CE913C750A8F1E97869DFCC4926010725120F24923C0D76B7D6D2C371A"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Face_1.png.meta",
+        "Hash":  "CBAE85032FD4EE026B75486F0A828A804772E4839BDA520ED1A3A03BC3F863D4"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Slime/Slime.png.meta",
+        "Hash":  "E62AA3361244207E164755A67C7A8FD76D3BA3514F6143360EAC166C7C84AA02"
+    },
+    {
+        "Path":  "Assets/Resources/DoodleLab/Sprites.png.meta",
+        "Hash":  "49C9E7C7D63050CB3069F7113A2F313BABDE0B8527567F7B9CB807D019A45147"
+    }
+]

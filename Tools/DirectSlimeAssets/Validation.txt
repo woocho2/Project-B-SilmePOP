@@ -1,0 +1,1 @@
+PASS: 66 serialized skin bindings; no DoodleLab Resources sprites; game skin UI and SpriteRenderers use SlimeAsset paths (color-picker internals and Unity primitives retained); original menu/table/bar/mascot references in all 8 themes; original game bodies, face and costume selections; all 3 scene entry points; menu/options/game/pause/resume; 170 slimes; no runtime errors.

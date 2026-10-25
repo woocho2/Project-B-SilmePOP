@@ -137,6 +137,7 @@ public class Change : MonoBehaviour
         {
             if (slimepart == SlimePart.Color)
             {
+                color = DoodleLabSkin.SlimeColor(color, m_slimeController != null ? m_slimeController.CurrentNumber : 0);
                 if (targetimg != null) targetimg.color = color;
                 if (targetsr != null) targetsr.color = color;
 
@@ -185,7 +186,14 @@ public class Change : MonoBehaviour
 
         if (spriteToApply == null) return;
 
-        if (targetimg != null) targetimg.sprite = spriteToApply;
-        if (targetsr != null) targetsr.sprite = spriteToApply;
+        if (targetimg != null)
+        {
+            targetimg.sprite = spriteToApply;
+            targetimg.color = Color.white;
+            targetimg.type = mappart == MapPart.GameTable ? Image.Type.Sliced : Image.Type.Simple;
+            targetimg.preserveAspect = mappart == MapPart.Slime;
+            targetimg.pixelsPerUnitMultiplier = mappart == MapPart.GameTable ? 3.5f : 2f;
+        }
+        if (targetsr != null) { targetsr.sprite = spriteToApply; targetsr.color = Color.white; }
     }
 }

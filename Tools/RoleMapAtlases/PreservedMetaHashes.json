@@ -1,0 +1,42 @@
+﻿[
+    {
+        "Path":  "Assets/1. Scenes/2. GameMenu.unity.meta",
+        "Hash":  "9199391987C09FAF8CFAFF1AAD72744061519C017425E6EE9A9A6EADCA275041"
+    },
+    {
+        "Path":  "Assets/2. Prefab/1. Basic.asset.meta",
+        "Hash":  "C4E9E7D48D77B3BD33C96235F0C74C1E1422430FAF3BC4776F0DD5C0281525D2"
+    },
+    {
+        "Path":  "Assets/2. Prefab/2. Spring.asset.meta",
+        "Hash":  "90BD2BC8001AEF9BF1231741D09D1C13E5C1065842D94F9C502F1A3BDF09788B"
+    },
+    {
+        "Path":  "Assets/2. Prefab/3. Summer.asset.meta",
+        "Hash":  "D74C2DD141FF0E24D51A36D9FB1665D09D1D2A4352180A6D2C284FE5054106C8"
+    },
+    {
+        "Path":  "Assets/2. Prefab/4. Autumn.asset.meta",
+        "Hash":  "AF2418E55C1E742ED1796D41C880FEC31956906AD1FAA57662EEAF9DE773E163"
+    },
+    {
+        "Path":  "Assets/2. Prefab/5. Winter.asset.meta",
+        "Hash":  "18448D959E0384BBD23F6758034232A14E3ABD3B9E7B646BAD08E5A834B56A72"
+    },
+    {
+        "Path":  "Assets/2. Prefab/6. Sunny.asset.meta",
+        "Hash":  "60A729E8C26723C80798271C73C7F2CA3906FE6A7429E5B1A19C9CCFD3F2DF0A"
+    },
+    {
+        "Path":  "Assets/2. Prefab/7. Night.asset.meta",
+        "Hash":  "F8FD91F7DD56399FE7C9CCA9DABC08301A300BF6AA4F0720F3C9B425E5F4589E"
+    },
+    {
+        "Path":  "Assets/2. Prefab/8. Cloudy.asset.meta",
+        "Hash":  "3F814E5D1320CED9D4E5B75E7C9C0E0D686EDDB0BE48E1AF7EE5FA63F089AB32"
+    },
+    {
+        "Path":  "Assets/3. Scripts/DoodleLabSkin.cs.meta",
+        "Hash":  "121C16D47DFF6B936D66A0DBD9BD76AFA6B2A7C87B9637FEC2E008C969082929"
+    }
+]

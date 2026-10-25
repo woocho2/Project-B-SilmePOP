@@ -1,0 +1,178 @@
+﻿[
+    {
+        "Path":  "Assets/2. Prefab/1. Basic.asset.meta",
+        "Hash":  "C4E9E7D48D77B3BD33C96235F0C74C1E1422430FAF3BC4776F0DD5C0281525D2"
+    },
+    {
+        "Path":  "Assets/2. Prefab/2. Spring.asset.meta",
+        "Hash":  "90BD2BC8001AEF9BF1231741D09D1C13E5C1065842D94F9C502F1A3BDF09788B"
+    },
+    {
+        "Path":  "Assets/2. Prefab/3. Summer.asset.meta",
+        "Hash":  "D74C2DD141FF0E24D51A36D9FB1665D09D1D2A4352180A6D2C284FE5054106C8"
+    },
+    {
+        "Path":  "Assets/2. Prefab/4. Autumn.asset.meta",
+        "Hash":  "AF2418E55C1E742ED1796D41C880FEC31956906AD1FAA57662EEAF9DE773E163"
+    },
+    {
+        "Path":  "Assets/2. Prefab/5. Winter.asset.meta",
+        "Hash":  "18448D959E0384BBD23F6758034232A14E3ABD3B9E7B646BAD08E5A834B56A72"
+    },
+    {
+        "Path":  "Assets/2. Prefab/6. Sunny.asset.meta",
+        "Hash":  "60A729E8C26723C80798271C73C7F2CA3906FE6A7429E5B1A19C9CCFD3F2DF0A"
+    },
+    {
+        "Path":  "Assets/2. Prefab/7. Night.asset.meta",
+        "Hash":  "F8FD91F7DD56399FE7C9CCA9DABC08301A300BF6AA4F0720F3C9B425E5F4589E"
+    },
+    {
+        "Path":  "Assets/2. Prefab/8. Cloudy.asset.meta",
+        "Hash":  "3F814E5D1320CED9D4E5B75E7C9C0E0D686EDDB0BE48E1AF7EE5FA63F089AB32"
+    },
+    {
+        "Path":  "Assets/3. Scripts/Change.cs.meta",
+        "Hash":  "9C807841BA3FFB08AD87EE449EB2D0DEA556381C11090C1A526032B9BD34E20E"
+    },
+    {
+        "Path":  "Assets/3. Scripts/DoodleLabSkin.cs.meta",
+        "Hash":  "121C16D47DFF6B936D66A0DBD9BD76AFA6B2A7C87B9637FEC2E008C969082929"
+    },
+    {
+        "Path":  "Assets/3. Scripts/UIManager_Game.cs.meta",
+        "Hash":  "9B98010728EE5DA4BBB30A8054D3D1049B1712785A04208BB640426E5D7D2D9B"
+    },
+    {
+        "Path":  "Assets/3. Scripts/UIManager_Menu.cs.meta",
+        "Hash":  "C27F4E2B23A3645B413ECC1ED29C2032B88D0FAB3129A72A05A4AB6FC877ADAC"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Autumn_Bar.png.meta",
+        "Hash":  "80A4AB0F17ACC6EE107E26F195C37EDAB18017C43295642B278094A81D044EBE"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Basic_Bar.png.meta",
+        "Hash":  "59416B23E613CEBDC556F4A86F8E31D58007DF5DC0FE94CC6D42BE125DBE7076"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Cloudy_Bar.png.meta",
+        "Hash":  "3BE9D3CB36A759C9035A55EC86613D4089EE7E707E3E7CE53CDB11CA728D1398"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Night_Bar.png.meta",
+        "Hash":  "15AB1345FEFD670D6A8E63F737AAC3429EEF4C71F6FBFE31087A20D7A77BF3C2"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Spring_Bar.png.meta",
+        "Hash":  "F53D804671084996C9F9550A0F225B6B52F10F790AFCF72866D06E6B06715247"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Summer_Bar.png.meta",
+        "Hash":  "BE0BC3960E6EC48BDC43E965D2B550BD738B1BC557F65FF6711DDDE632B5FFB9"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Sunny_Bar.png.meta",
+        "Hash":  "63508522C13BC4E5C6C3DC68544D962DDCC69F1B85106A80C797C14551139DD8"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Bar/Winter_Bar.png.meta",
+        "Hash":  "2B72D2EF3E8646E1C5CC2BC053520985EADCAAA31037BC5EEFD66FD6532C80EF"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Autumn_Menu.png.meta",
+        "Hash":  "06AD47B7350368E383708458360E807D04EAAABD066262FAEEC2A61C6116CCE4"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Basic_Menu.png.meta",
+        "Hash":  "43EDB1AF0813F72481E2521CF6E46701A6178BE7DBB4FE96CE29C31E304BC51C"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Cloudy_Menu.png.meta",
+        "Hash":  "BE1B457BE3D33E5B7605824CA62D45C9CA0C1E1E8CA48920AEB12AD7A91A2D54"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Night_Menu.png.meta",
+        "Hash":  "86FE580EE4685891DF200BC80997C2F6C96D0D8C360FF16248DC9947CB63000D"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Spring_Menu.png.meta",
+        "Hash":  "2520AED846CB2984F512310086E1D87D926A3844C321D2773C0392C8FA460D5D"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Summer_Menu.png.meta",
+        "Hash":  "DAD19F2706B9531BA24C3F35A840E3B2A356F0B6654E7AE7607CD6EFB0F433A2"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Sunny_Menu.png.meta",
+        "Hash":  "727C816579A55C7C46B142FEA18A946367ABE81A8C7D86CB9E20AA4B4AE7D4DC"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Menu/Winter_Menu.png.meta",
+        "Hash":  "370D09C055F6FF5FAFB7E46B7E82D2D5993B1232D45725157313CBB801B4F555"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Autumn.png.meta",
+        "Hash":  "E86A797501D3A372697F926FA2CA04C8AA04FC8AF4C0692A74A1A8480E612D0F"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Basic.png.meta",
+        "Hash":  "9DE9D41A28A0AAF667DC60503C926951BCC5C2C7789118982D4F1699636075A5"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Cloudy.png.meta",
+        "Hash":  "D3B1558E0FB7FAED821B13FD2745EE4305B4FAA585CE9C078050484D45687488"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Night.png.meta",
+        "Hash":  "DE6E71FAC9A6B3371E795FC1BD15AFA2866818AFBA5197AD6A28E07BFCF97716"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Spring.png.meta",
+        "Hash":  "DC1DCB8435533AA61069CE74D4D7071F01CB72C8672D3CE7EEDB58954EF8889E"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Summer.png.meta",
+        "Hash":  "03F717DA958521244AB8632EE25888CDC0B063D2190ECB42EE306D636FB29072"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Sunny.png.meta",
+        "Hash":  "7AF5F077882E3BCEFEB974F26DA376D985073083E5A0CE3F90253089A45EA3A9"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Slime/Slime_Winter.png.meta",
+        "Hash":  "ECF09243FD53E7381C95A3FE3BF1D6D80F360D24ACDBBA32A06477D86CA8E963"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Autumn_Table.png.meta",
+        "Hash":  "661A1E94ABE63EB220B4E1C4938BE8CEEEA92267C64CC07840B99DE3EECE643B"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Basic_Table.png.meta",
+        "Hash":  "8FCC6DC8B36F13D7DE462DC93AC6EE9CF81AF1C219CA7432B85DDAD546975907"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Cloudy_Table.png.meta",
+        "Hash":  "AD13A03688F7AB848FECAC48B8DF850F16CBF8EBF999A45092C7D60394677CFA"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Night_Table.png.meta",
+        "Hash":  "DDE6FC681AC07DB0187EBB131FDAAA09D21EECA7804F56C3015F3329C5438690"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Spring_Table.png.meta",
+        "Hash":  "BDA2D8F6F5F3D93A2A164EE36DBC3881EA74FBA4099BDF3CEF817C6650D47042"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Summer_Table.png.meta",
+        "Hash":  "09A0C552408123A1AAC8DCAAE700E550B25A2530465F0A7391D3D98F7243DE30"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Sunny_Table.png.meta",
+        "Hash":  "F7F497C6CCB4420B8689729A50AD380A8AFE2994903AD12F6B20AD58E73A3090"
+    },
+    {
+        "Path":  "Assets/4. SlimeAsset/Map/Table/Winter_Table.png.meta",
+        "Hash":  "5988A2F52F1AF1B23ED22C9226E7311A060FEEB5F749F54A10F613F28C9B302C"
+    }
+]

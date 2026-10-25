@@ -10,4 +10,6 @@ public class ThemeData : ScriptableObject
     public Sprite MenuSprite;
     public Sprite TableSprite;
     public Sprite SlimeSprite;
+    public Sprite BarSprite;
+    public Sprite OptionPanelSprite;
 }
