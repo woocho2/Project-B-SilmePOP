@@ -11,14 +11,14 @@ public class SlimeController : MonoBehaviour
     private SpriteRenderer highlightRenderer;
 
     private readonly Color hintColor = new Color(1f, 1f, 0f, 0.8f);
-    private readonly Color destroyHoverColor = new Color(0.2f, 0.5f, 1f, 0.8f); // ÆÄ±« ½ºÅ³¿ë ÆÄ¶õ»ö Ãß°¡
+    private readonly Color destroyHoverColor = new Color(0.2f, 0.5f, 1f, 0.8f); // íŒŒê´´ ìŠ¤í‚¬ìš© íŒŒë€ìƒ‰ ì¶”ê°€
 
     private bool isHintActive = false;
-    private bool isDestroyHoverActive = false; // ÆÄ±« È£¹ö »óÅÂ ÃßÀû¿ë º¯¼ö Ãß°¡
+    private bool isDestroyHoverActive = false; // íŒŒê´´ í˜¸ë²„ ìƒíƒœ ì¶”ì ìš© ë³€ìˆ˜ ì¶”ê°€
 
     public int CurrentNumber { get; private set; }
 
-    // Äİ¶óÀÌ´õ Á¦¾î¿ë º¯¼ö Ãß°¡
+    // ì½œë¼ì´ë” ì œì–´ìš© ë³€ìˆ˜ ì¶”ê°€
     private BoxCollider2D slimeCollider;
 
     private void Awake()
@@ -28,7 +28,7 @@ public class SlimeController : MonoBehaviour
             highlightRenderer = highlightObject.GetComponent<SpriteRenderer>();
         }
 
-        // ºÎÂøµÈ BoxCollider2D ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        // ë¶€ì°©ëœ BoxCollider2D ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         slimeCollider = GetComponent<BoxCollider2D>();
     }
 
@@ -41,12 +41,12 @@ public class SlimeController : MonoBehaviour
 
     private void SetRandomNumber()
     {
-        // 1. ±âÁØ È®·ü °è»ê
-        float pMid = 100f / 9f;             // Áß°£°ª È®·ü (¾à 11.11%)
-        float pLow = pMid + 0.25f;          // ³·Àº°ª È®·ü (¾à 11.36%)
-        float pHigh = pMid - 0.25f;         // ³ôÀº°ª È®·ü (¾à 10.86%)
+        // 1. ê¸°ì¤€ í™•ë¥  ê³„ì‚°
+        float pMid = 100f / 9f;             // ì¤‘ê°„ê°’ í™•ë¥  (ì•½ 11.11%)
+        float pLow = pMid + 0.25f;          // ë‚®ì€ê°’ í™•ë¥  (ì•½ 11.36%)
+        float pHigh = pMid - 0.25f;         // ë†’ì€ê°’ í™•ë¥  (ì•½ 10.86%)
 
-        // 2. ´©Àû ±¸°£ °è»ê
+        // 2. ëˆ„ì  êµ¬ê°„ ê³„ì‚°
         float threshold1 = pLow;
         float threshold2 = threshold1 + pLow;
         float threshold3 = threshold2 + pLow;
@@ -60,7 +60,7 @@ public class SlimeController : MonoBehaviour
 
         float randomValue = Random.Range(0f, 100f);
 
-        // 3. ¹øÈ£ ÇÒ´ç
+        // 3. ë²ˆí˜¸ í• ë‹¹
         if (randomValue < threshold1) CurrentNumber = 1;
         else if (randomValue < threshold2) CurrentNumber = 2;
         else if (randomValue < threshold3) CurrentNumber = 3;
@@ -119,7 +119,7 @@ public class SlimeController : MonoBehaviour
 
         if (highlightObject != null && highlightRenderer != null)
         {
-            // ÆÄ±« ½ºÅ³ È£¹ö »óÅÂ°¡ ¾Æ´Ò ¶§¸¸ ÈùÆ® »ö»óÀ» Àû¿ë (È£¹ö°¡ ¿ì¼±¼øÀ§ ³ôÀ½)
+            // íŒŒê´´ ìŠ¤í‚¬ í˜¸ë²„ ìƒíƒœê°€ ì•„ë‹ ë•Œë§Œ íŒíŠ¸ ìƒ‰ìƒì„ ì ìš© (í˜¸ë²„ê°€ ìš°ì„ ìˆœìœ„ ë†’ìŒ)
             if (!isDestroyHoverActive)
             {
                 highlightObject.SetActive(isActive);
@@ -132,7 +132,7 @@ public class SlimeController : MonoBehaviour
     }
 
     /// <summary>
-    /// ÆÄ±« ½ºÅ³ »ç¿ë Áß ¸¶¿ì½º È£¹ö¿¡ µû¸¥ ÆÄ¶õ»ö ÇÏÀÌ¶óÀÌÆ®¸¦ Á¦¾îÇÕ´Ï´Ù.
+    /// íŒŒê´´ ìŠ¤í‚¬ ì‚¬ìš© ì¤‘ ë§ˆìš°ìŠ¤ í˜¸ë²„ì— ë”°ë¥¸ íŒŒë€ìƒ‰ í•˜ì´ë¼ì´íŠ¸ë¥¼ ì œì–´í•©ë‹ˆë‹¤.
     /// </summary>
     public void SetDestroyHoverHighlight(bool isActive)
     {
@@ -143,11 +143,11 @@ public class SlimeController : MonoBehaviour
             if (isActive)
             {
                 highlightObject.SetActive(true);
-                highlightRenderer.color = destroyHoverColor; // ÆÄ¶õ»ö Àû¿ë
+                highlightRenderer.color = destroyHoverColor; // íŒŒë€ìƒ‰ ì ìš©
             }
             else
             {
-                // È£¹ö°¡ ²¨Á³À» ¶§, ÈùÆ® »óÅÂ¿´´Ù¸é ±âÁ¸ ³ë¶õ»öÀ¸·Î º¹±¸
+                // í˜¸ë²„ê°€ êº¼ì¡Œì„ ë•Œ, íŒíŠ¸ ìƒíƒœì˜€ë‹¤ë©´ ê¸°ì¡´ ë…¸ë€ìƒ‰ìœ¼ë¡œ ë³µêµ¬
                 if (isHintActive)
                 {
                     highlightObject.SetActive(true);

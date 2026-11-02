@@ -3,10 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ThemeData", menuName = "SlimeGame/Map Theme Data")]
 public class ThemeData : ScriptableObject
 {
-    [Header("¸Ê ±âº» Á¤º¸")]
+    [Header("ë§µ ê¸°ë³¸ ì •ë³´")]
     public string themeName;
 
-    [Header("¸Ê UI ¹× ¹è°æ ½ºÇÁ¶óÀÌÆ®")]
+    [Header("ë§µ UI ë° ë°°ê²½ ìŠ¤í”„ë¼ì´íŠ¸")]
     public Sprite MenuSprite;
     public Sprite TableSprite;
     public Sprite SlimeSprite;
