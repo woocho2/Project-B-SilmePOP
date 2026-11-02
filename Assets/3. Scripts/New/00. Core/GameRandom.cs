@@ -1,30 +1,23 @@
 using System;
 using System.Collections.Generic;
 
-// 시드로 만드는 랜덤. 규칙 코드(판 생성, 스킬, 조커 이동, AI)는 UnityEngine.Random 대신 이것만 씀.
+// 시드로 만드는 랜덤. 판 생성과 스킬은 같은 경기 시드로 같은 난수 순서를 사용함.
+// 조커 이동은 BoardModel에서 별도의 일반 난수를 사용함.
 //
-// 왜 직접 만드나
-//   - 같은 시드 = 같은 결과. 방장이 seed 숫자 하나만 보내면 모든 참가자가 같은 판을 만듦.
+// System.Random을 감싸는 이유
+//   - 같은 빌드에서 같은 시드 = 같은 결과. 방장이 seed 숫자 하나만 보내면 모든 참가자가 같은 판을 만듦.
 //   - UnityEngine.Random은 전역 하나라서, 다른 코드(연출 등)가 한 번만 불러도 순서가 어긋남.
-//   - System.Random은 .NET 버전에 따라 알고리즘이 바뀔 수 있음. 아래 SplitMix64는 몇 줄짜리 공식이라 어디서나 같음.
+//   - 판 생성과 스킬에 자주 쓰는 기능(Chance, Pick, Shuffle)을 한곳에 모음.
 //
-// 랜덤의 흐름을 둘로 나눔
-//   판 생성       new GameRandom(seed)                → 모두 같은 판
-//   스킬·조커     GameRandom.ForPlayer(seed, 자리)     → 같은 판이어도 자리마다 다른 흐름
+// 판 생성과 스킬은 각각 별도의 new GameRandom(seed)를 사용함.
+// 플레이어 자리 번호는 섞지 않으며, 같은 시드와 같은 호출 순서면 같은 결과가 나옴.
 public sealed class GameRandom
 {
-    private ulong state;
+    private readonly Random random;
 
     public GameRandom(int seed)
     {
-        state = (ulong)(uint)seed;
-    }
-
-    // 참가자 한 명의 스킬·조커 이동용. 자리 번호를 섞어 판 생성과 다른 흐름을 만듦.
-    public static GameRandom ForPlayer(int matchSeed, int slot)
-    {
-        GameRandom mixer = new GameRandom(matchSeed ^ ((slot + 1) * 0x5BD1E995));
-        return new GameRandom((int)mixer.NextUInt());
+        random = new Random(seed);
     }
 
     // 방장이 새 판의 seed를 정할 때만 씀 (이 값 자체는 재현할 필요가 없음).
@@ -41,15 +34,13 @@ public sealed class GameRandom
             throw new ArgumentOutOfRangeException(nameof(maxExclusive), "max는 min보다 커야 합니다.");
         }
 
-        ulong range = (ulong)((long)maxExclusive - minInclusive);
-        return (int)(minInclusive + (long)(NextULong() % range));
+        return random.Next(minInclusive, maxExclusive);
     }
 
     // 0 이상 1 미만.
     public double NextDouble()
     {
-        // 상위 53비트만 써서 double의 정밀도에 맞춤
-        return (NextULong() >> 11) * (1.0 / (1UL << 53));
+        return random.NextDouble();
     }
 
     public float NextFloat()
@@ -76,20 +67,5 @@ public sealed class GameRandom
             int j = Next(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
         }
-    }
-
-    private uint NextUInt()
-    {
-        return (uint)(NextULong() >> 32);
-    }
-
-    // SplitMix64: 상태에 고정값을 더하고 비트를 섞어 다음 수를 만듦.
-    private ulong NextULong()
-    {
-        state += 0x9E3779B97F4A7C15UL;
-        ulong z = state;
-        z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL;
-        z = (z ^ (z >> 27)) * 0x94D049BB133111EBUL;
-        return z ^ (z >> 31);
     }
 }

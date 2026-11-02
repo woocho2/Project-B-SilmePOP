@@ -157,17 +157,16 @@ public class MatchFinderTest
         board.MakeJoker(joker);
 
         // 빈자리가 없으면 시간이 지나도 그대로
-        GameRandom rng = new GameRandom(1);
-        board.Tick(GameRules.JokerMoveInterval, rng);
+        board.Tick(GameRules.JokerMoveInterval);
         Assert.AreEqual(from, joker.Anchor);
 
         // 빈자리가 생기면 그 칸으로
         int emptyCell = from == 0 ? 1 : 0;
         board.Remove(new[] { board.GetSlimeAt(emptyCell) });
-        board.Tick(GameRules.JokerMoveInterval - 0.5f, rng);
+        board.Tick(GameRules.JokerMoveInterval - 0.5f);
         Assert.AreEqual(from, joker.Anchor, "5초 전에는 안 움직임");
 
-        board.Tick(1f, rng);
+        board.Tick(1f);
         Assert.AreEqual(emptyCell, joker.Anchor);
         Assert.IsNull(board.GetSlimeAt(from));
         Assert.AreSame(joker, board.GetSlimeAt(emptyCell));

@@ -2,13 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-public class UIManager_Menu : MonoBehaviour
+public class UIManager_Menu : Singleton<UIManager_Menu>
 {
     [Header("Audio Volume Sliders")]
     [SerializeField] private Slider slider_masterVolume;
     [SerializeField] private Slider slider_bgmVolume;
     [SerializeField] private Slider slider_sfxVolume;
-    public static UIManager_Menu Instance { get; private set; }
 
     public event UnityAction<Color> OnColorChanged;
     public event UnityAction<Sprite> OnFaceChanged;
@@ -83,18 +82,9 @@ public class UIManager_Menu : MonoBehaviour
     [SerializeField] private ThemeData themeNight;
     [SerializeField] private ThemeData themeCloudy;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
-
     private void Start()
     {
+        if (Instance != this) return;
         AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
         AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
         AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
@@ -234,6 +224,11 @@ public class UIManager_Menu : MonoBehaviour
 
     private void BindSlimeFaceButtons()
     {
+        spr_slimeNormal = DoodleLabSkin.Sprite("Face") ?? spr_slimeNormal;
+        spr_slimeDemon = DoodleLabSkin.Sprite("Horns") ?? spr_slimeDemon;
+        spr_slimeAngel = DoodleLabSkin.Sprite("Angel") ?? spr_slimeAngel;
+        spr_slimeKing = DoodleLabSkin.Sprite("Crown") ?? spr_slimeKing;
+
         // 얼굴은 Face로
         BindSprite(btn_slimeNone, spr_slimeFaceNone, ChangeSlimeFace);
         BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
@@ -354,7 +349,7 @@ public class UIManager_Menu : MonoBehaviour
         DoodleLabSkin.ApplyMapTheme(newTheme);
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         if (fcp != null)
         {
@@ -362,6 +357,6 @@ public class UIManager_Menu : MonoBehaviour
             fcp.onColorChange.RemoveListener(ChangeCustomButtonColor);
         }
 
-        if (Instance == this) Instance = null;
+        base.OnDestroy();
     }
 }

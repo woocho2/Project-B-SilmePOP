@@ -71,8 +71,15 @@ public static class DoodleLabSkin
         image.preserveAspect = true;
     }
 
-    public static Color SlimeColor(Color selected, int number)
+    public static Color SlimeColor(Color selected, int number, SlimeType type = SlimeType.Basic)
     {
+        // Role decorations keep their own colors; the common white body receives the player tint.
+        switch (type)
+        {
+            case SlimeType.Joker: return Color.white;
+            case SlimeType.Merged: return new Color(0.30f, 0.50f, 0.95f);
+        }
+
         if (!ChangeData.UseDoodlePalette) return selected;
         return Palette[Mathf.Max(0, number - 1) % Palette.Length];
     }
@@ -94,10 +101,16 @@ public static class DoodleLabSkin
 
     public static void ApplySlime(SlimeController slime)
     {
-        var body = slime.transform.Find("Color");
-        Color color = SlimeColor(ChangeData.SelectedColor, slime.CurrentNumber);
-        if (body != null && body.TryGetComponent<SpriteRenderer>(out var renderer))
-            renderer.color = color;
+        if (slime == null) return;
+        Color color = SlimeColor(ChangeData.SelectedColor, slime.CurrentNumber, slime.CurrentType);
+        Sprite costume = slime.CurrentType switch
+        {
+            SlimeType.King => Sprite("Crown"),
+            SlimeType.Angel => Sprite("Angel"),
+            SlimeType.Devil => Sprite("Horns"),
+            _ => null
+        };
+        slime.ApplyVisualSkin(Sprite("Body"), costume, Sprite("Joker"), color);
         slime.SetSlimeColor(color);
     }
 
@@ -217,6 +230,17 @@ public static class DoodleLabSkin
             }
             foreach (var image in root.GetComponentsInChildren<Image>(true))
             {
+                // Standalone UI previews use the faced sprite; layered previews are handled by Change.
+                if (image.GetComponent<Change>() == null && image.sprite != null &&
+                    image.sprite.texture.name.StartsWith("Slime_Preview_Atlas"))
+                {
+                    Sprite uiSlime = Sprite("BodyUI");
+                    if (uiSlime != null)
+                    {
+                        image.sprite = uiSlime;
+                        image.preserveAspect = true;
+                    }
+                }
                 // The old full-screen hollow border cannot be replaced with an opaque sticker.
                 // The new parent panels already supply the notebook border.
                 if (image.name == "Frame" && image.sprite != null && image.sprite.name.StartsWith("Frame_"))
@@ -368,7 +392,7 @@ public static class DoodleLabSkin
             Place(warning.rectTransform, 0, 60, 1500, 180);
             warning.fontSize = 42;
         }
-        AddLabel(panel, "DoodleInstructions", "DRAG A RECTANGLE  /  MAKE 10!", font, 22, 0, -505, 1050, 38);
+        AddLabel(panel, "DoodleInstructions", "DRAG A RECTANGLE  /  MAKE THE TARGET!", font, 22, 0, -505, 1050, 38);
     }
 
     private static void StyleSkill(Scene scene, string name, string icon, string frame, string title, float x, TMP_FontAsset font)
@@ -519,6 +543,17 @@ public static class DoodleLabSkin
         foreach (var image in gamePanel.GetComponentsInChildren<Image>(true))
             if (image.name != "DoodleThemeMascot" && image.sprite != null && IsMapMascot(image.sprite)) image.enabled = false;
         ApplyMapTheme(ChangeData.SelectedMapTheme);
+    }
+
+    // 상단의 타이머와 점수 사이에 목표 합 칸을 만들고, 값을 쓸 글자를 돌려줌.
+    public static TMP_Text AddTargetSumDisplay(GameObject gamePanel, TMP_FontAsset font)
+    {
+        var frame = AddImage(gamePanel.transform, "DoodleTargetSum", "Frame_Yellow");
+        SetFrame(frame, "Frame_Yellow");
+        Place(frame.rectTransform, 352, 425, 150, 110);
+        AddLabel(frame.transform, "DoodleTargetSumCaption", "TARGET", font, 22, 0, 26, 130, 34);
+        AddLabel(frame.transform, "DoodleTargetSumValue", "", font, 44, 0, -14, 130, 60);
+        return frame.transform.Find("DoodleTargetSumValue").GetComponent<TMP_Text>();
     }
 
     private static void StyleOptions(Scene scene, TMP_FontAsset font)

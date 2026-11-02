@@ -1,0 +1,66 @@
+[
+    {
+        "name":  "Title_S",
+        "fileId":  21300001,
+        "x":  83,
+        "y":  453,
+        "width":  325,
+        "height":  382
+    },
+    {
+        "name":  "Title_L",
+        "fileId":  21300002,
+        "x":  537,
+        "y":  457,
+        "width":  277,
+        "height":  383
+    },
+    {
+        "name":  "Title_I",
+        "fileId":  21300003,
+        "x":  951,
+        "y":  458,
+        "width":  299,
+        "height":  385
+    },
+    {
+        "name":  "Title_M",
+        "fileId":  21300004,
+        "x":  1356,
+        "y":  466,
+        "width":  361,
+        "height":  365
+    },
+    {
+        "name":  "Title_E",
+        "fileId":  21300005,
+        "x":  99,
+        "y":  43,
+        "width":  299,
+        "height":  386
+    },
+    {
+        "name":  "Title_P",
+        "fileId":  21300006,
+        "x":  528,
+        "y":  48,
+        "width":  312,
+        "height":  387
+    },
+    {
+        "name":  "Title_O",
+        "fileId":  21300007,
+        "x":  932,
+        "y":  49,
+        "width":  353,
+        "height":  375
+    },
+    {
+        "name":  "Title_Exclamation",
+        "fileId":  21300008,
+        "x":  1460,
+        "y":  38,
+        "width":  160,
+        "height":  396
+    }
+]

@@ -5,7 +5,7 @@
       끝난 항목은 내역서로 옮기고 여기서 지움. 테스트에서 나온 버그는 이 문서 5장 맨 앞 "버그"에 적음.
 마감: 2026-11-04 (과제 제출). 남은 기간 11일.
 
->>> 다음 작업: 1-2 화면 쪽을 BoardModel에 연결 (0단계, 1-1 규칙 코드 끝. 2026-11-02)
+>>> 다음 작업: 1단계 Unity에서 플레이 확인 후 커밋 → 2단계 (1-2, 1-3 코드 끝. 2026-11-02)
 >>> 남은 순서 (2026-11-02 변경, 마감까지 이틀): 1단계 → 2단계 → 3단계 → 결과 순위 → AI → 스킬. 합체·조커 등은 부록 A대로 뒤로.
 >>> 과제 네트워크 요구사항은 아직 미발표. 방 만들기와 채팅 정도로 예상되어 Firebase 계획대로 진행 (2026-11-02 사용자가 정함).
 
@@ -125,8 +125,8 @@
   조심: 구독(+=)과 해제(-=)는 짝으로 (OnEnable/OnDisable 또는 Start/OnDestroy).
         네트워크 콜백은 메인 스레드가 아닐 수 있음 → NetworkManager가 큐에 담아 Update에서 이벤트를 쏨.
 
-[시드 랜덤] GameRandom(System.Random 래퍼). UnityEngine.Random은 규칙 코드에서 쓰지 않음.
-  판 생성: 방의 seed. 스킬·조커 이동: seed와 자리 번호로 만든 참가자별 시드 (같은 판이어도 참가자마다 다르게).
+[시드 랜덤] GameRandom(System.Random 래퍼). 판 생성·스킬은 같은 경기 시드를 사용하고, 조커 이동은 별도의 System.Random 사용.
+  자리 번호로 시드를 나누지 않음: 같은 판 경쟁이라 시드 차이로 유불리가 생기면 안 됨 (2026-11-02 사용자가 정함).
 
 쓰지 않는 것: 오브젝트 풀(슬라임 170개를 한 판에 한 번 만듦. 재대결 때 다시 만드는 비용이 작음),
               상태 패턴(게임 상태가 대기/카운트다운/진행/종료 넷뿐 → enum).
@@ -262,8 +262,8 @@
                                                AiDifficulty(Easy, Normal, Hard, Test), MatchPhase, SlotKind(Empty, Human, Ai),
                                                ChatChannel(Lobby, Room, Match, Result). 숫자를 직접 적고 새 값은 맨 뒤에
   2  Singleton.cs         [MB 베이스] 새 (0단계)  Singleton<T>. Instance, 중복이면 Destroy, PersistAcrossScenes(true면 DontDestroyOnLoad)
-  3  GameRandom.cs        [클래스]  새 (0단계)  SplitMix64 시드 랜덤 (System.Random 대신 직접: 어디서나 같은 결과).
-                                               Next(min,max), NextDouble/NextFloat, Chance(p), Pick, Shuffle, ForPlayer(seed, slot), NewSeed
+  3  GameRandom.cs        [클래스]  새 (0단계)  System.Random 시드 랜덤 (같은 빌드, 같은 시드, 같은 호출 순서면 같은 결과).
+                                               Next(min,max), NextDouble/NextFloat, Chance(p), Pick, Shuffle, NewSeed
   4  GameRules.cs         [static]  새 (0단계)  상수: 판 17 x 10, 120초, 카운트다운·공개·시작 지연, 목표 합 10 ~ 15, 출현 수(킹 2/천사 3/악마 5),
                                                점수 숫자(천사 x2, 악마 x-1, 킹 +10, 조커 x2, 합체 0 = 수 x 4)와 BaseScore(종류),
                                                스킬 횟수 SkillUses(1/2/1/1/1/3)·범위, 조커 이동 5초, 방 4명, 하트비트 5초·끊김 15초, 채팅 길이·간격,
@@ -346,7 +346,7 @@
 08. Network — 6
 ----------------------------------------------------------------------
  36  INetworkService.cs   [IF]      새 (2단계)  4장 4-6의 함수와 이벤트
- 37  NetworkModels.cs     [클래스]  새 (2단계)  UserInfo(uid, 닉네임, 태그 4자리 = uid에서 만듦, 표시 이름 "닉네임#1234"), RoomInfo, SlotInfo(사람/AI/빈칸, 난이도, ready, 색·테마), ChatMessage, ScoreEntry
+ 37  NetworkModels.cs     [클래스]  새 (2단계)  UserInfo(uid, 닉네임, 게스트 번호 = 생성 순서, 표시 이름 "닉네임#0012"), RoomInfo, SlotInfo(사람/AI/빈칸, 난이도, ready, 색·테마), ChatMessage, ScoreEntry
  38  LocalNetworkService.cs [클래스] 새 (2단계)  서버 없이 메모리로 흉내. 로그인 즉시 성공, 방 1개, AI만 넣고 대전 끝까지 가능.
                                                받은 요청을 같은 PC의 이벤트로 돌려줌 (채팅 에코 포함)
  39  NetworkManager.cs    [매니저]  새 (2단계)  DontDestroyOnLoad. INetworkService 하나를 듦(인스펙터에서 Local/Firebase 선택),
@@ -453,11 +453,11 @@
        BoardGenerator: 지금 SlimeController.SetRandomNumber의 확률표를 그대로 옮김 (낮은 수가 조금 더 많이). 특수 10마리는 칸 번호를 섞어 앞 10칸.
        MatchFinder: 지금 SlimeManager.TryFindMatch의 누적합을 옮기고 합체 처리를 더함 (4장 4-5). 지금은 FindFirst의 탐색 순서를 유지.
        ScoreCalculator: 4장 4-4.
-1-2. [ ] 화면 쪽을 BoardModel에 연결.
+1-2. [코드 끝, 플레이 확인 남음] 화면 쪽을 BoardModel에 연결. 합체의 2 x 2 그림은 5-2에서. 옛 스킬 3종은 5단계까지 BoardModel 위에서 그대로 동작.
        SlimeManager: Start에서 칸 170개를 만들고 GameManager가 BoardModel을 넘겨 주면 그림. 재대결 때는 오브젝트를 다시 만들지 않고 다시 그림.
        SlimeController: 숫자를 뽑지 않음. Refresh(BoardSlime)로 그림·숫자·콜라이더. 지금의 하이라이트(힌트 노랑, 파괴 파랑)는 강조 종류로 정리.
        DragManager/DragBoxArea: 4장 4-3. 목표 합은 GameManager.TargetSum.
-1-3. [ ] GameManager: MatchSettings(seed, targetSum)로 시작. 이 단계에서는 seed = 시각, targetSum = 10 ~ 15 랜덤 (네트워크 전 임시).
+1-3. [코드 끝, 플레이 확인 남음] GameManager: MatchSettings(seed, targetSum)로 시작. 이 단계에서는 seed = 시각, targetSum = 10 ~ 15 랜덤 (네트워크 전 임시).
        일시정지·재시작 버튼은 아직 지우지 않음 (6단계에서 기권으로 바꿀 때 같이).
        UIManager_Game: 상단에 목표 합 표시, 점수 = GameManager의 점수.
 함정: Destroy 대신 그림·콜라이더를 끔 → 지금의 "Destroy는 프레임 끝에 일어나 즉시 계산이 틀어짐" 문제(DragBoxArea 주석)가 사라짐.
@@ -471,11 +471,12 @@
 만들 것: #36 INetworkService, #37 NetworkModels, #38 LocalNetworkService, #39 NetworkManager, #16 MatchScores, T5,
          #44 UIManager_Lobby, #45 UIManager_Room, #47 ChatPanel, #48 ChatMessageItem, #49 RoomListItem, #50 RoomSlotItem, #51 ScoreboardPanel
 고칠 것: #43 UIManager_Menu(시작 → 로비), #15 GameManager(MatchStarting으로 시작, ServerNow로 시간), #46 UIManager_Game(점수판, 채팅)
-씬: 3. Lobby.unity를 새로 (로그인·로비·대기실 패널). 지금 3. GameScene은 4. GameScene으로 이름만 바꿈. Build Settings 순서도.
-2-1. [ ] 인터페이스와 모델을 먼저 다 정함 (4장 4-6). 3단계에서 Firebase로 바꿀 때 인터페이스를 고치지 않는 것이 목표.
-2-2. [ ] LocalNetworkService: 혼자 방을 만들고 바로 시작할 수 있게 (AI 자리는 4단계 전까지 빈칸으로 둠).
-2-3. [ ] 로비·대기실 UI와 ChatPanel. 채팅은 Lobby / Room / Match 채널.
-2-4. [ ] 대전 연결: 방장 StartMatch → MatchStarting → 4. GameScene 로드 → GameManager가 startAt까지 기다림 → 시작.
+씬: 로비 씬을 따로 만들지 않음 (2026-11-02 사용자가 정함). 2. GameMenu의 게임 시작 버튼을 누르면 방 참여·방 생성 패널이 나오고, 대기실도 그 씬의 패널로 둠.
+    로그인은 1. Title에서 끝남. 씬 이름과 Build Settings는 그대로 (1. Title, 2. GameMenu, 3. GameScene).
+2-1. [코드 끝] 인터페이스와 모델을 먼저 다 정함 (4장 4-6). 3단계에서 Firebase로 바꿀 때 인터페이스를 고치지 않는 것이 목표.
+2-2. [코드 끝] LocalNetworkService: 혼자 방을 만들고 바로 시작할 수 있게 (AI 자리는 4단계 전까지 빈칸으로 둠).
+2-3. [ ] (UI는 Codex 담당, 2026-11-02 사용자가 정함) 로비·대기실 UI와 ChatPanel. 채팅은 Lobby / Room / Match 채널.
+2-4. [ ] 대전 연결: 방장 StartMatch → MatchStarting → 3. GameScene 로드 → GameManager가 startAt까지 기다림 → 시작.
        점수: GameManager → ReportScore → ScoresChanged → MatchScores → ScoreboardPanel.
 함정: 네트워크 콜백에서 바로 UI를 만지지 않음 (NetworkManager가 메인 스레드로 넘김).
       NetworkManager는 DontDestroyOnLoad인데 UI 매니저는 씬마다 새로 생김 → 구독은 UI 쪽 OnEnable/OnDisable에서.
@@ -498,6 +499,7 @@
 3-1. [ ] Firebase 프로젝트, Realtime Database, 익명 로그인 켜기. 보안 규칙 초안(로그인한 사람만, 방 안의 자기 자리만 쓰기, AI 자리는 방장만).
 3-2. [ ] RestClient: 로그인 → 토큰, 읽기·쓰기, 실시간 수신(스트림), 서버 시각. 토큰 만료(1시간) 때 다시 받기.
 3-3. [ ] FirebaseNetworkService: LocalNetworkService와 같은 동작이 되게. 하트비트로 끊김 판정 (REST에는 onDisconnect가 없음).
+       게스트 번호: 서버의 공용 번호표를 ETag 조건부 쓰기로 올림. 두 사람이 동시에 받아도 번호가 겹치지 않게 (ReserveGuestNumber).
 3-4. [ ] NetworkManager 인스펙터에서 Local ↔ Firebase를 바꿀 수 있게 (혼자 테스트는 계속 Local).
 테스트 방법: Unity 6의 Multiplayer Play Mode(패키지 com.unity.multiplayer.playmode)로 에디터에서 창 2 ~ 4개, 또는 빌드 1개 + 에디터.
 함정: 두 PC의 시계가 다름 → 반드시 ServerNow. 카운트다운이 어긋나면 서버 시각 계산부터 봄.
@@ -527,7 +529,7 @@
 5-1. [ ] SkillManager의 대상 고르기 모드: 고르는 동안 드래그 막음, 클릭 적용, ESC 취소(횟수 안 씀), 채팅 입력 중이면 단축키 막음.
 5-2. [ ] 합체 화면: Anchor 칸이 2 x 2 그림, 나머지 세 칸은 그림 끔·콜라이더 켬. 강조는 네 칸 다.
 5-3. [ ] 조커: 5초 타이머는 BoardModel.Tick(GameManager가 매 프레임 부름, AI는 AiPlayer가). 드래그 중에도 이동.
-함정: 스킬의 랜덤은 GameRandom.ForPlayer(seed, 자리) (UnityEngine.Random 금지).
+함정: 스킬은 같은 경기 시드로 스킬마다 별도의 GameRandom을 만들고 사용 순서를 관리. 자리 번호는 섞지 않음. 조커 이동은 BoardModel의 별도 System.Random 사용.
       합체가 생긴 뒤 MatchFinder의 합체 처리가 실제로 맞는지 씬에서도 봄 (한 칸만 걸쳐도 포함).
 확인: T4 초록. 각 스킬을 한 번씩 써서 기획 [4-1]의 줄마다 확인. 조커 + 천사 사각형 = 목표 10에서 35점.
 
@@ -568,7 +570,7 @@
 부록 B. 확인 시나리오 (단계가 끝날 때마다 해당하는 것을 다시)
 ======================================================================
   S1 혼자 한 판: 메뉴 → 로비 → 방 → 시작 → 120초 → 결과
-  S2 둘이서: 창 2개, 같은 판·같은 목표 합, 동시에 시작, 서로 점수 보임, 채팅
+  S2 둘이서: 창 2개, 같은 판·같은 목표 합, 동시에 시작, 서로 점수 보임, 채팅 (에디터 + 빌드 조합에서도 판이 같은지 봄)
   S3 AI 셋 + 나: 쉬움·보통·어려움, 방장이 아닌 창에서도 AI 점수
   S4 동점: 같은 점수에서 먼저 도달한 쪽이 위 (DebugCheat F5로 맞춰 봄)
   S5 기권·끊김: 대전 중 창 하나를 닫음 → 15초 뒤 기권 표시, 나머지는 끝까지

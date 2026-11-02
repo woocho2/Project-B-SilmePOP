@@ -1,0 +1,20 @@
+# Crayon slider frame and fill
+
+Mode: built-in image_gen transparent layer edits, followed by aligned crop/resampling export with System.Drawing. No scripts, prefabs or scenes were changed; no Unity or runtime checks were run.
+
+- Assets/4. SlimeAsset/UI_Slider_Crayon_Frame.png
+- Assets/4. SlimeAsset/UI_Slider_Crayon_Fill_Mint.png
+
+Both PNGs use 1600 x 256 canvases and center pivots. The frame's outer drawing box is x32/y32/w1536/h192. The border is exported at approximately 12 px with nine-region resampling of the generated frame so its line remains modestly thicker than the concept. Frame center and outside are transparent. The fill is full-length (100%), placed in x43/y43/w1514/h170 with a 1 px underlap beneath the border. Layer order: fill behind, frame in front; use identical dimensions, position and pivot. The fill's crayon grain is retained. The shared transparent margins are intentional for alignment; do not independently trim either image.
+
+Single Sprite, alpha transparency, 100 PPU, bilinear/clamp, no mipmaps, no compression. LayerPreview.png is an assembly illustration on white, not an additional production sprite. Concept.png remains the earlier draft.
+
+For an actual slider, keep the frame stationary and change only the fill's visible extent. A mask/clipping setup can preserve the grain instead of stretching it.
+
+## Frame prompt
+
+Use case: precise-object-edit / background-extraction. Turn the attached hand-drawn rectangular crayon slider concept into ONLY ITS EMPTY FRAME as a transparent Unity UI sprite. Preserve the long straight rectangular box with SQUARE corners and friendly imperfect graphite/crayon texture. Make the dark graphite outline approximately 1.5 to 1.8 times thicker than the reference, visibly sturdier but still a simple modest line, not a decorative bevel. All four sides have consistent perceived thickness, about 5 to 6 percent of the box's height. Preserve a very wide horizontal frame, approximately 8:1 width-to-height, with genuinely straight upper/lower/side edges and a subtle handmade grain. Remove ALL green crayon fill, all white paper and all paper background texture: frame interior AND exterior must both be genuine transparent alpha. Only the continuous dark-grey rectangular outline is visible. No rounded ends, knobs, ticks, text, numbers, shadows, stickers or extra marks. One reusable frame layer only, complete silhouette centered with a small safe transparent margin. Designed for a final shared 1600 x 256 canvas; leave large interior empty for a separate matching crayon fill.
+
+## Fill prompt
+
+Use case: precise-object-edit / background-extraction. Turn the attached hand-drawn rectangular crayon slider concept into ONLY THE MINT GREEN CRAYON FILL as a transparent Unity UI sprite. Remove all graphite frame lines and all paper background. Extend the fill to 100 percent of the slider's full interior width, not the partial 70 percent in the concept. Output ONE wide horizontal rectangular swath of mint-green wax crayon, approximately 8.8:1 width-to-height. It must reach right up to all four straight edges of its rectangular footprint, so it can fit snugly against the INSIDE of a separately supplied square-corner rectangular frame: no deliberate inset gap, no tapered end, no oval/capsule ends, no large jagged chunks missing at the sides. Keep the fine tactile wax-crayon grain and horizontal stroke direction from the reference: small irregular lighter pigment gaps and natural pressure variation, a continuous single broad horizontal coloring pass. Transparent paper-grain pinholes are fine but overall filled area should read as solid mint at game UI size. Real transparent alpha outside the rectangle and in tiny grain holes; no baked white paper. No dark frame or outline, no black edges, no text, knobs, icons, numbers, arrows, shadow or scattered scraps. One full-length color fill layer only, centered with small safe transparent margins; intended for a separate fill image that aligns exactly inside the companion frame.

@@ -137,14 +137,21 @@ public class Change : MonoBehaviour
         {
             if (slimepart == SlimePart.Color)
             {
-                color = DoodleLabSkin.SlimeColor(color, m_slimeController != null ? m_slimeController.CurrentNumber : 0);
-                if (targetimg != null) targetimg.color = color;
-                if (targetsr != null) targetsr.color = color;
-
                 if (m_slimeController != null)
                 {
-                    m_slimeController.SetSlimeColor(color);
+                    DoodleLabSkin.ApplySlime(m_slimeController);
+                    return;
                 }
+
+                Sprite bodySprite = DoodleLabSkin.Sprite("Body");
+                if (bodySprite != null)
+                {
+                    if (targetimg != null) { targetimg.sprite = bodySprite; targetimg.preserveAspect = true; }
+                    if (targetsr != null) targetsr.sprite = bodySprite;
+                }
+                color = DoodleLabSkin.SlimeColor(color, 0);
+                if (targetimg != null) targetimg.color = color;
+                if (targetsr != null) targetsr.color = color;
             }
             else if (slimepart == SlimePart.SliderBar)
             {
@@ -157,19 +164,59 @@ public class Change : MonoBehaviour
     public void ApplyFace(Sprite faceSprite)
     {
         if (category != Category.Slime || slimepart != SlimePart.Face) return;
-        if (faceSprite == null) return;
+        if (m_slimeController != null)
+        {
+            if (targetimg != null) targetimg.enabled = false;
+            if (targetsr != null) targetsr.enabled = false;
+            return;
+        }
 
-        if (targetimg != null) targetimg.sprite = faceSprite;
-        if (targetsr != null) targetsr.sprite = faceSprite;
+        faceSprite = faceSprite != null ? faceSprite : DoodleLabSkin.Sprite("Face");
+        ApplyLayer(faceSprite);
     }
 
     public void ApplyCostume(Sprite costumeSprite)
     {
         if (category != Category.Slime || slimepart != SlimePart.Costume) return;
-        if (costumeSprite == null) return;
+        if (m_slimeController != null) return;
+        ApplyLayer(costumeSprite);
+    }
 
-        if (targetimg != null) targetimg.sprite = costumeSprite;
-        if (targetsr != null) targetsr.sprite = costumeSprite;
+    private void ApplyLayer(Sprite sprite)
+    {
+        Transform body = transform.parent != null ? transform.parent.Find("Color") : null;
+        if (targetimg != null)
+        {
+            targetimg.sprite = sprite;
+            targetimg.enabled = sprite != null;
+            targetimg.color = Color.white;
+            targetimg.raycastTarget = false;
+            targetimg.preserveAspect = true;
+            if (body != null && body.TryGetComponent<Image>(out var bodyImage))
+            {
+                RectTransform source = bodyImage.rectTransform;
+                RectTransform layer = targetimg.rectTransform;
+                layer.anchorMin = source.anchorMin;
+                layer.anchorMax = source.anchorMax;
+                layer.pivot = source.pivot;
+                layer.sizeDelta = source.sizeDelta;
+                layer.anchoredPosition3D = source.anchoredPosition3D;
+                layer.localRotation = source.localRotation;
+                layer.localScale = source.localScale;
+            }
+        }
+        if (targetsr != null)
+        {
+            targetsr.sprite = sprite;
+            targetsr.enabled = sprite != null;
+            targetsr.color = Color.white;
+            if (body != null)
+            {
+                transform.localPosition = body.localPosition;
+                transform.localRotation = body.localRotation;
+                transform.localScale = body.localScale;
+            }
+        }
     }
 
     public void ApplyMap(ThemeData themeData)

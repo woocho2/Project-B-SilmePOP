@@ -12,6 +12,7 @@ public sealed class BoardModel
 
     private readonly BoardSlime[] cells = new BoardSlime[GameRules.CellCount];
     private readonly List<BoardSlime> jokers = new List<BoardSlime>();
+    private readonly Random jokerRandom = new Random();
     private int nextId;
 
     public BoardSlime GetSlimeAt(int cell)
@@ -125,8 +126,9 @@ public sealed class BoardModel
         return merged;
     }
 
-    // 매 프레임 부름. 조커는 5초마다 랜덤한 빈자리로 이동하고, 빈자리가 없으면 그대로 있음.
-    public void Tick(float deltaTime, GameRandom rng)
+    // 매 프레임 부름. 조커는 경기·스킬 시드와 무관하게 5초마다 랜덤한 빈자리로 이동함.
+    // 빈자리가 없으면 그대로 있음.
+    public void Tick(float deltaTime)
     {
         foreach (BoardSlime joker in jokers)
         {
@@ -134,11 +136,11 @@ public sealed class BoardModel
             if (joker.JokerTimeLeft > 0f) continue;
 
             joker.JokerTimeLeft += GameRules.JokerMoveInterval;
-            MoveJoker(joker, rng);
+            MoveJoker(joker);
         }
     }
 
-    private void MoveJoker(BoardSlime joker, GameRandom rng)
+    private void MoveJoker(BoardSlime joker)
     {
         List<int> emptyCells = new List<int>();
         for (int cell = 0; cell < cells.Length; cell++)
@@ -148,7 +150,7 @@ public sealed class BoardModel
         if (emptyCells.Count == 0) return;
 
         int from = joker.Anchor;
-        int to = rng.Pick(emptyCells);
+        int to = emptyCells[jokerRandom.Next(emptyCells.Count)];
         cells[from] = null;
         cells[to] = joker;
         joker.Cells = new[] { to };

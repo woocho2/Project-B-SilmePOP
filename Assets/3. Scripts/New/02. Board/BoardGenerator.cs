@@ -3,18 +3,6 @@ using System.Collections.Generic;
 // seed → 판. 같은 seed면 모든 참가자의 판이 완전히 같음 (기획 [4]).
 public static class BoardGenerator
 {
-    // 숫자 확률표: 낮은 수가 조금 더 많음 (SlimeController.SetRandomNumber에서 그대로 옮김).
-    private const double MidPercent = 100.0 / 9.0;
-    private const double LowPercent = MidPercent + 0.25;
-    private const double HighPercent = MidPercent - 0.25;
-
-    private static readonly double[] NumberPercents =
-    {
-        LowPercent, LowPercent, LowPercent,     // 1, 2, 3
-        MidPercent, MidPercent, MidPercent,     // 4, 5, 6
-        HighPercent, HighPercent, HighPercent   // 7, 8, 9
-    };
-
     public static BoardModel Generate(int seed)
     {
         GameRandom rng = new GameRandom(seed);
@@ -57,13 +45,6 @@ public static class BoardGenerator
 
     private static int DrawNumber(GameRandom rng)
     {
-        double value = rng.NextDouble() * 100.0;
-        double threshold = 0.0;
-        for (int i = 0; i < NumberPercents.Length - 1; i++)
-        {
-            threshold += NumberPercents[i];
-            if (value < threshold) return i + 1;
-        }
-        return NumberPercents.Length;
+        return rng.Next(1, 10); // 1~9를 같은 확률로 선택.
     }
 }

@@ -94,15 +94,15 @@ MonoBehaviour:
   - name: Map_Cloudy_Menu
     sprite: {fileID: 21300008, guid: be1f998f6310bd8dc6d1ba9ede610608, type: 3}
   - name: Body
-    sprite: {fileID: -7282886668606283007, guid: 04f4d77a776ebbb44a57ee1ff0679c7d, type: 3}
+    sprite: {fileID: 21300000, guid: 463d2650d0384b628db75909a9c79357, type: 3}
   - name: Face
-    sprite: {fileID: 21300000, guid: c2036370fe623ec43a0eacf07f21b3a0, type: 3}
+    sprite: {fileID: 21300000, guid: acd4af436f7d49b288cffcdfda13e104, type: 3}
   - name: Crown
-    sprite: {fileID: -4821530343430527414, guid: b2dce87ed36240f41980b0587e527132, type: 3}
+    sprite: {fileID: 21300000, guid: 36676ec3b6ab4a3d85359e5952cc1147, type: 3}
   - name: Horns
-    sprite: {fileID: 6897479667268090689, guid: a266c517a57c5164588d3296a1252795, type: 3}
+    sprite: {fileID: 21300000, guid: 1accc268ef1442b6814233e8e5371ebe, type: 3}
   - name: Angel
-    sprite: {fileID: 794005853264362711, guid: e6e582060110e7144a806060fc9c4a11, type: 3}
+    sprite: {fileID: 21300000, guid: 22d67df5160342b5a45c244946825235, type: 3}
   - name: Magnifier
     sprite: {fileID: -4976215857643454600, guid: 0ee1ad77f02f99045bde101ea4b82983, type: 3}
   - name: Mix
@@ -145,3 +145,7 @@ MonoBehaviour:
     sprite: {fileID: 21300007, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
   - name: Frame_Tape
     sprite: {fileID: 21300008, guid: c5f6877f2097a5283eef59ba2ceb4a81, type: 3}
+  - name: Joker
+    sprite: {fileID: 21300000, guid: 222dc640296a42a5959d50b4a663266d, type: 3}
+  - name: BodyUI
+    sprite: {fileID: 21300000, guid: d4fa3761871e48d78a530d1db1e341ad, type: 3}

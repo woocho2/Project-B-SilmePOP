@@ -60,3 +60,18 @@ public enum ChatChannel
     Match = 2,   // 대전 중
     Result = 3   // 결과 화면
 }
+
+// 방이 지금 어느 단계인가. 대기 중인 방에만 들어갈 수 있음.
+public enum RoomState
+{
+    Waiting = 0,
+    Playing = 1,
+    Result = 2
+}
+
+// NetworkManager가 어떤 구현을 쓰는가 (인스펙터에서 고름).
+public enum NetworkBackend
+{
+    Local = 0,      // 서버 없이 메모리로 흉내
+    Firebase = 1    // 실제 서버 (3단계)
+}
