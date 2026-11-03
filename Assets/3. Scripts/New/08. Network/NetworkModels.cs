@@ -30,7 +30,7 @@ public sealed class SlotInfo
     public string uid;              // 사람만
     public string displayName;      // "닉네임#1234" 또는 "AI 2"
     public AiDifficulty difficulty; // AI만
-    public bool ready;              // AI는 항상 true
+    public string slimeColor;       // 그 자리 슬라임 색 "#RRGGBB" (사람은 자기가 고른 색)
 
     public SlotInfo Clone()
     {
@@ -44,10 +44,12 @@ public sealed class RoomInfo
     public string roomId;
     public string roomName;
     public string hostUid;
+    public int maxPlayers;          // 열려 있는 자리 수 (1 ~ 4). slots는 항상 4칸이고, 이 수 이상의 자리는 닫힘
     public RoomState state;
     public int seed;
     public int targetSum;
-    public long startAt;
+    public long startAt;            // 대기실 카운트다운(5초)이 끝나고 게임 씬으로 넘어가는 서버 시각
+    public long playAt;             // 모두 게임 씬에 모인 뒤 3, 2, 1을 시작하는 서버 시각. 0이면 아직 기다리는 중
     public SlotInfo[] slots;
 
     public int PlayerCount
@@ -63,17 +65,14 @@ public sealed class RoomInfo
         }
     }
 
-    // 방장을 뺀 사람이 모두 준비했는가. 방장은 시작 버튼을 누르는 쪽이라 준비가 없음.
-    public bool IsEveryoneReady
+    // 열린 자리(maxPlayers 안) 중 첫 빈자리. 없으면 -1.
+    public int FindEmptySlot()
     {
-        get
+        for (int i = 0; i < maxPlayers && i < slots.Length; i++)
         {
-            foreach (SlotInfo slot in slots)
-            {
-                if (slot.kind == SlotKind.Human && slot.uid != hostUid && !slot.ready) return false;
-            }
-            return true;
+            if (slots[i].kind == SlotKind.Empty) return i;
         }
+        return -1;
     }
 
     public int FindSlot(string uid)
@@ -104,6 +103,9 @@ public sealed class ChatMessage
     public string displayName;
     public string text;
     public long time;   // 서버 시각 (밀리초)
+
+    // 사람이 아닌 게임이 띄운 안내 (예: "5초뒤 게임이 시작합니다")
+    public bool IsSystem => string.IsNullOrEmpty(uid);
 }
 
 [Serializable]

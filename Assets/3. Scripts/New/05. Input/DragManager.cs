@@ -26,15 +26,15 @@ public class DragManager : Singleton<DragManager>
 
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsPaused)
+        if (GameManager.Instance != null && !GameManager.Instance.IsPlaying)
         {
             CancelDrag();
             return;
         }
         if (Mouse.current == null) return;
 
-        // 슬라임 단일 파괴 스킬이 켜져 있는 동안에는 드래그 로직을 완전히 차단합니다.
-        if (SlimeManager.Instance != null && SlimeManager.Instance.IsDestroySkillActive)
+        // 스킬 대상을 고르는 중이거나, 이번 클릭을 스킬 적용에 썼으면 드래그하지 않음
+        if (SkillManager.Instance != null && (SkillManager.Instance.IsTargeting || SkillManager.Instance.ConsumedClickThisFrame))
         {
             CancelDrag();
             return;

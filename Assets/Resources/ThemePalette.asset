@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6afa359543744715be492fd7d67c60b1, type: 3}
+  m_Name: ThemePalette
+  m_EditorClassIdentifier: 
+  themes:
+  - themeName: Basic
+    CoverColor: {r: 0.4509804, g: 0.29411766, b: 0, a: 1}
+    PaperColor: {r: 0.8, g: 0.7176471, b: 0.57254905, a: 1}
+    SliderFillColor: {r: 0.6320754, g: 0.42838463, b: 0, a: 1}
+  - themeName: Spring
+    CoverColor: {r: 1, g: 0.18431373, b: 0.78431374, a: 1}
+    PaperColor: {r: 1, g: 0.88235295, b: 0.9607843, a: 1}
+    SliderFillColor: {r: 0.8396226, g: 0.45545566, b: 0.69749886, a: 1}
+  - themeName: Summer
+    CoverColor: {r: 0, g: 0.7490196, b: 0.05882353, a: 1}
+    PaperColor: {r: 0.91764706, g: 1, b: 0.827451, a: 1}
+    SliderFillColor: {r: 0, g: 0.8584906, b: 0.13429062, a: 1}
+  - themeName: Autumn
+    CoverColor: {r: 1, g: 0.14901961, b: 0, a: 1}
+    PaperColor: {r: 1, g: 0.7529412, b: 0.5529412, a: 1}
+    SliderFillColor: {r: 0.9245283, g: 0.5537017, b: 0.3009078, a: 1}
+  - themeName: Winter
+    CoverColor: {r: 0.78039217, g: 0.91764706, b: 1, a: 1}
+    PaperColor: {r: 0.9764706, g: 0.9843137, b: 1, a: 1}
+    SliderFillColor: {r: 0.763172, g: 0.86915433, b: 0.9245283, a: 1}
+  - themeName: Sunny
+    CoverColor: {r: 1, g: 0.6862745, b: 0, a: 1}
+    PaperColor: {r: 1, g: 1, b: 0.69411767, a: 1}
+    SliderFillColor: {r: 1, g: 0.99731886, b: 0.3726415, a: 1}
+  - themeName: Night
+    CoverColor: {r: 0, g: 0.02745098, b: 0.105882354, a: 1}
+    PaperColor: {r: 0, g: 0.09803922, b: 0.32156864, a: 1}
+    SliderFillColor: {r: 0.99550414, g: 1, b: 0.8726415, a: 1}
+  - themeName: Cloudy
+    CoverColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 1}
+    PaperColor: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+    SliderFillColor: {r: 0.7877358, g: 1, b: 0.9979838, a: 1}

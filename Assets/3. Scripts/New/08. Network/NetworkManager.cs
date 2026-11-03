@@ -12,6 +12,12 @@ public class NetworkManager : Singleton<NetworkManager>
 
     [SerializeField] private NetworkBackend backend = NetworkBackend.Local;
 
+    [Header("Firebase (Backend가 Firebase일 때)")]
+    [Tooltip("Realtime Database 화면 맨 위의 주소. 예: https://프로젝트-default-rtdb.asia-southeast1.firebasedatabase.app")]
+    [SerializeField] private string firebaseDatabaseUrl;
+    [Tooltip("프로젝트 설정 → 일반 탭의 웹 API 키")]
+    [SerializeField] private string firebaseApiKey;
+
     public event Action Connected;
     public event Action Disconnected;
     public event Action<string> ErrorOccurred;
@@ -30,8 +36,18 @@ public class NetworkManager : Singleton<NetworkManager>
     public RoomInfo CurrentRoom { get; private set; }
     public MatchSettings CurrentMatch { get; private set; }   // 진행 중인 판. 없으면 null
     public MatchScores Scores { get; } = new MatchScores();
+    public IReadOnlyList<RoomInfo> Rooms { get; private set; } = new RoomInfo[0];   // 마지막으로 받은 방 목록
 
     public bool IsConnected => CurrentUser != null;
+
+    // 로그인한 상태면 NetworkManager, 아니면 경고를 남기고 null. 방 만들기·들어가기 전에 씀.
+    public static NetworkManager SignedIn(UnityEngine.Object context)
+    {
+        if (Instance != null && Instance.IsConnected) return Instance;
+
+        Debug.LogWarning("방에 들어가려면 타이틀에서 로그인해야 합니다.", context);
+        return null;
+    }
     public bool IsHost => CurrentUser != null && CurrentRoom != null && CurrentRoom.hostUid == CurrentUser.uid;
     public int MySlot => CurrentUser != null && CurrentRoom != null ? CurrentRoom.FindSlot(CurrentUser.uid) : -1;
     public long ServerNow => service.ServerNow;
@@ -51,15 +67,40 @@ public class NetworkManager : Singleton<NetworkManager>
 
         service = CreateService();
         SubscribeService();
+
+        // 메뉴에서 고른 슬라임 색을 대기실의 내 자리에 보여 줌
+        ChangeData.ColorChanged += SendMyColor;
+        SendMyColor(ChangeData.SelectedColor);
+    }
+
+    protected override void OnDestroy()
+    {
+        ChangeData.ColorChanged -= SendMyColor;
+        base.OnDestroy();
+    }
+
+    private void SendMyColor(Color color)
+    {
+        service.SetMyColor("#" + ColorUtility.ToHtmlStringRGB(color));
     }
 
     private INetworkService CreateService()
     {
         if (backend == NetworkBackend.Firebase)
         {
-            Debug.LogWarning("Firebase 구현은 아직 없어 Local로 동작합니다.", this);
+            if (!string.IsNullOrWhiteSpace(firebaseDatabaseUrl) && !string.IsNullOrWhiteSpace(firebaseApiKey))
+            {
+                return new FirebaseNetworkService(new FirebaseRestClient(firebaseDatabaseUrl, firebaseApiKey));
+            }
+            Debug.LogError("NetworkManager: Firebase 주소와 웹 API 키를 넣어 주세요. 지금은 Local로 동작합니다.", this);
         }
         return new LocalNetworkService();
+    }
+
+    // 끌 때 방에서 나가고 실시간 수신을 닫음 (에디터에서는 플레이를 멈춰도 연결이 남을 수 있음)
+    private void OnApplicationQuit()
+    {
+        if (service != null && IsConnected) service.SignOut();
     }
 
     private void SubscribeService()
@@ -68,7 +109,11 @@ public class NetworkManager : Singleton<NetworkManager>
         service.Disconnected += () => Post(HandleDisconnected);
         service.ErrorOccurred += message => Post(() => ErrorOccurred?.Invoke(message));
         service.LobbyUsersChanged += users => Post(() => LobbyUsersChanged?.Invoke(users));
-        service.RoomListChanged += rooms => Post(() => RoomListChanged?.Invoke(rooms));
+        service.RoomListChanged += rooms => Post(() =>
+        {
+            Rooms = rooms;
+            RoomListChanged?.Invoke(rooms);
+        });
         service.RoomChanged += room => Post(() => HandleRoomChanged(room));
         service.ChatReceived += (channel, message) => Post(() => ChatReceived?.Invoke(channel, message));
         service.MatchStarting += settings => Post(() => HandleMatchStarting(settings));
@@ -147,9 +192,7 @@ public class NetworkManager : Singleton<NetworkManager>
         string saved = SavedNickname;
         if (!string.IsNullOrWhiteSpace(saved)) return saved;
 
-        string personality = GameRules.NicknamePersonalities[UnityEngine.Random.Range(0, GameRules.NicknamePersonalities.Length)];
-        string color = GameRules.NicknameColors[UnityEngine.Random.Range(0, GameRules.NicknameColors.Length)];
-        return $"{personality}{color}슬라임";
+        return GameRules.RandomNickname(new System.Random());
     }
 
     public void SignIn(string nickname, Action<UserInfo> onDone = null)
@@ -167,9 +210,14 @@ public class NetworkManager : Singleton<NetworkManager>
 
     public void SignOut() => service.SignOut();
 
-    public void CreateRoom(string roomName, Action<RoomInfo> onDone = null)
+    // 방 이름이 비어 있으면 "닉네임의 방". 너무 길면 자름.
+    public void CreateRoom(string roomName, int maxPlayers, Action<RoomInfo> onDone = null)
     {
-        service.CreateRoom(roomName, room => Post(() => onDone?.Invoke(room)));
+        string trimmed = string.IsNullOrWhiteSpace(roomName) ? "" : roomName.Trim();
+        if (trimmed.Length == 0 && CurrentUser != null) trimmed = $"{CurrentUser.nickname}의 방";
+        if (trimmed.Length > GameRules.RoomNameMaxLength) trimmed = trimmed.Substring(0, GameRules.RoomNameMaxLength);
+
+        service.CreateRoom(trimmed, maxPlayers, room => Post(() => onDone?.Invoke(room)));
     }
 
     public void JoinRoom(string roomId, Action<RoomInfo> onDone = null)
@@ -178,11 +226,22 @@ public class NetworkManager : Singleton<NetworkManager>
     }
 
     public void LeaveRoom() => service.LeaveRoom();
-    public void SetReady(bool ready) => service.SetReady(ready);
     public void AddAi(int slot, AiDifficulty difficulty) => service.AddAi(slot, difficulty);
     public void RemoveAi(int slot) => service.RemoveAi(slot);
     public void StartMatch() => service.StartMatch();
     public void EndMatch() => service.EndMatch();
+
+    // 게임 씬을 다 불러왔음. 모두 오면 CurrentRoom.playAt이 정해짐.
+    public void ReportLoaded()
+    {
+        if (MySlot >= 0) service.ReportLoaded(MySlot);
+    }
+
+    // 이 PC에서만 보이는 안내 메시지를 채팅으로 띄움 (서버로 보내지 않음)
+    public void ShowSystemMessage(ChatChannel channel, string text)
+    {
+        ChatReceived?.Invoke(channel, new ChatMessage { text = text, time = ServerNow });
+    }
     public void ReturnToRoom() => service.ReturnToRoom();
 
     // 빈 글이거나 도배 제한에 걸리면 보내지 않고 false. 너무 길면 잘라서 보냄.

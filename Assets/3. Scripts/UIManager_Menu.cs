@@ -1,362 +1,152 @@
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 
+// 메뉴 씬. 화면 위 버튼(종료·도움말·옵션)과 패널 켜고 끄기만 맡음. 각 패널의 일은 패널에 붙은 스크립트가 함.
+// 메뉴 → 방 만들기 → 대기실(Robby)로 앞으로 가고, 옵션·도움말은 연 곳으로 돌아가며, 종료 확인은 지금 화면 위에 겹쳐 띄움.
+// 방 상태에 따른 화면 전환(방에서 나오면 메뉴로, 시작하면 5초 세고 게임 씬으로)도 여기서 함.
 public class UIManager_Menu : Singleton<UIManager_Menu>
 {
-    [Header("Audio Volume Sliders")]
-    [SerializeField] private Slider slider_masterVolume;
-    [SerializeField] private Slider slider_bgmVolume;
-    [SerializeField] private Slider slider_sfxVolume;
+    [Header("화면 위 버튼")]
+    [SerializeField] private Button btn_quit;     // QuitPanel 띄움
+    [SerializeField] private Button btn_help;     // HelpPanel 띄움
+    [SerializeField] private Button btn_option;   // OptionPanel 띄움
 
-    public event UnityAction<Color> OnColorChanged;
-    public event UnityAction<Sprite> OnFaceChanged;
-    public event UnityAction<Sprite> OnCostumeChanged; // 코스튬 이벤트 추가
-    public event UnityAction<ThemeData> OnMapChanged;
-
-    [Header("Panels & UI Elements")]
+    [Header("패널")]
     [SerializeField] private GameObject Panel_MainMenu;
+    [SerializeField] private GameObject Panel_Quit;
     [SerializeField] private GameObject Panel_Option;
+    [SerializeField] private GameObject Panel_CreateRoom;
     [SerializeField] private GameObject Panel_Help;
+    [SerializeField] private GameObject Panel_Lobby;
+
+    [Header("Scene Settings")]
+    [Tooltip("방장이 게임을 시작하면 모두 이 씬으로 넘어감")]
     [SerializeField] private string m_sceneName;
 
-    [Header("Menu Buttons")]
-    [SerializeField] private Button btn_gameStart;
-    [SerializeField] private Button btn_option;
-    [SerializeField] private Button btn_help;
-    [SerializeField] private Button btn_quit;
-    [SerializeField] private Button btn_optionQuit;
-
-    [Header("Help Buttons")]
-    [SerializeField] private Button btn_helpBack;
-
-    [Header("Slime Color Buttons")]
-    [SerializeField] private Button btn_slimeWhite;
-    [SerializeField] private Button btn_slimeBlack;
-    [SerializeField] private Button btn_slimeRed;
-    [SerializeField] private Button btn_slimeBlue;
-    [SerializeField] private Button btn_slimeYellow;
-    [SerializeField] private Button btn_slimeGreen;
-    [SerializeField] private Button btn_slimeYellowGreen;
-    [SerializeField] private Button btn_slimeBrown;
-
-    [Header("Custom Color Settings")]
-    [SerializeField] private Button btn_slimeCustom;
-    [SerializeField] private Button btn_slimeCustomApply;
-    [SerializeField] private GameObject ColorPallet;
-    [SerializeField] private FlexibleColorPicker fcp;
-
-    [Header("Slime Face Settings")]
-    [SerializeField] private Button btn_slimeNone;
-    [SerializeField] private Button btn_slimeNormal;
-    [SerializeField] private Sprite spr_slimeFaceNone;
-    [SerializeField] private Sprite spr_slimeNormal;
-
-    [Header("Slime Costume Settings")]
-    [SerializeField] private Button btn_slimeCostumeNone;
-    [SerializeField] private Button btn_slimeDemon;
-    [SerializeField] private Button btn_slimeAngel;
-    [SerializeField] private Button btn_slimeKing;
-    [SerializeField] private Sprite spr_slimeCostumeNone;
-    [SerializeField] private Sprite spr_slimeDemon;
-    [SerializeField] private Sprite spr_slimeAngel;
-    [SerializeField] private Sprite spr_slimeKing;
-
-    [Header("Map Settings")]
-    [SerializeField] private Button btn_basic;
-    [SerializeField] private Button btn_spring;
-    [SerializeField] private Button btn_summer;
-    [SerializeField] private Button btn_autumn;
-    [SerializeField] private Button btn_winter;
-    [SerializeField] private Button btn_sunny;
-    [SerializeField] private Button btn_night;
-    [SerializeField] private Button btn_cloudy;
-
-    [Header("Map Theme Data (SO)")]
-    [SerializeField] private ThemeData themeBasic;
-    [SerializeField] private ThemeData themeSpring;
-    [SerializeField] private ThemeData themeSummer;
-    [SerializeField] private ThemeData themeAutumn;
-    [SerializeField] private ThemeData themeWinter;
-    [SerializeField] private ThemeData themeSunny;
-    [SerializeField] private ThemeData themeNight;
-    [SerializeField] private ThemeData themeCloudy;
+    private GameObject currentPanel;
+    private readonly Stack<GameObject> returnPanels = new Stack<GameObject>();
+    private Sequence startCountdown;
 
     private void Start()
     {
         if (Instance != this) return;
-        AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
-        AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
-        AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
-        if (ChangeData.SelectedMapTheme == null) ChangeData.SelectedMapTheme = themeBasic;
-        ApplySavedMapUI();
-        DoodleLabSkin.ApplyMapTheme(ChangeData.SelectedMapTheme);
-        InitUI();
-        BindMenuButtons();
-        BindSlimeColorButtons();
-        BindSlimeFaceButtons();
-        BindMapButtons();
 
-        if (fcp != null)
+        // 게임을 마치고 돌아왔으면 아직 방 안이므로 대기실로
+        bool inRoom = NetworkManager.Instance != null && NetworkManager.Instance.CurrentRoom != null;
+        GoTo(inRoom && Panel_Lobby != null ? Panel_Lobby : Panel_MainMenu);
+        if (Panel_Quit != null) Panel_Quit.SetActive(false);
+
+        UIButtons.Bind(btn_quit, () =>
         {
-            fcp.onColorChange.AddListener(ChangeCustomSlimeColor);
-            fcp.onColorChange.AddListener(ChangeCustomButtonColor);
-        }
-    }
-
-    private void InitUI()
-    {
-        if (Panel_MainMenu != null) Panel_MainMenu.SetActive(true);
-        if (Panel_Option != null) Panel_Option.SetActive(false);
-        if (Panel_Help != null) Panel_Help.SetActive(false);
-
-        if (ColorPallet != null) ColorPallet.SetActive(false);
-    }
-
-    private void ApplySavedMapUI()
-    {
-        if (ChangeData.SelectedMapTheme == null) return;
-
-        if (Panel_MainMenu != null)
-        {
-            Panel_MainMenu.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.MenuSprite;
-        }
-
-        if (Panel_Option != null)
-        {
-            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.TableSprite;
-        }
-    }
-
-    private void BindMenuButtons()
-    {
-        BindMenuButton(btn_gameStart, 170f, () => SceneLoader.StartLoad(m_sceneName));
-        BindMenuButton(btn_option, 20f, () => SwitchPanel(Panel_MainMenu, Panel_Option));
-        BindMenuButton(btn_help, -130f, () => SwitchPanel(Panel_Help, Panel_MainMenu));
-        
-        // btn_quit 클릭 시 게임 종료 로직(QuitGame) 실행 바인딩
-        BindMenuButton(btn_quit, -280f, QuitGame);
-
-        if (btn_optionQuit != null)
-        {
-            btn_optionQuit.onClick.RemoveAllListeners();
-            btn_optionQuit.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_optionQuit.onClick.AddListener(() => SwitchPanel(Panel_Option, Panel_MainMenu));
-        }
-
-        if (btn_helpBack != null)
-        {
-            btn_helpBack.onClick.RemoveAllListeners();
-            btn_helpBack.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_helpBack.onClick.AddListener(() => SwitchPanel(Panel_Help, Panel_MainMenu));
-        }
-    }
-
-    /// <summary>
-    /// 게임을 완전히 종료하는 메서드
-    /// 에디터 환경에서는 재생 모드를 정지하고, 빌드된 파일에서는 프로세스를 종료합니다.
-    /// </summary>
-    private void QuitGame()
-    {
-#if UNITY_EDITOR
-        // 유니티 에디터 환경에서 플레이 모드 정지
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        // 빌드된 실행 파일(.exe / .apk 등)에서 애플리케이션 완전 종료
-        Application.Quit();
-#endif
-    }
-
-    private void BindSlimeColorButtons()
-    {
-        BindColor(btn_slimeWhite, ChangeData.HEX_WHITE);
-        BindColor(btn_slimeBlack, ChangeData.HEX_BLACK);
-        BindColor(btn_slimeRed, ChangeData.HEX_RED);
-        BindColor(btn_slimeBlue, ChangeData.HEX_BLUE);
-        BindColor(btn_slimeYellow, ChangeData.HEX_YELLOW);
-        BindColor(btn_slimeGreen, ChangeData.HEX_GREEN);
-        BindColor(btn_slimeYellowGreen, ChangeData.HEX_YELLOWGREEN);
-        BindColor(btn_slimeBrown, ChangeData.HEX_BROWN);
-
-        if (btn_slimeCustom != null && ColorPallet != null && btn_slimeCustomApply != null)
-        {
-            btn_slimeCustom.onClick.RemoveAllListeners();
-            btn_slimeCustom.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_slimeCustom.onClick.AddListener(() =>
-            {
-                bool willBeActive = !ColorPallet.activeSelf;
-                Color backupColor = ChangeData.LastCustomColor;
-                ColorPallet.SetActive(willBeActive);
-
-                if (btn_slimeCustomApply != null)
-                {
-                    btn_slimeCustomApply.gameObject.SetActive(willBeActive);
-                }
-
-                if (willBeActive && fcp != null)
-                {
-                    ChangeData.LastCustomColor = backupColor;
-                    fcp.color = backupColor;
-                }
-            });
-        }
-
-        if (btn_slimeCustomApply != null)
-        {
-            btn_slimeCustomApply.onClick.RemoveAllListeners();
-            btn_slimeCustomApply.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_slimeCustomApply.onClick.AddListener(OnCustomApplyClicked);
-        }
-    }
-
-    private void OnCustomApplyClicked()
-    {
-        if (ColorPallet != null)
-        {
-            ColorPallet.SetActive(false);
-        }
-
-        if (btn_slimeCustomApply != null)
-        {
-            btn_slimeCustomApply.gameObject.SetActive(false);
-        }
-    }
-
-    private void BindSlimeFaceButtons()
-    {
-        spr_slimeNormal = DoodleLabSkin.Sprite("Face") ?? spr_slimeNormal;
-        spr_slimeDemon = DoodleLabSkin.Sprite("Horns") ?? spr_slimeDemon;
-        spr_slimeAngel = DoodleLabSkin.Sprite("Angel") ?? spr_slimeAngel;
-        spr_slimeKing = DoodleLabSkin.Sprite("Crown") ?? spr_slimeKing;
-
-        // 얼굴은 Face로
-        BindSprite(btn_slimeNone, spr_slimeFaceNone, ChangeSlimeFace);
-        BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
-
-        // 악마, 천사, 왕관은 Costume으로 분리 연결
-        BindSprite(btn_slimeCostumeNone, spr_slimeCostumeNone, ChangeSlimeCostume);
-        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
-        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
-        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
-    }
-
-    private void BindMapButtons()
-    {
-        BindMap(btn_basic, themeBasic);
-        BindMap(btn_spring, themeSpring);
-        BindMap(btn_summer, themeSummer);
-        BindMap(btn_autumn, themeAutumn);
-        BindMap(btn_winter, themeWinter);
-        BindMap(btn_sunny, themeSunny);
-        BindMap(btn_night, themeNight);
-        BindMap(btn_cloudy, themeCloudy);
-    }
-
-    private void SwitchPanel(GameObject from, GameObject to)
-    {
-        if (from != null) from.SetActive(false);
-        if (to != null) to.SetActive(true);
-    }
-
-    private void BindMenuButton(Button btn, float ypos, UnityAction action = null)
-    {
-        if (btn == null) return;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn.onClick.AddListener(() => {
-            action?.Invoke();
+            if (Panel_Quit != null) Panel_Quit.SetActive(true);
+            else QuitPopup.QuitGame();
         });
-    }
+        UIButtons.Bind(btn_help, () => OpenSubPanel(Panel_Help));
+        UIButtons.Bind(btn_option, () => OpenSubPanel(Panel_Option));
 
-    private void BindColor(Button btn, string hexCode)
-    {
-        if (btn != null && ColorUtility.TryParseHtmlString(hexCode, out Color parsedColor))
+        if (NetworkManager.Instance != null)
         {
-            parsedColor.a = ChangeData.SLIME_ALPHA;
-            btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn.onClick.AddListener(() => ChangeSlimeColor(parsedColor));
+            NetworkManager.Instance.RoomChanged += OnRoomChanged;
+            NetworkManager.Instance.MatchStarting += OnMatchStarting;
         }
-    }
-
-    private void BindSprite(Button btn, Sprite sprite, UnityAction<Sprite> action)
-    {
-        if (btn == null || sprite == null) return;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn.onClick.AddListener(() => action(sprite));
-    }
-
-    private void BindMap(Button btn, ThemeData theme)
-    {
-        if (btn == null || theme == null) return;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn.onClick.AddListener(() => ChangeMap(theme));
-    }
-
-    private void ChangeSlimeColor(Color newColor)
-    {
-        newColor.a = ChangeData.SLIME_ALPHA;
-        ChangeData.UseDoodlePalette = false;
-        ChangeData.SelectedColor = newColor;
-        OnColorChanged?.Invoke(newColor);
-    }
-
-    private void ChangeCustomSlimeColor(Color newColor)
-    {
-        newColor.a = ChangeData.SLIME_ALPHA;
-        ChangeData.UseDoodlePalette = false;
-        ChangeData.SelectedColor = newColor;
-        ChangeData.LastCustomColor = newColor;
-        OnColorChanged?.Invoke(newColor);
-    }
-
-    private void ChangeCustomButtonColor(Color newColor)
-    {
-        if (btn_slimeCustom != null && btn_slimeCustom.image != null)
-        {
-            newColor.a = 1.0f;
-            btn_slimeCustom.image.color = newColor;
-        }
-    }
-
-    private void ChangeSlimeFace(Sprite newSprite)
-    {
-        if (newSprite == null) return;
-        ChangeData.SelectedFace = newSprite;
-        OnFaceChanged?.Invoke(newSprite);
-    }
-
-    // 코스튬 전용 메서드 추가
-    private void ChangeSlimeCostume(Sprite newSprite)
-    {
-        if (newSprite == null) return;
-        ChangeData.SelectedCostume = newSprite;
-        OnCostumeChanged?.Invoke(newSprite);
-    }
-
-    private void ChangeMap(ThemeData newTheme)
-    {
-        if (newTheme == null) return;
-
-        ChangeData.SelectedMapTheme = newTheme;
-
-        if (Panel_MainMenu != null) Panel_MainMenu.GetComponent<Image>().sprite = newTheme.MenuSprite;
-        if (Panel_Option != null) Panel_Option.GetComponent<Image>().sprite = newTheme.TableSprite;
-
-        OnMapChanged?.Invoke(newTheme);
-        DoodleLabSkin.ApplyMapTheme(newTheme);
     }
 
     protected override void OnDestroy()
     {
-        if (fcp != null)
+        startCountdown?.Kill();
+        if (NetworkManager.Instance != null)
         {
-            fcp.onColorChange.RemoveListener(ChangeCustomSlimeColor);
-            fcp.onColorChange.RemoveListener(ChangeCustomButtonColor);
+            NetworkManager.Instance.RoomChanged -= OnRoomChanged;
+            NetworkManager.Instance.MatchStarting -= OnMatchStarting;
+        }
+        base.OnDestroy();
+    }
+
+    // ── 패널이 부르는 이동 ──────────────────────────────────────
+
+    public void ShowMainMenu() => GoTo(Panel_MainMenu);
+    public void ShowCreateRoom() => GoTo(Panel_CreateRoom);
+
+    // 방을 만들거나 들어간 뒤
+    public void ShowLobby()
+    {
+        if (Panel_Lobby == null)
+        {
+            Debug.LogWarning("UIManager_Menu: 방에 들어갔지만 Panel_Lobby가 연결되지 않았습니다.", this);
+            return;
+        }
+        GoTo(Panel_Lobby);
+    }
+
+    // 옵션·도움말 닫기: 열기 전 화면으로
+    public void CloseSubPanel()
+    {
+        ShowOnly(returnPanels.Count > 0 ? returnPanels.Pop() : Panel_MainMenu);
+    }
+
+    // 메뉴 → 방 만들기 → 대기실처럼 앞으로 가는 이동. 돌아갈 곳 기록을 지움.
+    private void GoTo(GameObject panel)
+    {
+        returnPanels.Clear();
+        ShowOnly(panel);
+    }
+
+    // 옵션·도움말: 지금 화면을 기억해 두고 엶
+    private void OpenSubPanel(GameObject panel)
+    {
+        if (panel == null || panel == currentPanel) return;
+        if (currentPanel != null) returnPanels.Push(currentPanel);
+        ShowOnly(panel);
+    }
+
+    private void ShowOnly(GameObject panel)
+    {
+        currentPanel = panel;
+        GameObject[] panels = { Panel_MainMenu, Panel_Option, Panel_Help, Panel_CreateRoom, Panel_Lobby };
+        foreach (GameObject p in panels)
+        {
+            if (p != null) p.SetActive(p == panel);
+        }
+    }
+
+    // ── 방 상태에 따른 이동 ─────────────────────────────────────
+
+    // 방에서 나왔으면 (나가기, 방이 없어짐, 끊겨서 빠짐) 대기실 대신 메뉴로
+    private void OnRoomChanged(RoomInfo room)
+    {
+        if (room != null) return;
+
+        startCountdown?.Kill();   // 세는 중에 방에서 나오면 게임 씬으로 넘어가지 않음
+        if (currentPanel == Panel_Lobby || returnPanels.Contains(Panel_Lobby)) GoTo(Panel_MainMenu);
+    }
+
+    // 방장이 시작함: 대기실 채팅에 5, 4, 3, 2, 1을 띄운 뒤 모든 참가자가 게임 씬으로.
+    // 서버 시각(startAt) 기준으로 세므로 모든 화면에서 같은 순간에 바뀜.
+    private void OnMatchStarting(MatchSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(m_sceneName))
+        {
+            Debug.LogError("UIManager_Menu: 게임 씬 이름(m_sceneName)을 넣어 주세요.", this);
+            return;
         }
 
-        base.OnDestroy();
+        NetworkManager network = NetworkManager.Instance;
+        float remaining = Mathf.Max(0f, (settings.StartAt - network.ServerNow) / 1000f);
+        int from = Mathf.Min(Mathf.RoundToInt(GameRules.StartDelay), Mathf.FloorToInt(remaining));
+
+        startCountdown?.Kill();
+        startCountdown = DOTween.Sequence().SetUpdate(true);
+        for (int seconds = from; seconds >= 1; seconds--)
+        {
+            string message = $"{seconds}초뒤 게임이 시작합니다.....";
+            startCountdown.InsertCallback(remaining - seconds, () => network.ShowSystemMessage(ChatChannel.Room, message));
+        }
+        startCountdown.InsertCallback(remaining, () =>
+        {
+            startCountdown = null;
+            SceneLoader.StartLoad(m_sceneName);
+        });
     }
 }

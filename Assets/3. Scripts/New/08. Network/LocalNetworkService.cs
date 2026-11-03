@@ -24,6 +24,8 @@ public sealed class LocalNetworkService : INetworkService
     private RoomInfo room;
     private int lastGuestNumber;
     private int reservedGuestNumber;
+    private string myColor = "#FFFFFF";
+    private readonly Random nicknameRandom = new Random();   // AI 이름
 
     public long ServerNow => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -63,11 +65,17 @@ public sealed class LocalNetworkService : INetworkService
         Disconnected?.Invoke();
     }
 
-    public void CreateRoom(string roomName, Action<RoomInfo> onDone)
+    public void CreateRoom(string roomName, int maxPlayers, Action<RoomInfo> onDone)
     {
         if (me == null)
         {
             ErrorOccurred?.Invoke("먼저 로그인하세요.");
+            onDone?.Invoke(null);
+            return;
+        }
+        if (maxPlayers < 1 || maxPlayers > GameRules.MaxPlayers)
+        {
+            ErrorOccurred?.Invoke($"인원은 1 ~ {GameRules.MaxPlayers}명이어야 합니다.");
             onDone?.Invoke(null);
             return;
         }
@@ -79,6 +87,7 @@ public sealed class LocalNetworkService : INetworkService
             roomId = Guid.NewGuid().ToString("N"),
             roomName = roomName,
             hostUid = me.uid,
+            maxPlayers = maxPlayers,
             state = RoomState.Waiting,
             slots = new SlotInfo[GameRules.MaxPlayers]
         };
@@ -86,7 +95,7 @@ public sealed class LocalNetworkService : INetworkService
         {
             room.slots[i] = new SlotInfo { kind = SlotKind.Empty };
         }
-        room.slots[0] = new SlotInfo { kind = SlotKind.Human, uid = me.uid, displayName = me.DisplayName };
+        room.slots[0] = new SlotInfo { kind = SlotKind.Human, uid = me.uid, displayName = me.DisplayName, slimeColor = myColor };
 
         PublishRoom();
         onDone?.Invoke(room.Clone());
@@ -114,14 +123,15 @@ public sealed class LocalNetworkService : INetworkService
         RoomListChanged?.Invoke(new RoomInfo[0]);
     }
 
-    public void SetReady(bool ready)
+    public void SetMyColor(string colorHex)
     {
+        myColor = colorHex;
         if (room == null || me == null) return;
 
         int slot = room.FindSlot(me.uid);
         if (slot < 0) return;
 
-        room.slots[slot].ready = ready;
+        room.slots[slot].slimeColor = colorHex;
         PublishRoom();
     }
 
@@ -135,12 +145,14 @@ public sealed class LocalNetworkService : INetworkService
             return;
         }
 
+        // 이미 AI가 있는 자리면 이름은 그대로 두고 난이도만 바꿈
+        string aiName = room.slots[slot].kind == SlotKind.Ai ? room.slots[slot].displayName : GameRules.RandomNickname(nicknameRandom);
         room.slots[slot] = new SlotInfo
         {
             kind = SlotKind.Ai,
-            displayName = $"AI {slot + 1}",
+            displayName = aiName,
             difficulty = difficulty,
-            ready = true
+            slimeColor = GameRules.AiSlimeColors[slot % GameRules.AiSlimeColors.Length]
         };
         PublishRoom();
     }
@@ -157,17 +169,12 @@ public sealed class LocalNetworkService : INetworkService
     {
         if (room == null || room.state != RoomState.Waiting) return;
 
-        if (!room.IsEveryoneReady)
-        {
-            ErrorOccurred?.Invoke("아직 준비하지 않은 사람이 있습니다.");
-            return;
-        }
-
         long startAt = ServerNow + (long)(GameRules.StartDelay * 1000f);
         MatchSettings settings = MatchSettings.CreateNew(startAt, room.PlayerCount);
         room.seed = settings.Seed;
         room.targetSum = settings.TargetSum;
         room.startAt = settings.StartAt;
+        room.playAt = 0;
         room.state = RoomState.Playing;
 
         scores.Clear();
@@ -179,6 +186,15 @@ public sealed class LocalNetworkService : INetworkService
         PublishRoom();
         MatchStarting?.Invoke(settings);
         PublishScores();
+    }
+
+    // 사람은 나 하나뿐이라 내가 오면 모두 온 것
+    public void ReportLoaded(int slot)
+    {
+        if (room == null || room.state != RoomState.Playing || room.playAt > 0) return;
+
+        room.playAt = ServerNow + (long)(GameRules.CountdownLead * 1000f);
+        PublishRoom();
     }
 
     public void EndMatch()
@@ -232,11 +248,7 @@ public sealed class LocalNetworkService : INetworkService
         if (room == null) return;
 
         room.state = RoomState.Waiting;
-        foreach (SlotInfo slot in room.slots)
-        {
-            if (slot.kind == SlotKind.Human) slot.ready = false;
-        }
-
+        room.playAt = 0;
         scores.Clear();
         PublishRoom();
         PublishScores();
@@ -249,7 +261,7 @@ public sealed class LocalNetworkService : INetworkService
 
     private bool CanEditSlot(int slot)
     {
-        return room != null && room.state == RoomState.Waiting && slot >= 0 && slot < room.slots.Length;
+        return room != null && room.state == RoomState.Waiting && slot >= 0 && slot < room.maxPlayers;
     }
 
     private ScoreEntry FindScore(int slot)

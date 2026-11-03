@@ -1,23 +1,12 @@
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+// 게임 화면: 시작 카운트다운, 타이머, 목표 합, 점수, 막혔을 때 안내, 게임오버 패널.
+// 스킬 버튼과 단축키는 SkillManager가 맡음.
 public class UIManager_Game : Singleton<UIManager_Game>
 {
-    [Header("Audio Volume Sliders")]
-    [SerializeField] private Slider slider_masterVolume;
-    [SerializeField] private Slider slider_bgmVolume;
-    [SerializeField] private Slider slider_sfxVolume;
-
-    public event UnityAction<Color> OnColorChanged;
-    public event UnityAction<Sprite> OnFaceChanged;
-    public event UnityAction<Sprite> OnCostumeChanged;
-    public event UnityAction<ThemeData> OnMapChanged;
-
     [Header("Start Countdown")]
     [SerializeField] private TextMeshProUGUI txt_startCountdown;
     [SerializeField, Min(0.1f)] private float countdownInterval = 1f;
@@ -29,27 +18,10 @@ public class UIManager_Game : Singleton<UIManager_Game>
     [SerializeField] private GameObject Panel_Game;
     [SerializeField] private TextMeshProUGUI txt_timer;
     [SerializeField] private TextMeshProUGUI txt_score;
+    [SerializeField] private TMP_Text txt_targetSum;
     [SerializeField] private Slider m_timerSlider;
-    [SerializeField] private Button btn_menu;
-    [SerializeField] private Button btn_magnifier;
-    [SerializeField] private Button btn_mix;
-    [SerializeField] private Button btn_destroy;
-    [SerializeField] private TextMeshProUGUI txt_magnifier;
-    [SerializeField] private TextMeshProUGUI txt_mix;
-    [SerializeField] private TextMeshProUGUI txt_destroy;
     [SerializeField] private GameObject m_score;
     [SerializeField] private TextMeshProUGUI txt_warning;
-
-    [Header("MainMenu Panel")]
-    [SerializeField] private GameObject Panel_Main;
-    [SerializeField] private Button btn_Resume;
-    [SerializeField] private Button btn_Restart;
-    [SerializeField] private Button btn_Option;
-    [SerializeField] private Button btn_Home;
-
-    [Header("Game Option Panel")]
-    [SerializeField] private GameObject Panel_Option;
-    [SerializeField] private Button btn_quit;
 
     [Header("Game Over Panel")]
     [SerializeField] private GameObject Panel_GameOver;
@@ -58,103 +30,22 @@ public class UIManager_Game : Singleton<UIManager_Game>
     [SerializeField] private Button btn_GameOverHome;
     [SerializeField] private TextMeshProUGUI txt_gameOverscore;
 
-    [Header("Slime Color Buttons")]
-    [SerializeField] private Button btn_slimeWhite;
-    [SerializeField] private Button btn_slimeBlack;
-    [SerializeField] private Button btn_slimeRed;
-    [SerializeField] private Button btn_slimeBlue;
-    [SerializeField] private Button btn_slimeYellow;
-    [SerializeField] private Button btn_slimeGreen;
-    [SerializeField] private Button btn_slimeYellowGreen;
-    [SerializeField] private Button btn_slimeBrown;
-
-    [Header("Custom Color Settings")]
-    [SerializeField] private Button btn_slimeCustom;
-    [SerializeField] private Button btn_slimeCustomApply;
-    [SerializeField] private GameObject ColorPallet;
-    [SerializeField] private FlexibleColorPicker fcp;
-
-    [Header("Slime Face Settings")]
-    [SerializeField] private Button btn_slimeFaceNone;
-    [SerializeField] private Button btn_slimeNormal;
-    [SerializeField] private Sprite spr_slimeFaceNone;
-    [SerializeField] private Sprite spr_slimeNormal;
-
-    [Header("Slime Costume Settings")]
-    [SerializeField] private Button btn_slimeCostumeNone;
-    [SerializeField] private Button btn_slimeDemon;
-    [SerializeField] private Button btn_slimeAngel;
-    [SerializeField] private Button btn_slimeKing;
-    [SerializeField] private Sprite spr_slimeCostumeNone;
-    [SerializeField] private Sprite spr_slimeDemon;
-    [SerializeField] private Sprite spr_slimeAngel;
-    [SerializeField] private Sprite spr_slimeKing;
-
-    [Header("Map Settings")]
-    [SerializeField] private Button btn_basic;
-    [SerializeField] private Button btn_spring;
-    [SerializeField] private Button btn_summer;
-    [SerializeField] private Button btn_autumn;
-    [SerializeField] private Button btn_winter;
-    [SerializeField] private Button btn_sunny;
-    [SerializeField] private Button btn_night;
-    [SerializeField] private Button btn_cloudy;
-
-    [Header("Map Theme Data (SO)")]
-    [SerializeField] private ThemeData themeBasic;
-    [SerializeField] private ThemeData themeSpring;
-    [SerializeField] private ThemeData themeSummer;
-    [SerializeField] private ThemeData themeAutumn;
-    [SerializeField] private ThemeData themeWinter;
-    [SerializeField] private ThemeData themeSunny;
-    [SerializeField] private ThemeData themeNight;
-    [SerializeField] private ThemeData themeCloudy;
-
-    private int countMagnifier;
-    private int countMix;
-    private int countDestroy;
-
     [SerializeField] string m_sceneName;
 
     private bool isTimerRunning = false;
 
-    private TMP_Text txt_targetSum;
-
     private Sequence warningTween;
-    private Sequence skillHighlightTween;
     private Vector2 warningHomePosition;
 
     private void Start()
     {
-        AudioVolumeSlider.Bind(slider_masterVolume, AudioVolumeSlider.VolumeChannel.Master);
-        AudioVolumeSlider.Bind(slider_bgmVolume, AudioVolumeSlider.VolumeChannel.BGM);
-        AudioVolumeSlider.Bind(slider_sfxVolume, AudioVolumeSlider.VolumeChannel.SFX);
-        ResetSkillCounts();
-
         InitTimerUI();
         InitScoreUI();
-        if (ChangeData.SelectedMapTheme == null) ChangeData.SelectedMapTheme = themeBasic;
-        ApplySavedMapUI();
-        DoodleLabSkin.ApplyMapTheme(ChangeData.SelectedMapTheme);
         InitUI();
-        BindMenuButtons();
-        BindSlimeColorButtons();
-        BindSlimeFaceButtons();
-        BindMapButtons();
-
-        if (fcp != null)
-        {
-            fcp.onColorChange.AddListener(ChangeCustomSlimeColor);
-            fcp.onColorChange.AddListener(ChangeCustomButtonColor);
-        }
+        UIButtons.Bind(btn_GameOverRestart, RestartGame);
+        UIButtons.Bind(btn_GameOverHome, () => SceneLoader.StartLoad(m_sceneName));
 
         if (txt_warning != null) warningHomePosition = txt_warning.rectTransform.anchoredPosition;
-
-        DoodleLabSkin.ConfigureHeader(Panel_Game, m_timerSlider, txt_timer, txt_score);
-        if (Panel_Game != null && txt_score != null)
-        {
-            txt_targetSum = DoodleLabSkin.AddTargetSumDisplay(Panel_Game, txt_score.font);
-        }
 
         if (GameManager.Instance != null)
         {
@@ -183,22 +74,44 @@ public class UIManager_Game : Singleton<UIManager_Game>
         isCountingDown = true;
         GameManager.Instance.PrepareStartCountdown();
         isTimerRunning = false;
-        SetCountdownButtons(false);
+
+        txt_startCountdown.raycastTarget = false;
+        txt_startCountdown.gameObject.SetActive(true);
+        if (GameManager.Instance.IsReadyToCountdown)
+        {
+            PlayStartCountdown();
+        }
+        else
+        {
+            // 방에서 시작한 판: 모든 참가자가 게임 씬에 올 때까지 기다림
+            txt_startCountdown.text = "다른 플레이어를 기다리는 중...";
+            NetworkManager.Instance.RoomChanged += OnRoomChangedWhileWaiting;
+        }
+    }
+
+    private void OnRoomChangedWhileWaiting(RoomInfo room)
+    {
+        if (GameManager.Instance == null || !GameManager.Instance.IsReadyToCountdown) return;
+
+        StopWaitingForPlayers();
         PlayStartCountdown();
+    }
+
+    private void StopWaitingForPlayers()
+    {
+        if (NetworkManager.Instance != null) NetworkManager.Instance.RoomChanged -= OnRoomChangedWhileWaiting;
     }
 
     private void PlayStartCountdown()
     {
-        txt_startCountdown.raycastTarget = false;
-        txt_startCountdown.gameObject.SetActive(true);
         txt_startCountdown.text = "";
 
         countdownTween = DOTween.Sequence().SetUpdate(true);
-        // 방에서 시작한 판이면 서버 시각까지 기다려 모든 참가자가 함께 카운트다운함
+        // 방에서 시작한 판이면 서버가 정한 시각(playAt)까지 기다려 모든 참가자가 함께 카운트다운함
         countdownTween.AppendInterval(GameManager.Instance.SecondsUntilStart);
         for (int count = GameRules.CountdownFrom; count >= 1; count--)
         {
-            string text = count + "!";
+            string text = count.ToString();
             countdownTween.AppendCallback(() =>
             {
                 txt_startCountdown.text = text;
@@ -209,7 +122,7 @@ public class UIManager_Game : Singleton<UIManager_Game>
 
         countdownTween.AppendCallback(() =>
         {
-            txt_startCountdown.text = "GameStart!";
+            txt_startCountdown.text = "GAME START!!";
             SoundManager.Play(SoundEffect.GameStart);
         });
         countdownTween.AppendInterval(Mathf.Max(0.1f, gameStartDuration));
@@ -218,21 +131,13 @@ public class UIManager_Game : Singleton<UIManager_Game>
             txt_startCountdown.gameObject.SetActive(false);
             isCountingDown = false;
             countdownTween = null;
-            SetCountdownButtons(true);
             if (GameManager.Instance != null) GameManager.Instance.StartGameTimer();
         });
     }
 
-    private void SetCountdownButtons(bool ready)
-    {
-        if (btn_menu != null) btn_menu.interactable = ready;
-        if (btn_magnifier != null) btn_magnifier.interactable = ready && countMagnifier > 0;
-        if (btn_mix != null) btn_mix.interactable = ready && countMix > 0;
-        if (btn_destroy != null) btn_destroy.interactable = ready && countDestroy > 0;
-    }
-
     private void OnDisable()
     {
+        StopWaitingForPlayers();
         countdownTween?.Kill();
         countdownTween = null;
         if (txt_startCountdown != null) txt_startCountdown.gameObject.SetActive(false);
@@ -262,13 +167,15 @@ public class UIManager_Game : Singleton<UIManager_Game>
 
     private void InitUI()
     {
-        if (Panel_Main != null) Panel_Main.SetActive(false);
-        if (Panel_Option != null) Panel_Option.SetActive(false);
-        if (Panel_Game != null) Panel_Game.SetActive(true);
-        if (Panel_GameOver != null) Panel_GameOver.SetActive(false);
-
-        if (ColorPallet != null) ColorPallet.SetActive(false);
+        ShowPanel(Panel_Game);
         if (txt_warning != null) txt_warning.gameObject.SetActive(false);
+    }
+
+    // 게임 / 게임오버 패널 중 하나만 켬. 씬에 없는 패널은 건너뜀.
+    private void ShowPanel(GameObject panel)
+    {
+        if (Panel_Game != null) Panel_Game.SetActive(panel == Panel_Game);
+        if (Panel_GameOver != null) Panel_GameOver.SetActive(panel == Panel_GameOver);
     }
 
     private void InitScoreUI()
@@ -290,12 +197,14 @@ public class UIManager_Game : Singleton<UIManager_Game>
         if (txt_targetSum != null) txt_targetSum.text = targetSum.ToString();
     }
 
+    // 막혀도 판은 끝나지 않음. 남은 스킬이 있으면 스킬 버튼을 반짝여 알려 줌.
     private void OnNoMoreMoves()
     {
-        if (HasAnySkillLeft())
+        SkillManager skills = SkillManager.Instance;
+        if (skills != null && skills.HasAnySkillLeft)
         {
             ShowWarningText("더 이상 만들 수 있는 수가 없습니다!\n스킬을 사용하세요");
-            HighlightAvailableSkills();
+            skills.HighlightAvailableSkills();
         }
         else
         {
@@ -316,17 +225,10 @@ public class UIManager_Game : Singleton<UIManager_Game>
         }
     }
 
-    private void UpdateSkillCountUI()
-    {
-        if (txt_magnifier != null) txt_magnifier.text = $"{countMagnifier.ToString()}/1";
-        if (txt_mix != null) txt_mix.text = $"{countMix.ToString()}/1";
-        if (txt_destroy != null) txt_destroy.text = $"{countDestroy.ToString()}/3";
-    }
-
     private void Update()
     {
-        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
-        if (isTimerRunning && m_timerSlider != null && GameManager.Instance != null)
+        if (GameManager.Instance == null || !GameManager.Instance.IsPlaying) return;
+        if (isTimerRunning && m_timerSlider != null)
         {
             float maxTime = GameManager.Instance.MaxGameTime;
             if (maxTime > 0f)
@@ -334,401 +236,13 @@ public class UIManager_Game : Singleton<UIManager_Game>
                 m_timerSlider.value = GameManager.Instance.CurrentTime / maxTime;
             }
         }
-
-        if (isTimerRunning && Keyboard.current != null)
-        {
-            if (Keyboard.current.aKey.wasPressedThisFrame)
-            {
-                UseMagnifier();
-            }
-            if (Keyboard.current.sKey.wasPressedThisFrame)
-            {
-                UseMix();
-            }
-            if (Keyboard.current.dKey.wasPressedThisFrame)
-            {
-                UseDestroy();
-            }
-        }
     }
 
-    public bool HasAnySkillLeft()
+    private void RestartGame()
     {
-        return countMagnifier > 0 || countMix > 0 || countDestroy > 0;
-    }
-
-    private void UseMagnifier()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
-        if (countMagnifier > 0 && SlimeManager.Instance != null)
-        {
-            SoundManager.Play(SoundEffect.Hint);
-            SlimeManager.Instance.ShowHint();
-            countMagnifier--;
-
-            UpdateSkillCountUI();
-                        
-            if (countMagnifier <= 0 && btn_magnifier != null) btn_magnifier.interactable = false;
-        }
-    }
-
-    private void UseMix()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
-        if (countMix > 0 && SlimeManager.Instance != null)
-        {
-            SoundManager.Play(SoundEffect.Mix);
-            SlimeManager.Instance.MixSlimes();
-            countMix--;
-
-            UpdateSkillCountUI();
-
-            if (countMix <= 0 && btn_mix != null) btn_mix.interactable = false;
-        }
-    }
-
-    private void UseDestroy()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.IsPaused) return;
-        if (countDestroy > 0 && SlimeManager.Instance != null)
-        {
-            SlimeManager.Instance.ActivateDestroySkill();
-            countDestroy--;
-
-            UpdateSkillCountUI();
-
-            if (countDestroy <= 0 && btn_destroy != null) btn_destroy.interactable = false;
-        }
-    }
-
-    private void ResetSkillCounts()
-    {
-        countMagnifier = 1;
-        countMix = 1;
-        countDestroy = 3;
-
-        if (btn_magnifier != null) btn_magnifier.interactable = true;
-        if (btn_mix != null) btn_mix.interactable = true;
-        if (btn_destroy != null) btn_destroy.interactable = true;
-
-        UpdateSkillCountUI();
-    }
-
-    private void BindMenuButtons()
-    {
-        if (btn_menu != null)
-        {
-            btn_menu.onClick.RemoveAllListeners();
-            btn_menu.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_menu.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(false);
-                Panel_Option.SetActive(false);
-                Panel_Main.SetActive(true);
-                Panel_GameOver.SetActive(false);
-                GameManager.Instance.PauseGame();
-            });
-        }
-
-        if (btn_magnifier != null)
-        {
-            btn_magnifier.onClick.RemoveAllListeners();
-            btn_magnifier.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_magnifier.onClick.AddListener(UseMagnifier);
-        }
-
-        if (btn_mix != null)
-        {
-            btn_mix.onClick.RemoveAllListeners();
-            btn_mix.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_mix.onClick.AddListener(UseMix);
-        }
-
-        if (btn_destroy != null)
-        {
-            btn_destroy.onClick.RemoveAllListeners();
-            btn_destroy.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_destroy.onClick.AddListener(UseDestroy);
-        }
-
-        BindResumeButtons();
-        BindRestartButtons();
-        BindOptionButtons();
-        BindHomeButtons();
-        BindGameOverRestartButtons();
-        BindGameOverHomeButtons();
-    }
-
-    private void BindResumeButtons()
-    {
-        if (btn_Resume != null)
-        {
-            btn_Resume.onClick.RemoveAllListeners();
-            btn_Resume.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_Resume.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(true);
-                Panel_Option.SetActive(false);
-                Panel_Main.SetActive(false);
-                Panel_GameOver.SetActive(false);
-                GameManager.Instance.ResumeGame();
-            });
-        }
-    }
-
-    private void BindRestartButtons()
-    {
-        if (btn_Restart != null)
-        {
-            btn_Restart.onClick.RemoveAllListeners();
-            btn_Restart.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_Restart.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(true);
-                Panel_Option.SetActive(false);
-                Panel_Main.SetActive(false);
-                Panel_GameOver.SetActive(false);
-                m_score.SetActive(true);
-                ResetSkillCounts();
-                GameManager.Instance.RestartGame();
-            });
-        }
-    }
-
-    private void BindGameOverRestartButtons()
-    {
-        if (btn_GameOverRestart != null)
-        {
-            btn_GameOverRestart.onClick.RemoveAllListeners();
-            btn_GameOverRestart.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_GameOverRestart.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(true);
-                Panel_Option.SetActive(false);
-                Panel_Main.SetActive(false);
-                Panel_GameOver.SetActive(false);
-                m_score.SetActive(true);
-                ResetSkillCounts();
-                GameManager.Instance.RestartGame();
-            });
-        }
-    }
-
-    private void BindOptionButtons()
-    {
-        if (btn_Option != null)
-        {
-            btn_Option.onClick.RemoveAllListeners();
-            btn_Option.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_Option.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(false);
-                Panel_Option.SetActive(true);
-                Panel_Main.SetActive(false);
-            });
-        }
-
-        if (btn_quit != null)
-        {
-            btn_quit.onClick.RemoveAllListeners();
-            btn_quit.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_quit.onClick.AddListener(() =>
-            {
-                Panel_Game.SetActive(false);
-                Panel_Option.SetActive(false);
-                Panel_Main.SetActive(true);
-
-                OnColorChanged?.Invoke(ChangeData.SelectedColor);
-                if (ChangeData.SelectedFace != null) OnFaceChanged?.Invoke(ChangeData.SelectedFace);
-                if (ChangeData.SelectedCostume != null) OnCostumeChanged?.Invoke(ChangeData.SelectedCostume);
-                if (ChangeData.SelectedMapTheme != null) OnMapChanged?.Invoke(ChangeData.SelectedMapTheme);
-            });
-        }
-    }
-
-    private void BindHomeButtons()
-    {
-        if (btn_Home == null) return;
-        btn_Home.onClick.RemoveAllListeners();
-        btn_Home.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn_Home.onClick.AddListener(() =>
-        {
-            SceneLoader.StartLoad(m_sceneName);
-        });
-    }
-
-    private void BindGameOverHomeButtons()
-    {
-        if (btn_GameOverHome == null) return;
-        btn_GameOverHome.onClick.RemoveAllListeners();
-        btn_GameOverHome.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn_GameOverHome.onClick.AddListener(() =>
-        {
-            SceneLoader.StartLoad(m_sceneName);
-        });
-    }
-
-    private void BindSlimeColorButtons()
-    {
-        BindColor(btn_slimeWhite, ChangeData.HEX_WHITE);
-        BindColor(btn_slimeBlack, ChangeData.HEX_BLACK);
-        BindColor(btn_slimeRed, ChangeData.HEX_RED);
-        BindColor(btn_slimeBlue, ChangeData.HEX_BLUE);
-        BindColor(btn_slimeYellow, ChangeData.HEX_YELLOW);
-        BindColor(btn_slimeGreen, ChangeData.HEX_GREEN);
-        BindColor(btn_slimeYellowGreen, ChangeData.HEX_YELLOWGREEN);
-        BindColor(btn_slimeBrown, ChangeData.HEX_BROWN);
-
-        if (btn_slimeCustom != null && ColorPallet != null && btn_slimeCustomApply != null)
-        {
-            btn_slimeCustom.onClick.RemoveAllListeners();
-            btn_slimeCustom.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_slimeCustom.onClick.AddListener(() =>
-            {
-                bool willBeActive = !ColorPallet.activeSelf;
-                Color backupColor = ChangeData.LastCustomColor;
-                ColorPallet.SetActive(willBeActive);
-
-                if (btn_slimeCustomApply != null)
-                {
-                    btn_slimeCustomApply.gameObject.SetActive(willBeActive);
-                }
-
-                if (willBeActive && fcp != null)
-                {
-                    ChangeData.LastCustomColor = backupColor;
-                    fcp.color = backupColor;
-                }
-            });
-        }
-
-        if (btn_slimeCustomApply != null) {
-            btn_slimeCustomApply.onClick.RemoveAllListeners();
-            btn_slimeCustomApply.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn_slimeCustomApply.onClick.AddListener(OnCustomApplyClicked);
-        }
-    }
-    private void OnCustomApplyClicked()
-    {
-        if (ColorPallet != null)
-        {
-            ColorPallet.SetActive(false);
-        }
-
-        if (btn_slimeCustomApply != null)
-        {
-            btn_slimeCustomApply.gameObject.SetActive(false);
-        }
-    }
-
-    private void BindSlimeFaceButtons()
-    {
-        spr_slimeNormal = DoodleLabSkin.Sprite("Face") ?? spr_slimeNormal;
-        spr_slimeDemon = DoodleLabSkin.Sprite("Horns") ?? spr_slimeDemon;
-        spr_slimeAngel = DoodleLabSkin.Sprite("Angel") ?? spr_slimeAngel;
-        spr_slimeKing = DoodleLabSkin.Sprite("Crown") ?? spr_slimeKing;
-
-        BindSprite(btn_slimeFaceNone, spr_slimeFaceNone, ChangeSlimeFace);
-        BindSprite(btn_slimeNormal, spr_slimeNormal, ChangeSlimeFace);
-
-        BindSprite(btn_slimeCostumeNone, spr_slimeCostumeNone, ChangeSlimeCostume);
-        BindSprite(btn_slimeDemon, spr_slimeDemon, ChangeSlimeCostume);
-        BindSprite(btn_slimeAngel, spr_slimeAngel, ChangeSlimeCostume);
-        BindSprite(btn_slimeKing, spr_slimeKing, ChangeSlimeCostume);
-    }
-
-    private void BindMapButtons()
-    {
-        BindMap(btn_basic, themeBasic);
-        BindMap(btn_spring, themeSpring);
-        BindMap(btn_summer, themeSummer);
-        BindMap(btn_autumn, themeAutumn);
-        BindMap(btn_winter, themeWinter);
-        BindMap(btn_sunny, themeSunny);
-        BindMap(btn_night, themeNight);
-        BindMap(btn_cloudy, themeCloudy);
-    }
-
-    private void BindColor(Button btn, string hexCode)
-    {
-        if (btn != null && ColorUtility.TryParseHtmlString(hexCode, out Color parsedColor))
-        {
-            parsedColor.a = ChangeData.SLIME_ALPHA;
-            btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-            btn.onClick.AddListener(() => ChangeSlimeColor(parsedColor));
-        }
-    }
-
-    private void BindSprite(Button btn, Sprite sprite, UnityAction<Sprite> action)
-    {
-        if (btn == null || sprite == null) return;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn.onClick.AddListener(() => action(sprite));
-    }
-
-    private void BindMap(Button btn, ThemeData theme)
-    {
-        if (btn == null || theme == null) return;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => SoundManager.Play(SoundEffect.Click));
-        btn.onClick.AddListener(() => ChangeMap(theme));
-    }
-
-    private void ChangeSlimeColor(Color newColor)
-    {
-        newColor.a = ChangeData.SLIME_ALPHA;
-        ChangeData.UseDoodlePalette = false;
-        ChangeData.SelectedColor = newColor;
-        OnColorChanged?.Invoke(newColor);
-    }
-
-    private void ChangeCustomSlimeColor(Color newColor)
-    {
-        newColor.a = ChangeData.SLIME_ALPHA;
-        ChangeData.UseDoodlePalette = false;
-        ChangeData.SelectedColor = newColor;
-        ChangeData.LastCustomColor = newColor;
-        OnColorChanged?.Invoke(newColor);
-    }
-
-    private void ChangeCustomButtonColor(Color newColor)
-    {
-        if (btn_slimeCustom != null && btn_slimeCustom.image != null)
-        {
-            newColor.a = 1.0f;
-            btn_slimeCustom.image.color = newColor;
-        }
-    }
-
-    private void ChangeSlimeFace(Sprite newSprite)
-    {
-        if (newSprite == null) return;
-        ChangeData.SelectedFace = newSprite;
-        OnFaceChanged?.Invoke(newSprite);
-    }
-
-    private void ChangeSlimeCostume(Sprite newSprite)
-    {
-        if (newSprite == null) return;
-        ChangeData.SelectedCostume = newSprite;
-        OnCostumeChanged?.Invoke(newSprite);
-    }
-
-    private void ChangeMap(ThemeData newTheme)
-    {
-        if (newTheme == null) return;
-
-        ChangeData.SelectedMapTheme = newTheme;
-
-        if (Panel_Option != null)
-        {
-            Panel_Option.GetComponent<Image>().sprite = newTheme.TableSprite;
-        }
-
-        OnMapChanged?.Invoke(newTheme);
-        DoodleLabSkin.ApplyMapTheme(newTheme);
+        ShowPanel(Panel_Game);
+        if (m_score != null) m_score.SetActive(true);
+        GameManager.Instance.RestartGame();
     }
 
     public void UpdateTimerUI(float remainingTime)
@@ -748,14 +262,6 @@ public class UIManager_Game : Singleton<UIManager_Game>
         else
         {
             isTimerRunning = true;
-        }
-    }
-
-    private void ApplySavedMapUI()
-    {
-        if (Panel_Option != null && ChangeData.SelectedMapTheme != null)
-        {
-            Panel_Option.GetComponent<Image>().sprite = ChangeData.SelectedMapTheme.TableSprite;
         }
     }
 
@@ -805,62 +311,19 @@ public class UIManager_Game : Singleton<UIManager_Game>
             .SetEase(Ease.Linear);
     }
 
-    public void HighlightAvailableSkills()
-    {
-        skillHighlightTween?.Kill();
-
-        // 강조 효과를 줄 잔여 스킬 버튼 리스트 추출
-        List<Button> targetButtons = new List<Button>();
-        if (countMagnifier > 0 && btn_magnifier != null) targetButtons.Add(btn_magnifier);
-        if (countMix > 0 && btn_mix != null) targetButtons.Add(btn_mix);
-        if (countDestroy > 0 && btn_destroy != null) targetButtons.Add(btn_destroy);
-
-        if (targetButtons.Count == 0) return;
-
-        Color originColor = Color.white; // 버튼 원래 색상 (기본 흰색 이미지 기준)
-        Color highlightColor = new Color(1f, 0.9f, 0.3f, 1f); // 노란색 강조 빛
-
-        float duration = 0.4f; // 반짝이는 속도
-        int repeatCount = 3;   // 반짝이는 횟수
-
-        skillHighlightTween = DOTween.Sequence();
-        foreach (Button btn in targetButtons)
-        {
-            if (btn.image == null) continue;
-            btn.image.color = originColor;
-            skillHighlightTween.Join(btn.image.DOColor(highlightColor, duration)
-                .SetEase(Ease.Linear)
-                .SetLoops(repeatCount * 2, LoopType.Yoyo));
-        }
-
-        // 중간에 끊겨도 최종 색상 원복
-        skillHighlightTween.OnKill(() =>
-        {
-            foreach (Button btn in targetButtons)
-            {
-                if (btn != null && btn.image != null) btn.image.color = originColor;
-            }
-        });
-    }
-
     private void GameOverUI()
     {
         isTimerRunning = false;
-        if (Panel_Main != null && Panel_Option != null && Panel_GameOver)
-        {
-            Panel_Main.SetActive(false);
-            Panel_Option.SetActive(false);
-            Panel_Game.SetActive(false);
-            Panel_GameOver.SetActive(true);
-            m_score.SetActive(false);
-        }
+        if (Panel_GameOver == null) return;
+
+        ShowPanel(Panel_GameOver);
+        if (m_score != null) m_score.SetActive(false);
     }
 
     protected override void OnDestroy()
     {
         countdownTween?.Kill();
         warningTween?.Kill();
-        skillHighlightTween?.Kill();
 
         if (GameManager.Instance != null)
         {
@@ -869,12 +332,6 @@ public class UIManager_Game : Singleton<UIManager_Game>
             GameManager.Instance.OnTimerUpdated -= UpdateTimerUI;
             GameManager.Instance.TargetSumChanged -= UpdateTargetSumUI;
             GameManager.Instance.NoMoreMoves -= OnNoMoreMoves;
-        }
-
-        if (fcp != null)
-        {
-            fcp.onColorChange.RemoveListener(ChangeCustomSlimeColor);
-            fcp.onColorChange.RemoveListener(ChangeCustomButtonColor);
         }
 
         base.OnDestroy();

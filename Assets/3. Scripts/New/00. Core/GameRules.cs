@@ -11,7 +11,9 @@ public static class GameRules
     public const float MatchDuration = 120f;
     public const int CountdownFrom = 3;          // 3, 2, 1
     public const float RevealDuration = 2f;      // 목표 합 공개 연출
-    public const float StartDelay = 5f;          // 방장이 시작을 누른 뒤 startAt까지 (모두 씬을 불러올 시간)
+    public const float StartDelay = 5f;          // 방장이 시작을 누른 뒤 대기실에서 5, 4, 3, 2, 1을 세고 게임 씬으로 넘어감
+    public const float LoadTimeout = 15f;        // 게임 씬에서 이만큼 기다려도 안 온 사람이 있으면 온 사람끼리 시작
+    public const float CountdownLead = 1f;       // 모두 모인 뒤 3, 2, 1을 시작하기까지 (시작 시각이 모두에게 전해질 시간)
     public const int MinTargetSum = 10;
     public const int MaxTargetSum = 15;          // 10 ~ 15 (둘 다 포함)
 
@@ -61,13 +63,24 @@ public static class GameRules
 
     // ── 방과 네트워크 (기획 [6]) ───────────────────────────────
     public const int MaxPlayers = 4;             // 사람 + AI
+    public const int RoomNameMaxLength = 20;
+
+    // AI 자리의 슬라임 색 (자리 번호 순서). 사람은 메뉴에서 고른 색을 씀.
+    public static readonly string[] AiSlimeColors = { "#9AD94A", "#F29BB6", "#7EC8F2", "#F2C94C" };
     public const float HeartbeatInterval = 5f;   // 이 간격으로 "아직 있음"을 알림
     public const float DisconnectTimeout = 15f;  // 이만큼 소식이 없으면 끊긴 것 → 대전 중이면 기권
     public const float FinalBoardWait = 5f;      // 종료 뒤 최종 판을 기다리는 최대 시간
     public const int ChatMaxLength = 100;
     public const float ChatCooldown = 1f;        // 도배 방지: 1초에 1번
 
-    // 기본 닉네임 = 성격 + 색깔 + 슬라임. 저장된 닉네임이 없을 때 로그인 창에 미리 채움.
+    // 기본 닉네임 = 성격 + 색깔 + 슬라임. 로그인 창의 기본 닉네임과 AI 이름에 씀.
+    public static string RandomNickname(System.Random random)
+    {
+        return NicknamePersonalities[random.Next(NicknamePersonalities.Length)]
+             + NicknameColors[random.Next(NicknameColors.Length)]
+             + "슬라임";
+    }
+
     public static readonly string[] NicknamePersonalities =
     {
         "도도한",

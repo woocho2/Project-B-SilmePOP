@@ -1,22 +1,36 @@
+using System;
 using UnityEngine;
 
 public static class ChangeData
 {
-    public static bool UseDoodlePalette { get; set; } = true;
-    public static Color SelectedColor { get; set; } = Color.white;
-    public static Sprite SelectedFace { get; set; }
-    public static Sprite SelectedCostume { get; set; }
-    public static Color LastCustomColor { get; set; } = Color.white;
+    // 값이 바뀌면 알림. Change_Slime, Change_Theme이 듣고 씬에 상관없이 스스로 다시 칠함.
+    public static event Action<Color> ColorChanged;
+    public static event Action<int> ThemeChanged;
 
-    public static ThemeData SelectedMapTheme { get; set; }
+    private static Color selectedColor = Color.white;
+    private static int selectedThemeIndex;
+
+    public static bool UseDoodlePalette { get; set; } = true;
+    public static Color SelectedColor
+    {
+        get => selectedColor;
+        set
+        {
+            selectedColor = value;
+            ColorChanged?.Invoke(value);
+        }
+    }
+
+    // 고른 맵 테마의 번호. ThemePalette의 순서 (0 = Basic).
+    public static int SelectedThemeIndex
+    {
+        get => selectedThemeIndex;
+        set
+        {
+            selectedThemeIndex = value;
+            ThemeChanged?.Invoke(value);
+        }
+    }
 
     public const float SLIME_ALPHA = 1.0f;
-    public const string HEX_WHITE = "#FFFFFF";
-    public const string HEX_BLACK = "#383838";
-    public const string HEX_RED = "#B3270B";
-    public const string HEX_BLUE = "#257BD6";
-    public const string HEX_YELLOW = "#DBD526";
-    public const string HEX_GREEN = "#02BE00";
-    public const string HEX_YELLOWGREEN = "#B5FF00";
-    public const string HEX_BROWN = "#733F01";
 }

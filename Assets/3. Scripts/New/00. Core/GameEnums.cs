@@ -31,7 +31,7 @@ public enum AiDifficulty
     Easy = 0,
     Normal = 1,
     Hard = 2,
-    Test = 3   // 게임판 확인용 (0.5 ~ 1초, 100%)
+    Hell = 3   // 가장 어려움 (0.5 ~ 1초, 100%). 게임판 확인용으로도 씀
 }
 
 // 한 판의 진행 단계. GameManager가 이 순서로만 넘어감.

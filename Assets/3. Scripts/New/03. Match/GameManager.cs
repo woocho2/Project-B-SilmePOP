@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +13,6 @@ public class GameManager : Singleton<GameManager>
 
     public MatchSettings Settings { get; private set; }
     public BoardModel Board { get; private set; }
-    public GameRandom SkillRandom { get; private set; }
     public int TargetSum => Settings != null ? Settings.TargetSum : GameRules.MinTargetSum;
     public int Score { get; private set; }
     public float LastScoreTime { get; private set; }   // 경기 시작 기준 경과 시간. 동점이면 먼저 도달한 쪽이 위
@@ -22,57 +22,105 @@ public class GameManager : Singleton<GameManager>
     public event UnityAction<int> TargetSumChanged;
     public event UnityAction<int, float> LocalScoreChanged;
     public event UnityAction NoMoreMoves;
+    public event UnityAction MatchCreated;   // 새 판(Settings, Board)이 만들어짐. 스킬 횟수 등을 처음부터
 
     private Coroutine co_LifeTime;
-    private bool isPaused = false;
+    private readonly List<AiPlayer> aiPlayers = new List<AiPlayer>();
     private bool hasEnded;
     public bool IsStarting { get; private set; }
-    public bool IsPaused => isPaused || IsStarting;
+
+    // 120초가 흐르는 중. 카운트다운 중과 끝난 뒤에는 입력을 받지 않음.
+    // 한번 시작한 판은 기권 말고는 멈출 수 없음 (일시정지 없음).
+    public bool IsPlaying => !IsStarting && !hasEnded && co_LifeTime != null;
 
     private void Start()
     {
+        // 씬에 SkillManager를 놓지 않았어도 단축키(1 ~ 6)로 스킬을 쓸 수 있게 만들어 둠 (버튼은 씬에 놓고 연결해야 보임)
+        if (SkillManager.Instance == null) new GameObject(nameof(SkillManager)).AddComponent<SkillManager>();
+
         // The UI starts the countdown after its own initialization.
         if (UIManager_Game.Instance == null || !UIManager_Game.Instance.isActiveAndEnabled)
             StartGameTimer();
     }
 
+    // 조커는 5초마다 빈자리로 이동 (판이 진행 중일 때만). AI 판은 AiPlayer가 따로 돌림.
+    private void Update()
+    {
+        if (IsPlaying && Board != null) Board.Tick(Time.deltaTime);
+    }
+
     public void PrepareStartCountdown()
     {
         StopGameTimer();
+        ClearAiPlayers();
         CreateMatch();
         hasEnded = false;
         IsStarting = true;
-        isPaused = false;
         CurrentTime = MaxGameTime;
         // Reveal the board only after the countdown text has finished.
         if (m_slimeManager != null) m_slimeManager.SetActive(false);
         if (m_dragManager != null) m_dragManager.SetActive(false);
         OnTimerUpdated?.Invoke(CurrentTime);
+
+        // 게임 씬에 도착했음을 알림. 모두 오면 playAt이 정해져 카운트다운이 시작됨.
+        if (IsNetworkMatch) NetworkManager.Instance.ReportLoaded();
     }
 
     // 방에서 시작한 판이면 true. 게임 씬을 바로 실행해 혼자 시험할 때는 false.
     private bool IsNetworkMatch => NetworkManager.Instance != null && NetworkManager.Instance.CurrentMatch != null;
 
-    // 카운트다운 시작까지 남은 시간. 모든 참가자가 같은 서버 시각에 시작함.
+    // 모두 게임 씬에 모여 3, 2, 1을 시작할 시각(playAt)이 정해졌는가. 혼자 시험하는 판은 바로 시작.
+    public bool IsReadyToCountdown => !IsNetworkMatch || PlayAt > 0;
+
+    // 3, 2, 1 시작까지 남은 시간. 모든 참가자가 같은 서버 시각에 시작함.
     public float SecondsUntilStart
     {
         get
         {
-            if (!IsNetworkMatch) return 0f;
-            return Mathf.Max(0f, (Settings.StartAt - NetworkManager.Instance.ServerNow) / 1000f);
+            if (!IsNetworkMatch || PlayAt <= 0) return 0f;
+            return Mathf.Max(0f, (PlayAt - NetworkManager.Instance.ServerNow) / 1000f);
         }
     }
+
+    private long PlayAt => NetworkManager.Instance.CurrentRoom != null ? NetworkManager.Instance.CurrentRoom.playAt : 0;
 
     // 새 판을 만듦. 방의 값이 있으면 그것을 쓰고, 없으면 혼자 시험하는 판을 만듦.
     private void CreateMatch()
     {
         Settings = IsNetworkMatch ? NetworkManager.Instance.CurrentMatch : MatchSettings.CreateNew(0L, 1);
         Board = BoardGenerator.Generate(Settings.Seed);
-        SkillRandom = new GameRandom(Settings.Seed);
         Score = 0;
         LastScoreTime = 0f;
         TargetSumChanged?.Invoke(TargetSum);
         LocalScoreChanged?.Invoke(Score, LastScoreTime);
+        MatchCreated?.Invoke();
+    }
+
+    // 방장만 AI 자리를 맡음 (다른 PC에서도 만들면 점수가 두 번 올라감). 혼자 시험하는 판에는 AI가 없음.
+    private void SpawnAiPlayers()
+    {
+        ClearAiPlayers();
+        if (!IsNetworkMatch || !NetworkManager.Instance.IsHost) return;
+
+        RoomInfo room = NetworkManager.Instance.CurrentRoom;
+        if (room == null) return;
+
+        for (int slot = 0; slot < room.slots.Length; slot++)
+        {
+            if (room.slots[slot].kind == SlotKind.Ai)
+            {
+                aiPlayers.Add(AiPlayer.Create(slot, room.slots[slot].difficulty, Settings));
+            }
+        }
+    }
+
+    private void ClearAiPlayers()
+    {
+        foreach (AiPlayer ai in aiPlayers)
+        {
+            if (ai != null) Destroy(ai.gameObject);
+        }
+        aiPlayers.Clear();
     }
 
     public void StartGameTimer()
@@ -81,7 +129,6 @@ public class GameManager : Singleton<GameManager>
         if (Board == null) CreateMatch();
         hasEnded = false;
         CurrentTime = MaxGameTime;
-        isPaused = false;
 
         if (m_slimeManager != null)
         {
@@ -96,6 +143,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         co_LifeTime = StartCoroutine(Co_GameTimer());
+        SpawnAiPlayers();
     }
 
     private IEnumerator Co_GameTimer()
@@ -104,14 +152,7 @@ public class GameManager : Singleton<GameManager>
 
         while (CurrentTime > 0f)
         {
-            if (isPaused)
-            {
-                yield return null;
-                continue;
-            }
-
             yield return null;
-            if (isPaused) continue;
             int previousSecond = Mathf.CeilToInt(CurrentTime);
             CurrentTime = Mathf.Max(0f, CurrentTime - Time.deltaTime);
             if (Mathf.CeilToInt(CurrentTime) != previousSecond)
@@ -147,26 +188,11 @@ public class GameManager : Singleton<GameManager>
         TargetSumChanged?.Invoke(TargetSum);
     }
 
-    public void PauseGame()
-    {
-        isPaused = true;
-        if (m_slimeManager != null) m_slimeManager.SetActive(false);
-        if (m_dragManager != null) m_dragManager.SetActive(false);
-    }
-
-    public void ResumeGame()
-    {
-        if (hasEnded || IsStarting) return;
-        isPaused = false;
-        if (m_slimeManager != null) m_slimeManager.SetActive(true);
-        if (m_dragManager != null) m_dragManager.SetActive(true);
-    }
-
+    // 게임오버 화면의 다시 하기. 카운트다운부터 새 판으로 시작함.
     public void RestartGame()
     {
         hasEnded = false;
         Board = null;
-        ResumeGame();
 
         if (m_slimeManager != null)
         {
@@ -199,7 +225,8 @@ public class GameManager : Singleton<GameManager>
         StopGameTimer();
         SoundManager.Play(SoundEffect.GameOver);
         OnGameOver?.Invoke();
-        PauseGame();
+        if (m_slimeManager != null) m_slimeManager.SetActive(false);
+        if (m_dragManager != null) m_dragManager.SetActive(false);
         Debug.Log("게임 종료");
     }
 

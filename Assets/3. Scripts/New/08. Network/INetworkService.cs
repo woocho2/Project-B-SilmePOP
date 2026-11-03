@@ -32,16 +32,21 @@ public interface INetworkService
     void SignOut();
 
     // 방 만들기와 들어가기. 실패하면 onDone(null)과 ErrorOccurred.
-    void CreateRoom(string roomName, Action<RoomInfo> onDone);
+    void CreateRoom(string roomName, int maxPlayers, Action<RoomInfo> onDone);
     void JoinRoom(string roomId, Action<RoomInfo> onDone);
     void LeaveRoom();
-    void SetReady(bool ready);
+
+    // 내 슬라임 색 "#RRGGBB". 방에 있으면 내 자리 색도 바꿔서 모두에게 알림.
+    void SetMyColor(string colorHex);
 
     // 방장만. 이미 AI가 있는 자리에 AddAi를 다시 부르면 난이도만 바뀜.
     void AddAi(int slot, AiDifficulty difficulty);
     void RemoveAi(int slot);
     void StartMatch();
     void EndMatch();
+
+    // 게임 씬을 다 불러왔음. 모두 오면(또는 너무 오래 걸리면) 방장 쪽에서 playAt이 정해짐.
+    void ReportLoaded(int slot);
 
     void SendChat(ChatChannel channel, string text);
 

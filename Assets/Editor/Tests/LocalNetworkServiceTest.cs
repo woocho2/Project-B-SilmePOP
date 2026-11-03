@@ -77,12 +77,73 @@ public class LocalNetworkServiceTest
         LocalNetworkService service = SignedIn();
         RoomInfo room = null;
 
-        service.CreateRoom("방", result => room = result);
+        service.CreateRoom("방", GameRules.MaxPlayers, result => room = result);
 
         Assert.AreEqual(SlotKind.Human, room.slots[0].kind);
         Assert.AreEqual(room.hostUid, room.slots[0].uid);
         Assert.AreEqual(GameRules.MaxPlayers, room.slots.Length);
         Assert.AreEqual(1, room.PlayerCount);
+    }
+
+    [Test]
+    public void CreateRoom_ClosesSlotsBeyondMaxPlayers()
+    {
+        LocalNetworkService service = SignedIn();
+        RoomInfo room = null;
+        service.RoomChanged += result => room = result;
+        service.CreateRoom("방", 2, null);
+
+        service.AddAi(1, AiDifficulty.Easy);
+        service.AddAi(2, AiDifficulty.Easy);
+
+        Assert.AreEqual(2, room.maxPlayers);
+        Assert.AreEqual(SlotKind.Ai, room.slots[1].kind);
+        Assert.AreEqual(SlotKind.Empty, room.slots[2].kind);
+    }
+
+    [Test]
+    public void SlimeColor_MyColorFollowsSetMyColor_AiGetsSlotColor()
+    {
+        LocalNetworkService service = SignedIn();
+        RoomInfo room = null;
+        service.RoomChanged += result => room = result;
+        service.SetMyColor("#B3270B");
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
+        service.AddAi(2, AiDifficulty.Hell);
+
+        Assert.AreEqual("#B3270B", room.slots[0].slimeColor);
+        Assert.AreEqual(GameRules.AiSlimeColors[2], room.slots[2].slimeColor);
+
+        service.SetMyColor("#257BD6");
+        Assert.AreEqual("#257BD6", room.slots[0].slimeColor);
+    }
+
+    [Test]
+    public void AddAi_GetsRandomNickname_KeptWhenDifficultyChanges()
+    {
+        LocalNetworkService service = SignedIn();
+        RoomInfo room = null;
+        service.RoomChanged += result => room = result;
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
+
+        service.AddAi(1, AiDifficulty.Easy);
+        string name = room.slots[1].displayName;
+        service.AddAi(1, AiDifficulty.Hell);
+
+        StringAssert.EndsWith("슬라임", name);
+        Assert.AreEqual(name, room.slots[1].displayName);
+        Assert.AreEqual(AiDifficulty.Hell, room.slots[1].difficulty);
+    }
+
+    [Test]
+    public void CreateRoom_RejectsInvalidMaxPlayers()
+    {
+        LocalNetworkService service = SignedIn();
+        RoomInfo room = new RoomInfo();
+
+        service.CreateRoom("방", GameRules.MaxPlayers + 1, result => room = result);
+
+        Assert.IsNull(room);
     }
 
     [Test]
@@ -93,7 +154,7 @@ public class LocalNetworkServiceTest
         string error = null;
         service.RoomChanged += result => room = result;
         service.ErrorOccurred += message => error = message;
-        service.CreateRoom("방", null);
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
 
         service.AddAi(0, AiDifficulty.Easy);
         Assert.IsNotNull(error);
@@ -103,7 +164,6 @@ public class LocalNetworkServiceTest
         service.AddAi(1, AiDifficulty.Hard);
         Assert.AreEqual(SlotKind.Ai, room.slots[1].kind);
         Assert.AreEqual(AiDifficulty.Hard, room.slots[1].difficulty);
-        Assert.IsTrue(room.slots[1].ready);
 
         service.RemoveAi(1);
         Assert.AreEqual(SlotKind.Empty, room.slots[1].kind);
@@ -119,7 +179,7 @@ public class LocalNetworkServiceTest
         service.RoomChanged += result => room = result;
         service.MatchStarting += result => settings = result;
         service.ScoresChanged += result => scores = result;
-        service.CreateRoom("방", null);
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
         service.AddAi(2, AiDifficulty.Normal);
 
         long before = service.ServerNow;
@@ -142,7 +202,7 @@ public class LocalNetworkServiceTest
         RoomInfo room = null;
         service.ScoresChanged += result => scores = result;
         service.RoomChanged += result => room = result;
-        service.CreateRoom("방", null);
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
         service.StartMatch();
 
         service.ReportScore(0, 42, 12.5f);
@@ -160,7 +220,7 @@ public class LocalNetworkServiceTest
         LocalNetworkService service = SignedIn();
         RoomInfo first = null;
         service.RoomChanged += result => { if (first == null) first = result; };
-        service.CreateRoom("방", null);
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
 
         service.AddAi(1, AiDifficulty.Easy);
 
@@ -188,7 +248,7 @@ public class LocalNetworkServiceTest
         LocalNetworkService service = SignedIn();
         RoomInfo room = new RoomInfo();
         service.RoomChanged += result => room = result;
-        service.CreateRoom("방", null);
+        service.CreateRoom("방", GameRules.MaxPlayers, null);
 
         service.LeaveRoom();
 

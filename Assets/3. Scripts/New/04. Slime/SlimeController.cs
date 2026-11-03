@@ -7,15 +7,32 @@ public class SlimeController : MonoBehaviour
     [Header("UI Component")]
     [SerializeField] private TextMeshProUGUI numberText;
 
-    [Header("Highlight Component")]
+    [Header("강조 (외곽선)")]
+    [Tooltip("선택 사항. 비우면 몸통(Color)의 SlimeOutline 셰이더로 외곽선을 그림. 넣으면 예전처럼 이 그림을 켜고 끔")]
     [SerializeField] private GameObject highlightObject;
     private SpriteRenderer highlightRenderer;
 
-    private readonly Color hintColor = new Color(1f, 1f, 0f, 0.8f);
-    private readonly Color destroyHoverColor = new Color(0.2f, 0.5f, 1f, 0.8f); // 파괴 스킬용 파란색 추가
+    private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
+    private MaterialPropertyBlock outlineBlock;
 
+    [Header("특수 슬라임 코스튬 (Costume 자식에 씌움)")]
+    [SerializeField] private Sprite costumeKing;
+    [SerializeField] private Sprite costumeAngel;
+    [SerializeField] private Sprite costumeDevil;
+    [SerializeField] private Sprite costumeJoker;
+
+    private readonly Color hintColor = new Color(1f, 1f, 0f, 0.8f);
+
+    // 강조는 세 가지가 겹칠 수 있고, 우선순위는 스킬 범위 > 힌트 > 드래그
+    private bool isDragHighlighted;
+    private Color dragColor = new Color(0.2f, 1f, 0.2f, 0.8f);
     private bool isHintActive = false;
-    private bool isDestroyHoverActive = false; // 파괴 호버 상태 추적용 변수 추가
+    private bool isSkillPreview;
+    private Color skillPreviewColor;
+
+    // 합체 슬라임을 두 배로 그릴 때 되돌릴 원래 위치·크기
+    private Vector3[] visualBasePositions;
+    private Vector3[] visualBaseScales;
 
     public int Cell { get; private set; }
     public int CurrentNumber { get; private set; }
@@ -43,13 +60,6 @@ public class SlimeController : MonoBehaviour
         bodyRenderer = transform.Find("Color")?.GetComponent<SpriteRenderer>();
         faceRenderer = transform.Find("Face")?.GetComponent<SpriteRenderer>();
         costumeRenderer = transform.Find("Costume")?.GetComponent<SpriteRenderer>();
-        if (bodyRenderer != null && costumeRenderer == null)
-        {
-            var costumeObject = new GameObject("Costume", typeof(SpriteRenderer));
-            costumeObject.transform.SetParent(transform, false);
-            costumeObject.layer = bodyRenderer.gameObject.layer;
-            costumeRenderer = costumeObject.GetComponent<SpriteRenderer>();
-        }
 
         foreach (Transform child in transform)
         {
@@ -57,6 +67,14 @@ public class SlimeController : MonoBehaviour
             {
                 visualObjects.Add(child.gameObject);
             }
+        }
+
+        visualBasePositions = new Vector3[visualObjects.Count];
+        visualBaseScales = new Vector3[visualObjects.Count];
+        for (int i = 0; i < visualObjects.Count; i++)
+        {
+            visualBasePositions[i] = visualObjects[i].transform.localPosition;
+            visualBaseScales[i] = visualObjects[i].transform.localScale;
         }
     }
 
@@ -78,9 +96,9 @@ public class SlimeController : MonoBehaviour
         bool hasSlime = slime != null;
         bool showVisuals = hasSlime && slime.Anchor == Cell;
 
+        isDragHighlighted = false;
         isHintActive = false;
-        isDestroyHoverActive = false;
-        if (highlightObject != null) highlightObject.SetActive(false);
+        UpdateHighlight();
 
         if (hasSlime)
         {
@@ -98,40 +116,41 @@ public class SlimeController : MonoBehaviour
         if (showVisuals) DoodleLabSkin.ApplySlime(this);
     }
 
-    public void ApplyVisualSkin(Sprite bodySprite, Sprite costumeSprite, Sprite jokerSprite, Color color)
+    // 종류에 맞는 코스튬. 기본·합체는 없음 (null).
+    public Sprite CostumeFor(SlimeType type)
+    {
+        switch (type)
+        {
+            case SlimeType.King: return costumeKing;
+            case SlimeType.Angel: return costumeAngel;
+            case SlimeType.Devil: return costumeDevil;
+            case SlimeType.Joker: return costumeJoker;
+            default: return null;
+        }
+    }
+
+    public void ApplyVisualSkin(Sprite bodySprite, Sprite costumeSprite, Color color)
     {
         if (bodyRenderer == null) return;
 
-        bool isJoker = CurrentType == SlimeType.Joker;
-        Sprite sprite = isJoker ? jokerSprite : bodySprite;
-        if (sprite != null) bodyRenderer.sprite = sprite;
-        bodyRenderer.color = isJoker ? Color.white : color;
+        if (bodySprite != null) bodyRenderer.sprite = bodySprite;
+        bodyRenderer.color = color;
 
-        // Gameplay keeps its center clear for the number. UI faces are handled by Change.
+        // 판에서는 숫자가 보이도록 얼굴을 끔.
         if (faceRenderer != null) faceRenderer.enabled = false;
         if (highlightRenderer != null && bodySprite != null) highlightRenderer.sprite = bodySprite;
 
         if (costumeRenderer == null) return;
-        costumeRenderer.sprite = isJoker ? null : costumeSprite;
+        costumeRenderer.sprite = costumeSprite;
         costumeRenderer.enabled = costumeRenderer.sprite != null;
         costumeRenderer.color = Color.white;
-        costumeRenderer.sharedMaterial = bodyRenderer.sharedMaterial;
-        costumeRenderer.sortingLayerID = bodyRenderer.sortingLayerID;
-        costumeRenderer.sortingOrder = bodyRenderer.sortingOrder + 1;
-        costumeRenderer.flipX = bodyRenderer.flipX;
-        costumeRenderer.flipY = bodyRenderer.flipY;
-        costumeRenderer.transform.localPosition = bodyRenderer.transform.localPosition;
-        costumeRenderer.transform.localRotation = bodyRenderer.transform.localRotation;
-        costumeRenderer.transform.localScale = bodyRenderer.transform.localScale;
     }
 
     public void SetSlimeColor(Color slimeColor)
     {
         if (numberText != null)
         {
-            Color oppositeColor = CurrentType == SlimeType.Joker ? Color.white : GetOppositeColor(slimeColor);
-            numberText.color = oppositeColor;
-            DoodleLabSkin.StyleSlimeNumber(numberText);
+            numberText.color = GetOppositeColor(slimeColor);
         }
     }
 
@@ -141,77 +160,76 @@ public class SlimeController : MonoBehaviour
         return luminance > 0.5f ? Color.black : Color.white;
     }
 
+    // 드래그 박스 안에 들어옴/나감
     public void SetHighlight(bool isActive)
     {
-        if (highlightObject != null)
-        {
-            highlightObject.SetActive(isActive || isHintActive || isDestroyHoverActive);
-        }
+        isDragHighlighted = isActive;
+        UpdateHighlight();
     }
 
+    // 돋보기 힌트 (노랑)
     public void SetHintHighlight(bool isActive)
     {
         isHintActive = isActive;
-
-        if (highlightObject != null && highlightRenderer != null)
-        {
-            // 파괴 스킬 호버 상태가 아닐 때만 힌트 색상을 적용 (호버가 우선순위 높음)
-            if (!isDestroyHoverActive)
-            {
-                highlightObject.SetActive(isActive);
-                if (isActive)
-                {
-                    highlightRenderer.color = hintColor;
-                }
-            }
-        }
+        UpdateHighlight();
     }
 
-    /// <summary>
-    /// 파괴 스킬 사용 중 마우스 호버에 따른 파란색 하이라이트를 제어합니다.
-    /// </summary>
-    public void SetDestroyHoverHighlight(bool isActive)
+    // 스킬 범위 미리보기 (가능하면 초록, 불가면 빨강). 다른 강조보다 먼저 보임.
+    public void SetSkillPreview(bool isActive, Color color)
     {
-        isDestroyHoverActive = isActive;
-
-        if (highlightObject != null && highlightRenderer != null)
-        {
-            if (isActive)
-            {
-                highlightObject.SetActive(true);
-                highlightRenderer.color = destroyHoverColor; // 파란색 적용
-            }
-            else
-            {
-                // 호버가 꺼졌을 때, 힌트 상태였다면 기존 노란색으로 복구
-                if (isHintActive)
-                {
-                    highlightObject.SetActive(true);
-                    highlightRenderer.color = hintColor;
-                }
-                else
-                {
-                    highlightObject.SetActive(false);
-                }
-            }
-        }
+        isSkillPreview = isActive;
+        skillPreviewColor = color;
+        UpdateHighlight();
     }
 
+    // 드래그 중 합이 맞으면 초록, 아니면 빨강. 드래그가 시작되면 힌트 강조는 지움.
     public void SetHighlightColor(Color color)
     {
-        if (highlightRenderer != null)
+        dragColor = color;
+        isHintActive = false;
+        UpdateHighlight();
+    }
+
+    // 합체 슬라임의 왼쪽 아래 칸이면 그림을 네 칸 가운데(offset만큼 위·오른쪽)로 옮기고 두 배로. 아니면 원래대로.
+    public void SetMergedLayout(bool isMergedAnchor, Vector2 worldOffset)
+    {
+        if (visualBasePositions == null) return;
+
+        float scale = transform.lossyScale.x != 0f ? transform.lossyScale.x : 1f;
+        Vector3 localOffset = isMergedAnchor ? (Vector3)(worldOffset / scale) : Vector3.zero;
+        float size = isMergedAnchor ? 2f : 1f;
+        for (int i = 0; i < visualObjects.Count; i++)
         {
-            highlightRenderer.color = color;
-            isHintActive = false;
-            isDestroyHoverActive = false;
+            visualObjects[i].transform.localPosition = visualBasePositions[i] + localOffset;
+            visualObjects[i].transform.localScale = visualBaseScales[i] * size;
         }
     }
 
-    public void SetColliderSize(float sizeX, float sizeY)
+    private void UpdateHighlight()
     {
-        if (slimeCollider != null)
+        bool isOn = isSkillPreview || isHintActive || isDragHighlighted;
+        Color color = isSkillPreview ? skillPreviewColor
+                    : isHintActive ? hintColor
+                    : dragColor;
+
+        if (highlightObject != null)
         {
-            slimeCollider.size = new Vector2(sizeX, sizeY);
+            highlightObject.SetActive(isOn);
+            if (isOn && highlightRenderer != null) highlightRenderer.color = color;
+            return;
         }
+
+        SetOutlineColor(isOn ? color : Color.clear);
+    }
+
+    // 몸통의 SlimeOutline 셰이더에 외곽선 색을 넘김 (투명이면 외곽선 없음). 슬라임마다 다른 색이라 재질 대신 블록으로 넘김.
+    private void SetOutlineColor(Color color)
+    {
+        if (bodyRenderer == null) return;
+
+        if (outlineBlock == null) outlineBlock = new MaterialPropertyBlock();
+        bodyRenderer.GetPropertyBlock(outlineBlock);
+        outlineBlock.SetColor(OutlineColorId, color);
+        bodyRenderer.SetPropertyBlock(outlineBlock);
     }
 }

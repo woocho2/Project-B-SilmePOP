@@ -1,0 +1,34 @@
+{
+  "rules": {
+    "guestCounter": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+    },
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid",
+        "nickname": { ".validate": "newData.isString() && newData.val().length <= 30" }
+      }
+    },
+    "lobbyChat": {
+      ".read": "auth != null",
+      "$messageId": {
+        ".write": "auth != null && !data.exists() && newData.child('uid').val() == auth.uid",
+        ".validate": "newData.child('text').isString() && newData.child('text').val().length <= 100"
+      }
+    },
+    "rooms": {
+      ".read": "auth != null",
+      "$roomId": {
+        ".write": "auth != null",
+        "chat": {
+          "$messageId": {
+            ".validate": "newData.child('text').isString() && newData.child('text').val().length <= 100"
+          }
+        }
+      }
+    }
+  }
+}

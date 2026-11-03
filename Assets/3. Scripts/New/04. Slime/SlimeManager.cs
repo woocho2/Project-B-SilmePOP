@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 
 // 내 판의 화면. BoardModel의 이벤트를 듣고 칸을 다시 그리기만 함.
+// 칸 좌표 ↔ 월드 좌표도 여기서 계산함 (스킬 대상 칸 고르기, 합체 슬라임 배치).
 public class SlimeManager : Singleton<SlimeManager>
 {
     [Header("Slime Settings")]
@@ -14,50 +14,9 @@ public class SlimeManager : Singleton<SlimeManager>
     private SlimeController[] cellViews;
     private BoardModel board;
 
-    public bool IsDestroySkillActive { get; private set; } = false;
-
-    private SlimeController currentHoveredSlime;
-
-    private void Update()
-    {
-        if (GameManager.Instance != null && GameManager.Instance.IsPaused) return;
-        if (IsDestroySkillActive && Mouse.current != null)
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-            SlimeController targetSlime = null;
-            if (hit.collider != null)
-            {
-                targetSlime = hit.collider.GetComponent<SlimeController>();
-            }
-
-            if (currentHoveredSlime != targetSlime)
-            {
-                if (currentHoveredSlime != null)
-                {
-                    currentHoveredSlime.SetDestroyHoverHighlight(false);
-                }
-
-                if (targetSlime != null)
-                {
-                    targetSlime.SetDestroyHoverHighlight(true);
-                }
-
-                currentHoveredSlime = targetSlime;
-            }
-
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                if (targetSlime != null)
-                {
-                    DestroySpecificSlimeAndAddScore(targetSlime);
-                }
-
-                EndDestroySkill();
-            }
-        }
-    }
+    // 왼쪽 아래 칸(0, 0)의 위치와 칸 사이 간격
+    private Vector2 GridOrigin => (Vector2)transform.position - areaSize / 2f;
+    private Vector2 Spacing => new Vector2(areaSize.x / (GameRules.Columns - 1), areaSize.y / (GameRules.Rows - 1));
 
     // 판을 처음부터 다시 그림. 칸 오브젝트는 처음 한 번만 만들고 재대결 때도 다시 씀.
     public void ShowBoard(BoardModel newBoard)
@@ -72,6 +31,26 @@ public class SlimeManager : Singleton<SlimeManager>
         for (int cell = 0; cell < cellViews.Length; cell++)
         {
             RefreshCell(cell);
+        }
+    }
+
+    // 월드 좌표에서 가장 가까운 칸. 판 밖이면 -1.
+    public int CellAt(Vector2 worldPosition)
+    {
+        Vector2 local = worldPosition - GridOrigin;
+        int x = Mathf.RoundToInt(local.x / Spacing.x);
+        int y = Mathf.RoundToInt(local.y / Spacing.y);
+        return GameRules.IsInside(x, y) ? GameRules.ToIndex(x, y) : -1;
+    }
+
+    // 스킬 범위 미리보기 (가능하면 초록, 불가면 빨강 외곽선)
+    public void SetSkillPreview(IReadOnlyList<int> cells, bool isActive, Color color)
+    {
+        if (cellViews == null) return;
+
+        foreach (int cell in cells)
+        {
+            if (cell >= 0 && cell < cellViews.Length) cellViews[cell].SetSkillPreview(isActive, color);
         }
     }
 
@@ -135,51 +114,12 @@ public class SlimeManager : Singleton<SlimeManager>
 
     private void RefreshCell(int cell)
     {
-        cellViews[cell].Refresh(board.GetSlimeAt(cell));
-    }
+        BoardSlime slime = board.GetSlimeAt(cell);
+        cellViews[cell].Refresh(slime);
 
-    public void ActivateDestroySkill()
-    {
-        IsDestroySkillActive = true;
-        ChangeAllSlimesColliderSize(1f, 1f);
-        Debug.Log("파괴 스킬 장전 완료: 타겟 슬라임을 클릭하세요.");
-    }
-
-    private void EndDestroySkill()
-    {
-        IsDestroySkillActive = false;
-        ChangeAllSlimesColliderSize(0.1f, 0.1f);
-
-        if (currentHoveredSlime != null)
-        {
-            currentHoveredSlime.SetDestroyHoverHighlight(false);
-            currentHoveredSlime = null;
-        }
-    }
-
-    private void ChangeAllSlimesColliderSize(float sizeX, float sizeY)
-    {
-        if (cellViews == null) return;
-
-        foreach (SlimeController view in cellViews)
-        {
-            view.SetColliderSize(sizeX, sizeY);
-        }
-    }
-
-    private void DestroySpecificSlimeAndAddScore(SlimeController targetSlime)
-    {
-        BoardSlime slime = board.GetSlimeAt(targetSlime.Cell);
-        if (slime == null) return;
-
-        SoundManager.Play(SoundEffect.Destroy);
-        board.Remove(new[] { slime });
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AddScore(ScoreCalculator.DestroyScore(slime));
-            GameManager.Instance.CheckForMoves();
-        }
+        // 합체 슬라임은 왼쪽 아래(Anchor) 칸이 네 칸 가운데에 두 배 크기로 그림
+        bool isMergedAnchor = slime != null && slime.Type == SlimeType.Merged && slime.Anchor == cell;
+        cellViews[cell].SetMergedLayout(isMergedAnchor, Spacing / 2f);
     }
 
     private void GenerateCellViews()
@@ -191,24 +131,11 @@ public class SlimeManager : Singleton<SlimeManager>
         }
 
         cellViews = new SlimeController[GameRules.CellCount];
-
-        Vector2 startPos = new Vector2(
-            transform.position.x - (areaSize.x / 2f),
-            transform.position.y - (areaSize.y / 2f)
-        );
-
-        float spacingX = areaSize.x / (GameRules.Columns - 1);
-        float spacingY = areaSize.y / (GameRules.Rows - 1);
-
         for (int y = 0; y < GameRules.Rows; y++)
         {
             for (int x = 0; x < GameRules.Columns; x++)
             {
-                Vector2 spawnPosition = new Vector2(
-                    startPos.x + (x * spacingX),
-                    startPos.y + (y * spacingY)
-                );
-
+                Vector2 spawnPosition = GridOrigin + new Vector2(x * Spacing.x, y * Spacing.y);
                 GameObject newSlime = Instantiate(slimePrefab, spawnPosition, Quaternion.identity, transform);
                 int cell = GameRules.ToIndex(x, y);
                 cellViews[cell] = newSlime.GetComponent<SlimeController>();
@@ -219,9 +146,10 @@ public class SlimeManager : Singleton<SlimeManager>
 
     public void ResetSlimeManager()
     {
-        EndDestroySkill();
+        ClearAllHints();
     }
 
+    // 돋보기: 가능한 조합 1개를 노란 외곽선으로 표시
     public void ShowHint()
     {
         if (cellViews == null) return;
@@ -247,31 +175,6 @@ public class SlimeManager : Singleton<SlimeManager>
         foreach (SlimeController view in cellViews)
         {
             view.SetHintHighlight(false);
-        }
-    }
-
-    public void MixSlimes()
-    {
-        if (cellViews == null) return;
-
-        List<BoardSlime> slimes = new List<BoardSlime>();
-        List<int> numbers = new List<int>();
-
-        for (int cell = 0; cell < GameRules.CellCount; cell++)
-        {
-            BoardSlime slime = board.GetSlimeAt(cell);
-            if (slime != null && slime.Anchor == cell)
-            {
-                slimes.Add(slime);
-                numbers.Add(slime.Number);
-            }
-        }
-
-        GameManager.Instance.SkillRandom.Shuffle(numbers);
-
-        for (int i = 0; i < slimes.Count; i++)
-        {
-            board.SetNumber(slimes[i], numbers[i]);
         }
     }
 

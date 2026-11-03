@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +9,18 @@ public sealed class AudioVolumeSlider : MonoBehaviour
 {
     public enum VolumeChannel { Master, BGM, SFX }
     [SerializeField] private VolumeChannel channel = VolumeChannel.Master;
+    [Tooltip("선택 사항. 볼륨을 0 ~ 100 숫자로 보여 줄 글자")]
+    [SerializeField] private TMP_Text valueText;
     private Slider slider;
     private SoundManager soundManager;
 
-    public static void Bind(Slider target, VolumeChannel targetChannel)
+    public static void Bind(Slider target, VolumeChannel targetChannel, TMP_Text targetValueText = null)
     {
         if (target == null) return;
         AudioVolumeSlider binding = target.GetComponent<AudioVolumeSlider>();
         if (binding == null) binding = target.gameObject.AddComponent<AudioVolumeSlider>();
         binding.channel = targetChannel;
+        if (targetValueText != null) binding.valueText = targetValueText;
         if (binding.soundManager != null) binding.RefreshValue();
     }
 
@@ -46,10 +50,17 @@ public sealed class AudioVolumeSlider : MonoBehaviour
             _ => soundManager.MasterVolume
         };
         slider.SetValueWithoutNotify(value);
+        ShowValue(value);
+    }
+
+    private void ShowValue(float value)
+    {
+        if (valueText != null) valueText.text = Mathf.RoundToInt(value * 100f).ToString();
     }
 
     private void ChangeVolume(float value)
     {
+        ShowValue(value);
         if (soundManager == null) return;
         switch (channel)
         {
