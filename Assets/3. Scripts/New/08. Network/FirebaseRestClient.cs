@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 // Firebase를 SDK 없이 REST(HTTP 요청)로 씀. Windows용 SDK가 베타라서 (기획 [3]).
-// 하는 일: 익명 로그인과 토큰 갱신, 읽기·쓰기, 조건부 쓰기(트랜잭션), 실시간 수신(SSE), 서버 시각 맞추기.
+// 하는 일: 이메일 회원가입·로그인과 토큰 갱신, 읽기·쓰기, 조건부 쓰기(트랜잭션), 실시간 수신(SSE), 서버 시각 맞추기.
 // UnityWebRequest는 메인 스레드에서 끝나므로 모든 콜백도 메인 스레드에서 옴.
 //
-// 읽는 순서: SignInAnonymously(로그인) → Get/Put/Patch/Post(쓰기·읽기) → Transaction(동시에 써도 안전한 쓰기)
+// 읽는 순서: SignUpWithEmail·SignInWithEmail(로그인) → Get/Put/Patch/Post(쓰기·읽기) → Transaction(동시에 써도 안전한 쓰기)
 //           → Listen(실시간 수신) → SyncServerTime(서버 시각)
 public sealed class FirebaseRestClient
 {
@@ -48,20 +48,62 @@ public sealed class FirebaseRestClient
                                        && r.result != UnityWebRequest.Result.DataProcessingError));
     }
 
-    // 익명 로그인. 성공하면 Uid와 토큰(1시간짜리)을 받음.
-    public void SignInAnonymously(Action<bool> onDone)
+    // 이메일 회원가입. 성공하면 Uid와 토큰(1시간짜리)을 받음. 실패하면 onDone(false, 사유 코드). 코드 예: EMAIL_EXISTS, INVALID_EMAIL, WEAK_PASSWORD
+    public void SignUpWithEmail(string email, string password, Action<bool, string> onDone)
     {
-        string url = $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={apiKey}";
-        UnityWebRequest request = NewRequest(url, "POST", "{\"returnSecureToken\":true}");
-        Send(request, r =>
-        {
-            if (!Succeeded(r, "익명 로그인")) { onDone?.Invoke(false); return; }
+        Authenticate("accounts:signUp", EmailBody(email, password), onDone);
+    }
 
-            object body = Json.Parse(r.downloadHandler.text);
-            Uid = FirebaseData.Str(body, "localId");
-            SetTokens(FirebaseData.Str(body, "idToken"), FirebaseData.Str(body, "refreshToken"), FirebaseData.Str(body, "expiresIn"));
-            onDone?.Invoke(true);
+    // 이메일 로그인. 코드 예: INVALID_LOGIN_CREDENTIALS(이메일·비밀번호가 틀림), USER_DISABLED
+    public void SignInWithEmail(string email, string password, Action<bool, string> onDone)
+    {
+        Authenticate("accounts:signInWithPassword", EmailBody(email, password), onDone);
+    }
+
+    private void Authenticate(string action, string body, Action<bool, string> onDone)
+    {
+        string url = $"https://identitytoolkit.googleapis.com/v1/{action}?key={apiKey}";
+        Send(NewRequest(url, "POST", body), r =>
+        {
+            if (r.result != UnityWebRequest.Result.Success)
+            {
+                string code = AuthErrorCode(r);
+                Debug.LogWarning($"Firebase 로그인 실패 ({r.responseCode}): {code}");
+                onDone?.Invoke(false, code);
+                return;
+            }
+
+            object response = Json.Parse(r.downloadHandler.text);
+            Uid = FirebaseData.Str(response, "localId");
+            SetTokens(FirebaseData.Str(response, "idToken"), FirebaseData.Str(response, "refreshToken"), FirebaseData.Str(response, "expiresIn"));
+            onDone?.Invoke(true, null);
         });
+    }
+
+    private static string EmailBody(string email, string password)
+    {
+        return Json.Serialize(new Dictionary<string, object>
+        {
+            { "email", email },
+            { "password", password },
+            { "returnSecureToken", true }
+        });
+    }
+
+    // 응답 {"error":{"message":"WEAK_PASSWORD : Password should be ..."}} 에서 앞의 코드만
+    private static string AuthErrorCode(UnityWebRequest request)
+    {
+        if (request.result == UnityWebRequest.Result.ConnectionError) return "NETWORK_ERROR";
+        try
+        {
+            string message = FirebaseData.Str(FirebaseData.Get(Json.Parse(request.downloadHandler.text), "error"), "message");
+            int space = message.IndexOf(' ');
+            return space > 0 ? message.Substring(0, space) : message;
+        }
+        catch (FormatException)
+        {
+            return "UNKNOWN";
+        }
     }
 
     // 토큰이 끝나기 전에 새 토큰을 받음. 실시간 수신은 새 토큰으로 다시 연결해야 함.

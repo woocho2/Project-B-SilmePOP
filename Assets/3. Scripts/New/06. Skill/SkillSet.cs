@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-// 참가자 한 명의 스킬 6종과 남은 횟수. 사람(SkillManager)과 AI(AiPlayer)가 같이 씀. 판마다 새로 만듦.
+// 참가자 한 명의 스킬과 남은 횟수. 사람(SkillManager)과 AI(AiPlayer)가 같이 씀. 판마다 새로 만듦.
 // 스킬마다 경기 시드로 만든 난수를 따로 둠 → 모든 참가자가 같은 스킬을 같은 순서로 쓰면 같은 결과.
+// available을 주면 그 스킬만 쓸 수 있음 (판마다 뽑은 3개). 나머지는 횟수 0.
 public sealed class SkillSet
 {
     public static readonly SkillType[] All =
@@ -17,15 +18,28 @@ public sealed class SkillSet
     private readonly Dictionary<SkillType, int> usesLeft = new Dictionary<SkillType, int>();
     private readonly Dictionary<SkillType, GameRandom> randoms = new Dictionary<SkillType, GameRandom>();
 
-    public SkillSet(int matchSeed)
+    public SkillSet(int matchSeed, IReadOnlyList<SkillType> available = null)
     {
+        Available = available ?? All;
         foreach (SkillType type in All)
         {
             SkillBase skill = Create(type);
             skills[type] = skill;
-            usesLeft[type] = skill.MaxUses;
+            usesLeft[type] = Contains(Available, type) ? skill.MaxUses : 0;
             randoms[type] = new GameRandom(unchecked(matchSeed * 31 + (int)type));
         }
+    }
+
+    // 이번 판에 쓸 수 있는 스킬 (순서 = 단축키 순서)
+    public IReadOnlyList<SkillType> Available { get; }
+
+    private static bool Contains(IReadOnlyList<SkillType> list, SkillType type)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == type) return true;
+        }
+        return false;
     }
 
     public SkillBase Get(SkillType type) => skills[type];

@@ -6,7 +6,7 @@ public class LocalNetworkServiceTest
     private static LocalNetworkService SignedIn()
     {
         LocalNetworkService service = new LocalNetworkService();
-        service.SignIn("슬라임", null);
+        service.SignUpWithEmail("slime@test.com", "123456", "슬라임", null);
         return service;
     }
 
@@ -21,51 +21,47 @@ public class LocalNetworkServiceTest
     }
 
     [Test]
-    public void SignIn_RejectsBlankNickname()
+    public void SignUp_RejectsBlankNickname()
     {
         LocalNetworkService service = new LocalNetworkService();
         string error = null;
         UserInfo user = new UserInfo();
         service.ErrorOccurred += message => error = message;
 
-        service.SignIn("   ", result => user = result);
+        service.SignUpWithEmail("slime@test.com", "123456", "   ", result => user = result);
 
         Assert.IsNull(user);
-        Assert.IsNotNull(error);
+        Assert.AreEqual("닉네임을 입력하세요.", error);
+    }
+
+    [TestCase("말랑슬라임", null)]
+    [TestCase("전설의청록색슬라임", null)]
+    [TestCase("", "닉네임을 입력하세요.")]
+    [TestCase("a", "닉네임은 2~12자로 입력하세요.")]
+    [TestCase("1234567890123", "닉네임은 2~12자로 입력하세요.")]
+    [TestCase("말랑 슬라임", "닉네임에 공백이나 #은 쓸 수 없습니다.")]
+    [TestCase("슬라임#1", "닉네임에 공백이나 #은 쓸 수 없습니다.")]
+    public void CheckNickname_GivesReason(string nickname, string reason)
+    {
+        Assert.AreEqual(reason, GameRules.CheckNickname(nickname));
     }
 
     [Test]
-    public void DisplayName_ShowsGuestNumberInFourDigits()
+    public void DisplayName_ShowsAccountNumberInFourDigits()
     {
         Assert.AreEqual("슬라임#0012", new UserInfo("uid-1", "슬라임", 12).DisplayName);
     }
 
     [Test]
-    public void SignIn_UsesReservedNumber_EvenIfReservedTwice()
-    {
-        LocalNetworkService service = new LocalNetworkService();
-        int first = 0;
-        int second = 0;
-        UserInfo user = null;
-
-        service.ReserveGuestNumber(number => first = number);
-        service.ReserveGuestNumber(number => second = number);
-        service.SignIn("슬라임", result => user = result);
-
-        Assert.AreEqual(first, second);
-        Assert.AreEqual(first, user.guestNumber);
-    }
-
-    [Test]
-    public void NextGuest_GetsNextNumber()
+    public void SignUp_NumbersAccountsInOrder()
     {
         LocalNetworkService service = new LocalNetworkService();
         UserInfo first = null;
         UserInfo second = null;
 
-        service.SignIn("하나", result => first = result);
+        service.SignUpWithEmail("one@test.com", "123456", "하나", result => first = result);
         service.SignOut();
-        service.SignIn("둘", result => second = result);
+        service.SignUpWithEmail("two@test.com", "123456", "둘", result => second = result);
 
         Assert.AreEqual(1, first.guestNumber);
         Assert.AreEqual(2, second.guestNumber);
@@ -133,6 +129,56 @@ public class LocalNetworkServiceTest
         StringAssert.EndsWith("슬라임", name);
         Assert.AreEqual(name, room.slots[1].displayName);
         Assert.AreEqual(AiDifficulty.Hell, room.slots[1].difficulty);
+    }
+
+    [Test]
+    public void Email_SignUpThenLoginAgain_KeepsNicknameAndNumber()
+    {
+        LocalNetworkService service = new LocalNetworkService();
+        UserInfo first = null;
+        UserInfo again = null;
+
+        service.SignUpWithEmail("slime@test.com", "123456", "말랑슬라임", result => first = result);
+        service.SignOut();
+        service.SignInWithEmail("slime@test.com", "123456", result => again = result);
+
+        Assert.IsNotNull(first);
+        Assert.AreEqual(first.uid, again.uid);
+        Assert.AreEqual(first.DisplayName, again.DisplayName);
+    }
+
+    [TestCase("slime@test.com", "654321", "이메일 또는 비밀번호가 맞지 않습니다.")]
+    [TestCase("nobody@test.com", "123456", "이메일 또는 비밀번호가 맞지 않습니다.")]
+    [TestCase("not-an-email", "123456", "이메일 형식이 올바르지 않습니다.")]
+    [TestCase("slime@test.com", "", "비밀번호를 입력하세요.")]
+    public void Email_LoginFailure_GivesReason(string email, string password, string reason)
+    {
+        LocalNetworkService service = new LocalNetworkService();
+        service.SignUpWithEmail("slime@test.com", "123456", "말랑슬라임", null);
+        service.SignOut();
+        string error = null;
+        UserInfo user = new UserInfo();
+        service.ErrorOccurred += message => error = message;
+
+        service.SignInWithEmail(email, password, result => user = result);
+
+        Assert.IsNull(user);
+        Assert.AreEqual(reason, error);
+    }
+
+    [Test]
+    public void Email_SignUpRejectsDuplicateAndShortPassword()
+    {
+        LocalNetworkService service = new LocalNetworkService();
+        List<string> errors = new List<string>();
+        service.ErrorOccurred += errors.Add;
+        service.SignUpWithEmail("slime@test.com", "123456", "하나", null);
+        service.SignOut();
+
+        service.SignUpWithEmail("slime@test.com", "123456", "둘", null);
+        service.SignUpWithEmail("new@test.com", "123", "셋", null);
+
+        CollectionAssert.AreEqual(new[] { "이미 가입된 이메일입니다.", "비밀번호는 6자 이상이어야 합니다." }, errors);
     }
 
     [Test]

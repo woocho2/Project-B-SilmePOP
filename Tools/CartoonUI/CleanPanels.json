@@ -1,0 +1,23 @@
+{
+  "changes": "Replaced defective scanline infill with clean solid geometric panel faces. Preserve each existing PNG's canvas dimensions and paper/cover inset relationship.",
+  "metaActions": "None",
+  "validation": "No Unity execution, import, compilation, tests or output validation performed.",
+  "assets": [
+    {
+      "key": "sketchbook_paper",
+      "path": "Sketchbook_Paper_White.png",
+      "source": "Tools/CartoonUI/Sketchbook_Paper_Clean.svg",
+      "mode": "vector-authored UI panel exported to PNG",
+      "processing": "CleanSketchbookPanels.cs draws continuous opaque white rounded paper faces and narrow gray page edges. The previous alpha-row infill was removed.",
+      "savedPath": "Assets/4. SlimeAsset/Sketchbook_Paper_White.png"
+    },
+    {
+      "key": "sketchbook_cover",
+      "path": "Sketchbook_Cover_Tintable.png",
+      "source": "Tools/CartoonUI/Sketchbook_Cover_Clean.svg",
+      "mode": "vector-authored UI panel exported to PNG",
+      "processing": "CleanSketchbookPanels.cs draws a continuous opaque neutral-white/gray rounded cover slab with lower thickness. Only the outside silhouette is transparent.",
+      "savedPath": "Assets/4. SlimeAsset/Sketchbook_Cover_Tintable.png"
+    }
+  ]
+}

@@ -45,6 +45,11 @@ public sealed class PastelColorPicker : MonoBehaviour
     private bool isOpen;
     private Color pendingColor;
 
+    private int closedFrame = -1;
+
+    // 떠 있거나 이번 프레임에 닫힘 (배경을 눌러 닫은 그 클릭이 옵션 창까지 닫지 않게)
+    public bool IsOpen => isOpen || closedFrame == Time.frameCount;
+
     private void Awake()
     {
         paperScale = paper != null ? paper.localScale : Vector3.one;
@@ -143,6 +148,7 @@ public sealed class PastelColorPicker : MonoBehaviour
         if (!isOpen) return;
         SoundManager.Play(SoundEffect.Click);
         isOpen = false;
+        closedFrame = Time.frameCount;
         RefreshSelection(ChangeData.SelectedColor);
         popupTween?.Kill();
         if (popupCanvas != null) popupCanvas.interactable = false;

@@ -9,7 +9,7 @@ public class QuitPopup : MonoBehaviour
 
     private void Awake()
     {
-        UIButtons.Bind(btn_no, () => gameObject.SetActive(false));
+        UIButtons.Bind(btn_no, () => PanelTransition.Hide(gameObject));
         UIButtons.Bind(btn_yes, QuitGame);
     }
 

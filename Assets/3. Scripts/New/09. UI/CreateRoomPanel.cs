@@ -16,7 +16,7 @@ public class CreateRoomPanel : MonoBehaviour
     private void Awake()
     {
         UIButtons.Bind(btn_createRoomConfirm, SubmitCreateRoom);
-        UIButtons.Bind(btn_createRoomClose, () => UIManager_Menu.Instance.ShowMainMenu());
+        UIButtons.Bind(btn_createRoomClose, () => UIManager_Lobby.Instance.ShowMainMenu());
         if (input_roomName != null) input_roomName.onValueChanged.AddListener(_ => UpdateCreateButton());
 
         foreach (Toggle toggle in toggles_maxPlayers)
@@ -94,7 +94,7 @@ public class CreateRoomPanel : MonoBehaviour
         {
             if (this == null) return;   // 응답이 오기 전에 씬이 바뀜
             UpdateCreateButton();
-            if (room != null) UIManager_Menu.Instance.ShowLobby();   // 실패 사유는 NetworkManager.ErrorOccurred로 옴
+            if (room != null) UIManager_Lobby.Instance.GoToRoomScene();   // 실패 사유는 NetworkManager.ErrorOccurred로 옴
         });
     }
 }

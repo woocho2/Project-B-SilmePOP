@@ -1,0 +1,32 @@
+{
+  "mode": "built-in image_gen",
+  "changes": "Merge icon vertical space minimized; checkbox and tintable paint main faces redrawn as opaque solid surfaces.",
+  "metaActions": "None",
+  "validation": "Not run, as requested",
+  "assets": [
+    {
+      "key": "merge",
+      "path": "UI_Icon_Item_Merge.png",
+      "prompt": "Precise-object-edit. Redesign the supplied merge skill icon to REMOVE its excessive TOP and BOTTOM TRANSPARENT STRIPS. Keep its same clean cartoon style, dark-indigo outline, ivory twin smiling slime forms merging at the center, and exactly TWO inward-curved gold arrows above them. Required final canvas: SQUARE1254x1254. The OUTERMOST TOP of the gold arrows must reach y0..1% of canvas, the BOTTOM of the slime bodies must reach y99..100%, and the combined left/right bodies should reach x0..1% and x99..100%. Compose the artwork to occupy essentially ALL of the square height. The current small squat graphic centered between large invisible top/bottom bars is the defect; do NOT reproduce that composition. Draw the two slime masses naturally a little TALLER and the gold arrows in higher round arches to use the vertical space, still appealing and rounded rather than mechanically stretched. Bring the gold arrow heads close to the central merging join. Maintain two simple cute faces, smooth opaque ivory bodies with subtle lavender lower cel shade and small white upper shine. NO new frame, badge, enclosing square, text, shadow or decorative fillers just to occupy space. True transparent alpha only outside the combined icon silhouettes, all slime surfaces fully opaque with no internal holes. No crayon grain, photorealism or surrounding scene.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-3c12396a-2daf-4494-9cac-edffc83e0318.png",
+      "mode": "built-in image_gen",
+      "savedPath": "Assets/4. SlimeAsset/UI_Icon_Item_Merge.png"
+    },
+    {
+      "key": "checkbox",
+      "path": "UI_Icon_Checkbox.png",
+      "prompt": "Precise-object-edit: repair the supplied cartoon CHECKBOX TILE by replacing the defective see-through and smudgy center with SOLID OPAQUE WARM IVORY. Keep its existing dark-indigo rounded-square outline, peach lower depth lip, rounded corner shape and small upper-left shine. The checkbox is a SOLID FILLED TILE, not a picture frame or hollow window. EVERY PIXEL INSIDE THE DARK OUTLINE MUST HAVE FULL OPACITY. Center fill must be smooth uniform warm pale cream (#FFE4B8), no central black/gray smudge, no alpha gradient, hole, transparent vignette, checker pattern or faded area. Do not leave the middle blank in the sense of transparency: it is visibly PAINTED SOLID IVORY. No checkmark or other symbol inside. SQUARE1254x1254, outer rounded-square border reaches all four canvas edges with at most1% empty margin. True transparency ONLY in the OUTSIDE corner cutouts beyond the rounded square. Everything INSIDE is completely solid including highlights and shading. Preserve clean casual mobile game cartoon finish; no text, grain, shadow outside the object or added controls.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-a1a93fea-efaa-49e7-8ae0-b27c9e486003.png",
+      "mode": "built-in image_gen",
+      "savedPath": "Assets/4. SlimeAsset/UI_Icon_Checkbox.png"
+    },
+    {
+      "key": "paint",
+      "path": "UI_Palette_Paint_White.png",
+      "prompt": "Precise-object-edit: repair the supplied tintable WHITE CARTOON COLOR SWATCH. Replace the ENTIRE defective semi-transparent/gray cloudy CENTER with a FULLY OPAQUE CLEAN WHITE SOLID FACE. The paint swatch should be one smooth solid white rounded organic blob, like an opaque white jelly/pigment button, with a thin neutral-gray outer contour, one simple light-gray lower-edge cel-shade band and a modest white upper-left shine. Do NOT include any center shading cloud: the whole upper/main face is an even near-white opaque surface. EVERY pixel within the silhouette must be FULLY OPAQUE (alpha255), no partially transparent centers, holes, fuzzy fade, central gray patch, checker pattern or alpha gradients anywhere inside. Use neutral grayscale only (white/very light gray face, simple gray lower rim), as this image will be tinted in Unity to make pastel color choices. True transparent alpha ONLY OUTSIDE the complete solid blob. SQUARE1254x1254, redraw plump rounded organic blob to fill98-100% of BOTH width and height so it nearly touches all four canvas edges, minimal outer margin, full silhouette visible. Keep clean mobile-game cartoon style and smooth color fields, no crayon/brush grain, no realism, no face, labels, check, separate shadow or other objects.",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-dbb7c926-a606-4aab-b525-ead1dacd00b2.png",
+      "mode": "built-in image_gen",
+      "savedPath": "Assets/4. SlimeAsset/UI_Palette_Paint_White.png"
+    }
+  ]
+}

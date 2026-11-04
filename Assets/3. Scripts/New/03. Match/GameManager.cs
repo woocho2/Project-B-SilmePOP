@@ -35,7 +35,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        // 씬에 SkillManager를 놓지 않았어도 단축키(1 ~ 6)로 스킬을 쓸 수 있게 만들어 둠 (버튼은 씬에 놓고 연결해야 보임)
+        // 씬에 SkillManager를 놓지 않았어도 아이템 3칸(A, S, D)을 쓸 수 있게 만들어 둠 (칸은 이름 Skill_item1 ~ 3으로 찾음)
         if (SkillManager.Instance == null) new GameObject(nameof(SkillManager)).AddComponent<SkillManager>();
 
         // The UI starts the countdown after its own initialization.
@@ -213,7 +213,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         if (UIManager_Game.Instance != null && UIManager_Game.Instance.isActiveAndEnabled)
-            UIManager_Game.Instance.BeginStartCountdown();
+            UIManager_Game.Instance.BeginMatch();
         else
             StartGameTimer();
     }

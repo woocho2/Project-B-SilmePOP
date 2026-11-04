@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <path id="body" d="M512 12 C802 12 1012 216 1012 580 C1012 810 978 932 878 976 C790 1012 654 1012 512 1012 C370 1012 234 1012 146 976 C46 932 12 810 12 580 C12 216 222 12 512 12 Z"/>
+    <clipPath id="bodyClip"><use href="#body"/></clipPath>
+  </defs>
+  <use href="#body" fill="#f4f4f4"/>
+  <g clip-path="url(#bodyClip)">
+    <path d="M0 760 C130 865 300 900 512 900 C724 900 894 865 1024 760 L1024 1100 L0 1100 Z" fill="#d8d8d8"/>
+    <ellipse cx="255" cy="245" rx="90" ry="29" transform="rotate(-40 255 245)" fill="#fff"/>
+    <circle cx="400" cy="116" r="19" fill="#fff"/>
+  </g>
+  <use href="#body" fill="none" stroke="#242424" stroke-width="24" stroke-linejoin="round"/>
+</svg>

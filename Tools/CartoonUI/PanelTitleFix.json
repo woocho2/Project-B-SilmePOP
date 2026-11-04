@@ -1,0 +1,59 @@
+{
+  "changes": "Repair sketchbook paper/cover and Create button interiors; center title glyphs in a 4x2 atlas. Title padding is intentionally retained.",
+  "metaActions": "None",
+  "validation": "Not run, per user request",
+  "assets": [
+    {
+      "key": "sketchbook_paper",
+      "path": "Sketchbook_Paper_White.png",
+      "source": "Tools/CartoonUI/BeforePanelTitleFix/Sketchbook_Paper_White.png",
+      "mode": "native alpha repair",
+      "processing": "Tools/CartoonUI/RepairSolidPanels.cs fills the convex slab interior opaque white while preserving outer silhouette and opaque original artwork.",
+      "savedPath": "Assets/4. SlimeAsset/Sketchbook_Paper_White.png"
+    },
+    {
+      "key": "sketchbook_cover",
+      "path": "Sketchbook_Cover_Tintable.png",
+      "source": "Tools/CartoonUI/BeforePanelTitleFix/Sketchbook_Cover_Tintable.png",
+      "mode": "native alpha repair",
+      "processing": "Tools/CartoonUI/RepairSolidPanels.cs fills the convex slab interior opaque white, keeping the original neutral-gray rim and outer transparency.",
+      "savedPath": "Assets/4. SlimeAsset/Sketchbook_Cover_Tintable.png"
+    },
+    {
+      "key": "create_room_button",
+      "path": "UI_Button_Crayon_CreateRoom_Pink.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-134a86c9-c8a1-40bb-be39-4c12078be4b5.png",
+      "mode": "built-in image_gen",
+      "prompt": "Precise-object-edit: repair the supplied PINK CREATE ROOM BUTTON. Preserve its wide3:1 rounded-rectangle silhouette, thick dark-indigo outer outline, small white upper-left shine and deeper-pink lower extrusion. Fill the WHOLE defective transparent/smudgy middle with SOLID OPAQUE BRIGHT CORAL-PINK (#F45B88), a continuous smooth pink face. EVERY PIXEL INSIDE THE OUTER BUTTON SHAPE must have FULL OPACITY(alpha255), no internal holes, central dark smudge, see-through strip, alpha vignette or gradients in transparency. Color shading can be subtle opaque lighter pink near upper edge, darker pink at lower lip, but the large middle is uninterrupted opaque pink pigment. This is a filled button slab NOT an empty frame. True transparent alpha ONLY outside the full button silhouette at its rounded-corner cutouts. Keep outer borders touching/nearly touching canvas edges with minimal outside margin, no cropping off contours. Do not put any words, letters, title, icons, crayon texture or extra objects on the face. Same clean polished casual cartoon mobile UI style.",
+      "savedPath": "Assets/4. SlimeAsset/UI_Button_Crayon_CreateRoom_Pink.png"
+    },
+    {
+      "key": "title_letters",
+      "path": "SlimePop_TitleLetters.png",
+      "source": "Tools/CartoonUI/BeforePanelTitleFix/SlimePop_TitleLetters.png",
+      "mode": "sprite atlas packing, existing artwork preserved",
+      "processing": "Tools/CartoonUI/CenterTitleAtlas.cs places existing glyph artwork at the center of each tile without rescaling or repainting glyph pixels.",
+      "layout": {
+        "width": 2048,
+        "height": 1024,
+        "columns": 4,
+        "rows": 2,
+        "cellWidth": 512,
+        "cellHeight": 512,
+        "topRow": [
+          "S",
+          "L",
+          "I",
+          "M"
+        ],
+        "bottomRow": [
+          "E",
+          "P",
+          "O",
+          "!"
+        ]
+      },
+      "savedPath": "Assets/4. SlimeAsset/SlimePop_TitleLetters.png"
+    }
+  ]
+}

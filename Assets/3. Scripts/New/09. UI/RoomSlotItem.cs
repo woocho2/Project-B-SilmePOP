@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 대기실의 자리 카드 하나. RobbyPanel이 자리 정보를 넘겨 주면 그리기만 하고,
+// 대기실의 자리 카드 하나. RoomPanel이 자리 정보를 넘겨 주면 그리기만 하고,
 // 방장이 AI 토글이나 난이도를 바꾸면 이벤트로 알림 (실제 변경은 서버를 거쳐 다시 그려짐).
 public class RoomSlotItem : MonoBehaviour
 {
@@ -22,10 +22,23 @@ public class RoomSlotItem : MonoBehaviour
 
     private int slot;
     private SlimeTint tint;
+    private bool initialized;
 
     private void Awake()
     {
+        Init();
+    }
+
+    // RoomPanel이 이 카드의 Awake보다 먼저 Show를 부를 수 있어서(Unity는 오브젝트끼리 Awake 순서를 보장하지 않음)
+    // Show에서도 부름. 한 번만 함.
+    private void Init()
+    {
+        if (initialized) return;
+        initialized = true;
+
         FindMissingParts();
+        // 슬라임 안의 Base(몸통)를 연결했으면 슬라임 전체(부모)를 끄고 켬. 몸통만 끄면 눈(Deco)이 남음
+        if (slime != null && slime.name == "Base" && slime.transform.parent != null) slime = slime.transform.parent.gameObject;
         tint = new SlimeTint(slime);
 
         if (dropdown_Difficulty != null)
@@ -44,6 +57,7 @@ public class RoomSlotItem : MonoBehaviour
     // isOpen: 방의 최대 인원 안의 자리인가. 닫힌 자리는 카드를 숨김.
     public void Show(int slotIndex, SlotInfo info, bool isOpen, bool isHost)
     {
+        Init();
         slot = slotIndex;
         gameObject.SetActive(isOpen);
         if (!isOpen) return;

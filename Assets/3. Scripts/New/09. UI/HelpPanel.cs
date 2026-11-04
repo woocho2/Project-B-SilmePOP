@@ -8,6 +8,6 @@ public class HelpPanel : MonoBehaviour
 
     private void Awake()
     {
-        UIButtons.Bind(btn_helpBack, () => UIManager_Menu.Instance.CloseSubPanel());
+        UIButtons.Bind(btn_helpBack, () => UIManager_Lobby.Instance.CloseSubPanel());
     }
 }

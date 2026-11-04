@@ -5,6 +5,13 @@
       ".write": "auth != null",
       ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
     },
+    "profiles": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        "nickname": { ".validate": "newData.isString() && newData.val().length <= 30" }
+      }
+    },
     "users": {
       ".read": "auth != null",
       "$uid": {

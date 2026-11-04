@@ -14,6 +14,7 @@ public static class GameRules
     public const float StartDelay = 5f;          // 방장이 시작을 누른 뒤 대기실에서 5, 4, 3, 2, 1을 세고 게임 씬으로 넘어감
     public const float LoadTimeout = 15f;        // 게임 씬에서 이만큼 기다려도 안 온 사람이 있으면 온 사람끼리 시작
     public const float CountdownLead = 1f;       // 모두 모인 뒤 3, 2, 1을 시작하기까지 (시작 시각이 모두에게 전해질 시간)
+    public const int SkillsPerMatch = 3;         // 6종 중 판마다 뽑는 아이템 수 (모두 같은 3개)
     public const int MinTargetSum = 10;
     public const int MaxTargetSum = 15;          // 10 ~ 15 (둘 다 포함)
 
@@ -73,7 +74,24 @@ public static class GameRules
     public const int ChatMaxLength = 100;
     public const float ChatCooldown = 1f;        // 도배 방지: 1초에 1번
 
-    // 기본 닉네임 = 성격 + 색깔 + 슬라임. 로그인 창의 기본 닉네임과 AI 이름에 씀.
+    // 닉네임 규칙: 2~12자, 공백과 #은 안 됨 (#은 "닉네임#0001"의 구분 기호)
+    public const int NicknameMinLength = 2;
+    public const int NicknameMaxLength = 12;
+
+    // 틀리면 이유, 맞으면 null
+    public static string CheckNickname(string nickname)
+    {
+        if (string.IsNullOrEmpty(nickname)) return "닉네임을 입력하세요.";
+        if (nickname.Length < NicknameMinLength || nickname.Length > NicknameMaxLength)
+            return $"닉네임은 {NicknameMinLength}~{NicknameMaxLength}자로 입력하세요.";
+        foreach (char c in nickname)
+        {
+            if (char.IsWhiteSpace(c) || c == '#') return "닉네임에 공백이나 #은 쓸 수 없습니다.";
+        }
+        return null;
+    }
+
+    // 기본 닉네임 = 성격 + 색깔 + 슬라임. 닉네임 창의 기본 닉네임과 AI 이름에 씀.
     public static string RandomNickname(System.Random random)
     {
         return NicknamePersonalities[random.Next(NicknamePersonalities.Length)]

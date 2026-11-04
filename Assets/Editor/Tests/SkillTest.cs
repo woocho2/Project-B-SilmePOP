@@ -130,4 +130,42 @@ public class SkillTest
 
         CollectionAssert.AreEqual(RunOnce(), RunOnce());
     }
+
+    [Test]
+    public void MatchSkills_SameSeedSameThree_AllDifferent()
+    {
+        for (int seed = -50; seed < 50; seed++)
+        {
+            MatchSettings a = new MatchSettings(seed, 10, 0, 2);
+            MatchSettings b = new MatchSettings(seed, 15, 123, 4);   // 목표 합·시각이 달라도 아이템은 seed로만
+
+            CollectionAssert.AreEqual(a.Skills, b.Skills);
+            Assert.AreEqual(GameRules.SkillsPerMatch, a.Skills.Count);
+            CollectionAssert.AllItemsAreUnique(a.Skills);
+            CollectionAssert.DoesNotContain(a.Skills, SkillType.None);
+        }
+    }
+
+    [Test]
+    public void MatchSkills_DifferentSeeds_GiveDifferentPicks()
+    {
+        HashSet<string> seen = new HashSet<string>();
+        for (int seed = 0; seed < 200; seed++) seen.Add(string.Join(",", MatchSettings.PickSkills(seed)));
+
+        Assert.Greater(seen.Count, 20);   // 늘 같은 3개가 나오지 않음
+    }
+
+    [Test]
+    public void SkillSet_OnlyPickedSkillsHaveUses()
+    {
+        SkillType[] picked = { SkillType.Joker, SkillType.Destroy, SkillType.Merge };
+        SkillSet skills = new SkillSet(7, picked);
+
+        CollectionAssert.AreEqual(picked, skills.Available);
+        foreach (SkillType type in SkillSet.All)
+        {
+            bool isPicked = System.Array.IndexOf(picked, type) >= 0;
+            Assert.AreEqual(isPicked, skills.UsesLeft(type) > 0, type.ToString());
+        }
+    }
 }

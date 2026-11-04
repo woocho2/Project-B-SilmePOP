@@ -8,8 +8,28 @@ TextureImporter:
     mipMapMode: 0
     enableMipMap: 0
     sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
   textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
@@ -21,6 +41,7 @@ TextureImporter:
     wrapV: 1
     wrapW: 1
   nPOTScale: 0
+  lightmap: 0
   compressionQuality: 100
   spriteMode: 2
   spriteExtrude: 1
@@ -32,8 +53,19 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
@@ -43,206 +75,255 @@ TextureImporter:
     textureCompression: 0
     compressionQuality: 100
     crunchedCompression: 0
+    allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 100
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Title_S
+      name: SlimePop_TitleLetters_0
       rect:
         serializedVersion: 2
-        x: 83
-        y: 453
-        width: 325
-        height: 382
+        x: 0
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e4ce31e32e8941709ea089c22ac11dd9
-      internalID: 21300001
+      spriteID: 6b3b7af675f1aa94fb05b15c83f9fc7b
+      internalID: -644664486
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_L
+      name: SlimePop_TitleLetters_1
       rect:
         serializedVersion: 2
-        x: 537
-        y: 457
-        width: 277
-        height: 383
+        x: 512
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6a611dffb33c42d1b7fa3e2bc504c82a
-      internalID: 21300002
+      spriteID: 77d0c2f615321fa44adefdd345434603
+      internalID: -586919062
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_I
+      name: SlimePop_TitleLetters_2
       rect:
         serializedVersion: 2
-        x: 951
-        y: 458
-        width: 299
-        height: 385
+        x: 1024
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a0456be353aa4c98afd898826d59b828
-      internalID: 21300003
+      spriteID: 351c1f2188c6dc24ab6b4c07680c81cb
+      internalID: 396928371
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_M
+      name: SlimePop_TitleLetters_3
       rect:
         serializedVersion: 2
-        x: 1356
-        y: 466
-        width: 361
-        height: 365
+        x: 1536
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 21af303180574c749d3c1511acd68bb6
-      internalID: 21300004
+      spriteID: ed28de0b821d17f408fa32388f9b9873
+      internalID: -62828058
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_E
+      name: SlimePop_TitleLetters_4
       rect:
         serializedVersion: 2
-        x: 99
-        y: 43
-        width: 299
-        height: 386
+        x: 0
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a103cb25aecc4eb3accfa26ab8e52fc1
-      internalID: 21300005
+      spriteID: 594f4781aff24a443831466c120f55aa
+      internalID: 2135790813
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_P
+      name: SlimePop_TitleLetters_5
       rect:
         serializedVersion: 2
-        x: 528
-        y: 48
-        width: 312
-        height: 387
+        x: 512
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9048e9929f56433a8130d248ce752a63
-      internalID: 21300006
+      spriteID: f1d9abba682c8e744a802af2e761b6b8
+      internalID: 243878095
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_O
+      name: SlimePop_TitleLetters_6
       rect:
         serializedVersion: 2
-        x: 932
-        y: 49
-        width: 353
-        height: 375
+        x: 1024
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dc4cef22aa0d43bcb70d7f11315f7fcb
-      internalID: 21300007
+      spriteID: 0c2296e3c94efae4381ceac28a1cc819
+      internalID: -187559605
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Title_Exclamation
+      name: SlimePop_TitleLetters_7
       rect:
         serializedVersion: 2
-        x: 1460
-        y: 38
-        width: 160
-        height: 396
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData:
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6264228b3d7347f98e6bbe71c6ed0f3e
-      internalID: 21300008
+      spriteID: 786bf23cebb162443bcd3b71998e723a
+      internalID: -42595853
       vertices: []
-      indices:
+      indices: 
       edges: []
       weights: []
     outline: []
-    customData:
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 88a96d18868643e1a3859a908f2c1a05
     internalID: 0
     vertices: []
-    indices:
+    indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":512.0,"y":512.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Title_S: 21300001
-      Title_L: 21300002
-      Title_I: 21300003
-      Title_M: 21300004
-      Title_E: 21300005
-      Title_P: 21300006
-      Title_O: 21300007
-      Title_Exclamation: 21300008
+      SlimePop_TitleLetters_0: -644664486
+      SlimePop_TitleLetters_1: -586919062
+      SlimePop_TitleLetters_2: 396928371
+      SlimePop_TitleLetters_3: -62828058
+      SlimePop_TitleLetters_4: 2135790813
+      SlimePop_TitleLetters_5: 243878095
+      SlimePop_TitleLetters_6: -187559605
+      SlimePop_TitleLetters_7: -42595853
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
   userData: Eight title glyphs, S L I M / E P O !, transparent 4x2 atlas.
-  assetBundleName:
-  assetBundleVariant:
+  assetBundleName: 
+  assetBundleVariant: 

@@ -19,8 +19,11 @@ public class DebugCheat : MonoBehaviour
     {
         if (Keyboard.current == null) return;
 
-        if (Keyboard.current.tKey.wasPressedThisFrame && UIManager_Start.Instance != null)
-            UIManager_Start.Instance.ReplayIntro();
+        if (Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            Login_TitlePanel title = FindAnyObjectByType<Login_TitlePanel>();   // 켜져 있는 타이틀만 찾음
+            if (title != null) title.ReplayIntro();
+        }
 
         if (GameManager.Instance == null || GameManager.Instance.Board == null) return;
 

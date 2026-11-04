@@ -24,11 +24,13 @@ public interface INetworkService
     // 서버에 닿는지 확인. 로그인 전에도 부를 수 있음.
     void CheckConnection(Action<bool> onDone);
 
-    // 로그인 창에 보여 줄 게스트 번호를 미리 받음. 로그인 전까지 다시 불러도 같은 번호. 실패하면 onDone(0).
-    void ReserveGuestNumber(Action<int> onDone);
+    // 이메일 회원가입: 계정을 만들고 닉네임·번호(가입 순서)를 계정에 저장한 뒤 바로 로그인함. 실패하면 onDone(null)과 ErrorOccurred.
+    void SignUpWithEmail(string email, string password, string nickname, Action<UserInfo> onDone);
 
-    // 로그인. 받아 둔 게스트 번호를 씀. 실패하면 onDone(null)과 ErrorOccurred.
-    void SignIn(string nickname, Action<UserInfo> onDone);
+    // 이메일 로그인: 저장된 닉네임·번호로 접속. 실패하면 onDone(null)과 ErrorOccurred(사람이 읽을 이유).
+    void SignInWithEmail(string email, string password, Action<UserInfo> onDone);
+
+    // 로그아웃: 방에서 나가고 접속을 끊음. Disconnected가 옴.
     void SignOut();
 
     // 방 만들기와 들어가기. 실패하면 onDone(null)과 ErrorOccurred.

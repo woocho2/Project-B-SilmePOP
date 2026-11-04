@@ -1,0 +1,9 @@
+{
+  "attemptedTool": "built-in image_gen",
+  "prompt": "Use case: precise-object-edit. Edit target: the supplied UI_Icon_Checkbox.png. Change ONLY the interior BACKGROUND COLOR of this EMPTY checkbox from warm yellow/ivory/peach to neutral WHITE. Keep its exact existing shape, proportions, thick dark-indigo rounded square border, exterior lavender lower rim, framing, corner curves and small upper-left shine. The large blank central interior must be fully OPAQUE white, never a transparent hole or gray transparency cloud. Neutral very pale gray is allowed only for the shallow lower bevel where the original was peach; remove all yellow/cream/peach tint from the interior. Do not add a checkmark: the red check is a separate sprite. Preserve transparency ONLY outside the rounded square. Do not add outer padding, text, objects, crayon texture, shadow or new decoration. Single square sprite 1254x1254, existing outer frame fills image bounds, no redesign, no sheet.",
+  "rejectedResult": "Generated white interior was incorrectly transparent; not saved as project asset.",
+  "finalMethod": "RecolorCheckboxWhite.cs changes original cream/peach pixels to white with a pale neutral-gray lower bevel, retaining each original alpha and other colors.",
+  "savedPath": "Assets/4. SlimeAsset/UI_Icon_Checkbox.png",
+  "metadata": "Untouched",
+  "validation": "Not performed at user request"
+}

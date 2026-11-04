@@ -6,20 +6,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-// 내 스킬 6종 (기획 [4-1]). 단축키 1 ~ 6 또는 버튼으로 고르고, 판 위에 적용 범위를 보여 준 뒤
-// 클릭으로 적용, ESC(또는 오른쪽 클릭)로 취소 (취소는 횟수를 쓰지 않음). 돋보기는 고르는 순간 바로 씀.
+// 이번 판의 아이템(스킬) 3칸 (기획 [4-1]). 6종 중 판마다 뽑힌 3개만 씀 (MatchSettings.Skills, 모두 같음).
+// 단축키 A, S, D 또는 칸 클릭으로 고르고, 판 위에 적용 범위를 보여 준 뒤 클릭으로 적용,
+// ESC(또는 오른쪽 클릭)로 취소 (취소는 횟수를 쓰지 않음). 돋보기는 고르는 순간 바로 씀.
+// 칸은 시작 전 아이템 뽑기(Game_ReadyPanel)가 하나씩 RevealSlot으로 채움. 뽑기가 없으면 시작할 때 한 번에 채움.
 // 채팅 입력 중에는 단축키를 막음. 규칙은 SkillSet(순수 C#)에 있고 여기는 입력과 표시만 함.
 public class SkillManager : Singleton<SkillManager>
 {
-    [Tooltip("스킬 버튼 6개. 순서: 돋보기, 파괴, 변신, 합체, 조커, 숫자변경 (= 단축키 1 ~ 6). 비워 둔 칸은 단축키로만 씀")]
-    [SerializeField] private Button[] skillButtons = new Button[6];
-    [Tooltip("선택 사항. 남은 횟수 글자 6개 (같은 순서). '남은/최대'로 보여 줌")]
-    [SerializeField] private TMP_Text[] usesTexts = new TMP_Text[6];
+    private const int SlotCount = GameRules.SkillsPerMatch;
+
+    [Tooltip("칸 그림 3개 (Skill_item1 ~ 3). 뽑힌 아이템 그림으로 바뀜. 비우면 이름으로 찾음")]
+    [SerializeField] private Image[] slotIcons = new Image[SlotCount];
+    [Tooltip("남은 횟수 글자 3개 (txt_item1 ~ 3). 비우면 이름으로 찾음")]
+    [SerializeField] private TMP_Text[] usesTexts = new TMP_Text[SlotCount];
     [SerializeField] private Color canApplyColor = new Color(0.2f, 1f, 0.2f, 0.9f);
     [SerializeField] private Color cannotApplyColor = new Color(1f, 0.2f, 0.2f, 0.9f);
+    [Tooltip("아직 안 뽑힌 칸의 색")]
+    [SerializeField] private Color hiddenSlotColor = new Color(1f, 1f, 1f, 0.15f);
 
-    private static readonly Key[] HotKeys = { Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6 };
-    private static readonly Key[] NumpadKeys = { Key.Numpad1, Key.Numpad2, Key.Numpad3, Key.Numpad4, Key.Numpad5, Key.Numpad6 };
+    private static readonly Key[] HotKeys = { Key.A, Key.S, Key.D };
 
     public SkillSet Skills { get; private set; }
     public SkillType Targeting { get; private set; } = SkillType.None;
@@ -31,6 +36,8 @@ public class SkillManager : Singleton<SkillManager>
 
     private int consumedClickFrame = -1;
     private bool wasPlaying;
+    private readonly bool[] revealed = new bool[SlotCount];
+    private readonly Button[] slotButtons = new Button[SlotCount];
     private readonly List<int> previewCells = new List<int>();
     private int previewCell = -1;
     private bool previewCanApply;
@@ -38,10 +45,22 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Start()
     {
-        for (int i = 0; i < skillButtons.Length && i < SkillSet.All.Length; i++)
+        FindMissingParts();
+        for (int i = 0; i < SlotCount; i++)
         {
-            SkillType type = SkillSet.All[i];
-            UIButtons.Bind(skillButtons[i], () => Select(type));
+            int slot = i;
+            if (slotIcons[i] == null) continue;
+
+            // 칸 그림을 누를 수 있게 버튼을 붙임 (씬에 이미 있으면 그것을 씀)
+            Button button = slotIcons[i].GetComponent<Button>();
+            if (button == null)
+            {
+                button = slotIcons[i].gameObject.AddComponent<Button>();
+                button.targetGraphic = slotIcons[i];
+                button.transition = Selectable.Transition.None;   // 색은 RefreshButtons가 칠함
+            }
+            slotButtons[i] = button;
+            UIButtons.Bind(button, () => SelectSlot(slot));
         }
 
         if (GameManager.Instance != null)
@@ -58,12 +77,49 @@ public class SkillManager : Singleton<SkillManager>
         base.OnDestroy();
     }
 
-    // 새 판마다 횟수와 스킬 난수를 처음부터
+    // 씬에 SkillManager를 놓지 않아도 GameManager가 만들어 주므로, 칸은 이름으로 찾음
+    private void FindMissingParts()
+    {
+        for (int i = 0; i < SlotCount; i++)
+        {
+            if (slotIcons[i] == null) slotIcons[i] = FindByName<Image>($"Skill_item{i + 1}");
+            if (usesTexts[i] == null) usesTexts[i] = FindByName<TMP_Text>($"txt_item{i + 1}");
+        }
+    }
+
+    private static T FindByName<T>(string objectName) where T : Component
+    {
+        foreach (T component in FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (component.name == objectName) return component;
+        }
+        return null;
+    }
+
+    // 새 판마다 이번 판의 3개로 횟수와 스킬 난수를 처음부터. 칸은 뽑기가 채울 때까지 가려 둠.
     private void OnMatchCreated()
     {
         CancelTargeting();
-        Skills = new SkillSet(GameManager.Instance.Settings.Seed);
+        MatchSettings settings = GameManager.Instance.Settings;
+        Skills = new SkillSet(settings.Seed, settings.Skills);
         Skills.UsesChanged += (_, _) => RefreshButtons();
+        for (int i = 0; i < SlotCount; i++) revealed[i] = false;
+        RefreshButtons();
+    }
+
+    // 아이템 뽑기가 i번째 칸을 정함: 그림을 바꾸고 살짝 튀게 함. icon이 없으면 칸 그림은 그대로.
+    public void RevealSlot(int slot, Sprite icon)
+    {
+        if (slot < 0 || slot >= SlotCount) return;
+        revealed[slot] = true;
+
+        Image image = slotIcons[slot];
+        if (image != null)
+        {
+            if (icon != null) image.sprite = icon;
+            image.rectTransform.DOKill(true);
+            image.rectTransform.DOPunchScale(Vector3.one * 0.25f, 0.35f, 6, 0.6f).SetUpdate(true);
+        }
         RefreshButtons();
     }
 
@@ -72,10 +128,14 @@ public class SkillManager : Singleton<SkillManager>
         GameManager game = GameManager.Instance;
         if (game == null || Skills == null) return;
 
-        // 카운트다운이 끝나거나 판이 끝나면 버튼을 켜고 끔
+        // 카운트다운이 끝나거나 판이 끝나면 버튼을 켜고 끔. 시작했는데 아직 안 채운 칸(뽑기 없음)은 채움.
         if (game.IsPlaying != wasPlaying)
         {
             wasPlaying = game.IsPlaying;
+            if (wasPlaying)
+            {
+                for (int i = 0; i < SlotCount; i++) revealed[i] = true;
+            }
             RefreshButtons();
         }
         if (!game.IsPlaying)
@@ -89,7 +149,7 @@ public class SkillManager : Singleton<SkillManager>
         {
             for (int i = 0; i < HotKeys.Length; i++)
             {
-                if (keyboard[HotKeys[i]].wasPressedThisFrame || keyboard[NumpadKeys[i]].wasPressedThisFrame) Select(SkillSet.All[i]);
+                if (keyboard[HotKeys[i]].wasPressedThisFrame) SelectSlot(i);
             }
             if (keyboard.escapeKey.wasPressedThisFrame) CancelTargeting();
         }
@@ -108,6 +168,17 @@ public class SkillManager : Singleton<SkillManager>
             consumedClickFrame = Time.frameCount;
             ApplyTargeting(cell);
         }
+    }
+
+    private SkillType SlotSkill(int slot)
+    {
+        return Skills != null && slot >= 0 && slot < Skills.Available.Count ? Skills.Available[slot] : SkillType.None;
+    }
+
+    public void SelectSlot(int slot)
+    {
+        SkillType type = SlotSkill(slot);
+        if (type != SkillType.None) Select(type);
     }
 
     public void Select(SkillType type)
@@ -203,52 +274,66 @@ public class SkillManager : Singleton<SkillManager>
         return SlimeManager.Instance.CellAt(world);
     }
 
+    // 버튼처럼 누를 수 있는 UI 위인가 (아이템 칸을 누른 것은 판 클릭이 아님).
+    // 화면 전체를 덮는 투명한 배경 이미지 같은 것은 판 클릭을 막지 않음.
+    private static readonly List<RaycastResult> uiHits = new List<RaycastResult>();
+
     private static bool IsPointerOverUi()
     {
-        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        if (EventSystem.current == null) return false;
+
+        PointerEventData pointer = new PointerEventData(EventSystem.current) { position = Mouse.current.position.ReadValue() };
+        uiHits.Clear();
+        EventSystem.current.RaycastAll(pointer, uiHits);
+        foreach (RaycastResult hit in uiHits)
+        {
+            if (hit.gameObject.GetComponentInParent<Selectable>() != null) return true;
+        }
+        return false;
     }
 
-    // ── 버튼 ────────────────────────────────────────────────────
+    // ── 칸 ──────────────────────────────────────────────────────
 
+    // 안 뽑힌 칸은 흐리게, 다 쓴 칸은 회색, 쓸 수 있는 칸은 원래 색
     private void RefreshButtons()
     {
         bool isPlaying = GameManager.Instance != null && GameManager.Instance.IsPlaying;
-        for (int i = 0; i < SkillSet.All.Length; i++)
+        for (int i = 0; i < SlotCount; i++)
         {
-            SkillType type = SkillSet.All[i];
-            int left = Skills != null ? Skills.UsesLeft(type) : 0;
+            SkillType type = SlotSkill(i);
+            int left = type != SkillType.None ? Skills.UsesLeft(type) : 0;
 
-            if (i < skillButtons.Length && skillButtons[i] != null) skillButtons[i].interactable = isPlaying && left > 0;
-            if (i < usesTexts.Length && usesTexts[i] != null) usesTexts[i].SetText("{0}/{1}", left, GameRules.SkillUses(type));
+            if (slotButtons[i] != null) slotButtons[i].interactable = isPlaying && left > 0;
+            if (slotIcons[i] != null)
+            {
+                slotIcons[i].color = !revealed[i] ? hiddenSlotColor
+                                   : left > 0 ? Color.white
+                                   : new Color(0.5f, 0.5f, 0.5f, 0.6f);
+            }
+            if (usesTexts[i] != null) usesTexts[i].text = revealed[i] ? left.ToString() : "?";
         }
     }
 
-    // 판이 막혔을 때 남은 스킬 버튼을 노랗게 세 번 반짝임
+    // 판이 막혔을 때 남은 스킬 칸을 노랗게 세 번 반짝임
     public void HighlightAvailableSkills()
     {
         highlightTween?.Kill();
 
-        List<Button> targets = new List<Button>();
-        for (int i = 0; i < skillButtons.Length && i < SkillSet.All.Length; i++)
+        List<Image> targets = new List<Image>();
+        for (int i = 0; i < SlotCount; i++)
         {
-            if (skillButtons[i] != null && skillButtons[i].image != null && Skills.UsesLeft(SkillSet.All[i]) > 0) targets.Add(skillButtons[i]);
+            SkillType type = SlotSkill(i);
+            if (slotIcons[i] != null && type != SkillType.None && Skills.UsesLeft(type) > 0) targets.Add(slotIcons[i]);
         }
         if (targets.Count == 0) return;
 
-        Color originColor = Color.white;
         Color highlightColor = new Color(1f, 0.9f, 0.3f, 1f);
         highlightTween = DOTween.Sequence();
-        foreach (Button button in targets)
+        foreach (Image image in targets)
         {
-            button.image.color = originColor;
-            highlightTween.Join(button.image.DOColor(highlightColor, 0.4f).SetEase(Ease.Linear).SetLoops(6, LoopType.Yoyo));
+            image.color = Color.white;
+            highlightTween.Join(image.DOColor(highlightColor, 0.4f).SetEase(Ease.Linear).SetLoops(6, LoopType.Yoyo));
         }
-        highlightTween.OnKill(() =>
-        {
-            foreach (Button button in targets)
-            {
-                if (button != null && button.image != null) button.image.color = originColor;
-            }
-        });
+        highlightTween.OnKill(RefreshButtons);
     }
 }

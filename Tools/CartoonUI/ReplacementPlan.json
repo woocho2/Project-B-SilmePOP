@@ -1,0 +1,377 @@
+{
+  "mode": "built-in image_gen",
+  "userInstruction": "Replace every UI/icon in SlimeAsset with approved cartoon UI. Minimize transparent outer margins on every side. No Unity meta-file generation/editing or validation.",
+  "assetRoot": "Assets/4. SlimeAsset/",
+  "backupRoot": "Tools/CartoonUI/Before/",
+  "generationPolicy": "One built-in image_gen call per asset. Tight-canvas composition generated directly. Save generated PNG originals unchanged. Preserve filenames and paths.",
+  "jobs": [
+    {
+      "key": "normal_button",
+      "path": "UI_Button_Normal.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: blank warm IVORY rounded rectangular common UI button matching the neutral cream button at the right of reference1. Thick dark-indigo outer contour, soft pale cream top, warm peach lower shaded extrusion, very small upper-left white shine. Corners rounded but long straight sides. Completely empty center for a separate label, NO text, icons or marks. Smooth clean flat cartoon button.",
+      "status": "pending"
+    },
+    {
+      "key": "create_room_button",
+      "path": "UI_Button_Crayon_CreateRoom_Pink.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: blank bright coral-PINK rounded rectangular action button for CREATE ROOM, matching the reference's chunky pressable colored buttons. Dark-indigo outline, deeper pink lower extrusion, slightly lighter pink top edge and small white upper-left shine. Horizontal rectangle, no words, labels, icons or tip. Preserve a large blank center. No crayon shape or grain.",
+      "status": "pending"
+    },
+    {
+      "key": "quick_join_button",
+      "path": "UI_Button_Crayon_QuickJoin_SkyBlue.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: blank bright SKY BLUE rounded rectangular action button for QUICK JOIN, matching the reference's blue confirm button. Dark-indigo outline, deeper cobalt-blue lower extrusion, slightly lighter cyan top edge and small white upper-left shine. Horizontal rectangle, NO text, icon or point. Large blank center. No crayon shape or texture.",
+      "status": "pending"
+    },
+    {
+      "key": "popup_paper",
+      "path": "UI_Popup_Background_Paper.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Landscape 7:5 canvas, a complete front-facing rounded rectangular panel touching or nearly touching the four image edges with zero outside padding. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: only the EMPTY CREAM POPUP PANEL surface from reference1, complete warm cream rounded rectangle with a thick continuous dark-indigo contour, a narrow peach shade inside its lower edge and simple top-left surface shine. A very spacious quiet blank cream interior for many UI controls. NO header tab, close button, labels, controls, slime, symbols or interior lines. No outside drop shadow slab.",
+      "status": "pending"
+    },
+    {
+      "key": "checkbox",
+      "path": "UI_Icon_Checkbox.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: ONE EMPTY square checkbox, warm ivory interior and thick dark-indigo rounded outline, modest lavender/peach lower edge depth. Like the unchecked box portion in reference1. Box bounds approximately x0..100%, y0..100%, equal sides and gently rounded corners. NO check, tick, X, letter or any mark inside the box.",
+      "status": "pending"
+    },
+    {
+      "key": "red_check",
+      "path": "UI_Icon_Check_Red.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: ONE standalone RED CHECKMARK, with two joined chunky smooth strokes and a clean slightly darker-red edge. Short arm starts near the left edge at mid-height, elbow near lower-middle, long arm rises to the upper-right edge. Chunky strokes, overall red tick bounds fill almost the full square with at most1% outside margin. No box or badge behind it. True transparent everywhere except the red tick. Not an X or equal-armed V.",
+      "status": "pending"
+    },
+    {
+      "key": "slider_track",
+      "path": "UI_Slider_Crayon_Background_Box.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one EMPTY horizontal slider/progress TRACK, capsule-like warm ivory interior with a thick dark-indigo outline and small lower cel-shaded depth, like slider reference1 but WITHOUT fill and WITHOUT thumb/handle. Target 768 x256 pixels 3:1, artwork fills entire rectangle width and height to outer borders; no extra transparent padding strips. Straight long sides, softly rounded ends. No text or markings.",
+      "status": "pending"
+    },
+    {
+      "key": "slider_fill",
+      "path": "UI_Slider_Crayon_Fill_White.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one WHITE TINTABLE horizontal slider/progress FILL. Use neutral WHITE and VERY LIGHT GRAY only so Unity can tint to theme colors. Smooth capsule-like rounded rectangle, predominantly opaque white, one subtle gray lower shaded band and tiny upper shine. Target768x256 3:1, rectangle fills entire canvas from edge to edge, with alpha only at rounded corner cutouts, NO empty outer margins or transparent strips. No dark-indigo outline, track, handle, text, crayon grain or other component.",
+      "status": "pending"
+    },
+    {
+      "key": "paint_swatch",
+      "path": "UI_Palette_Paint_White.png",
+      "category": "widgets",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: ONE tintable neutral-white color swatch matching the smooth rounded organic white blob in reference1. Plump flattened dome with gently irregular rounded-triangular oval shape, white opaque main face, light neutral gray lower cel shade and controlled white upper-left shine. All pixels must be NEUTRAL GRAYSCALE so Unity Image.color can produce all ten colors. A moderately thin darker-neutral-gray outline, no indigo hue. No face, grain, brush grooves, cup, symbol or other object. Full square with plump rounded swatch occupying98-100% of BOTH width and height, centered, no outside border padding.",
+      "status": "pending"
+    },
+    {
+      "key": "close_icon",
+      "path": "UI_Icon_Close.png",
+      "category": "utility_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one CORAL RED rounded-square close button tile containing a bold white X with subtle dark-red inner edging. Match the lower-right close icon in reference1 exactly in spirit: chunky red top, darker-red lower depth, dark-indigo outline, tiny top-left white shine. Only this icon tile, no surrounding UI.",
+      "status": "pending"
+    },
+    {
+      "key": "settings_icon",
+      "path": "UI_Icon_Settings.png",
+      "category": "utility_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one GOLDEN YELLOW rounded-square settings button tile containing a white chunky gear with a yellow circular center. Dark-indigo outlines on both button and white gear, warm orange lower cel shade, tiny upper shine. Match settings tile in reference1, only this tile.",
+      "status": "pending"
+    },
+    {
+      "key": "help_icon",
+      "path": "UI_Icon_Help.png",
+      "category": "utility_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one LAVENDER PURPLE rounded-square help button tile containing a bold white QUESTION MARK with its separate round dot, dark-indigo outlines on button and question mark, deeper violet lower depth, small upper-left shine. Match help tile in reference1, only this tile.",
+      "status": "pending"
+    },
+    {
+      "key": "quit_icon",
+      "path": "UI_Icon_Quit.png",
+      "category": "utility_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one CORAL RED rounded-square quit/power button tile containing a bold white POWER SYMBOL (broken circular ring with a short vertical stroke at top). Thick dark-indigo tile outline, deeper red lower depth, small upper-left shine. It should communicate exit/game quit. No X, door, text or other icons.",
+      "status": "pending"
+    },
+    {
+      "key": "map_basic",
+      "path": "MapThemeIcon/UI_Icon_Map_Basic.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One fresh green SPROUT, exactly two plump leaves on a short curved stem. Clean chunky dark-indigo contour and simple leaf green cel shading, no pot, soil, flower or face.",
+      "status": "pending"
+    },
+    {
+      "key": "map_spring",
+      "path": "MapThemeIcon/UI_Icon_Map_Spring.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One large pastel PINK CHERRY BLOSSOM with five softly rounded petals and small golden stamens, TWO fresh mint-green leaves below. One compact clean spring emblem.",
+      "status": "pending"
+    },
+    {
+      "key": "map_summer",
+      "path": "MapThemeIcon/UI_Icon_Map_Summer.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One juicy triangular WATERMELON WEDGE with coral-red flesh, a few dark seeds, cream inner rind and bright green outer rind. A slight playful tilt, no plate or other object.",
+      "status": "pending"
+    },
+    {
+      "key": "map_autumn",
+      "path": "MapThemeIcon/UI_Icon_Map_Autumn.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One ORANGE-RED MAPLE LEAF with distinct pointed lobes, golden-orange middle, darker orange tips, simple darker veins and short curved brown stem. A single compact leaf.",
+      "status": "pending"
+    },
+    {
+      "key": "map_winter",
+      "path": "MapThemeIcon/UI_Icon_Map_Winter.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One icy light SKY-BLUE SIX-ARM SNOWFLAKE, symmetrical broad branching arms, clean bold navy outline and restrained near-white highlights, one winter emblem.",
+      "status": "pending"
+    },
+    {
+      "key": "map_sunny",
+      "path": "MapThemeIcon/UI_Icon_Map_Sunny.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One golden-yellow SUN, round warm center with an evenly spaced simple ring of short orange rays, dark-indigo outline, no face or sky.",
+      "status": "pending"
+    },
+    {
+      "key": "map_night",
+      "path": "MapThemeIcon/UI_Icon_Map_Night.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One large lavender-blue CRESCENT MOON opening to the right, with exactly TWO small gold five-point stars near that opening. Smooth cheerful nighttime emblem, no sky.",
+      "status": "pending"
+    },
+    {
+      "key": "map_cloudy",
+      "path": "MapThemeIcon/UI_Icon_Map_Cloudy.png",
+      "category": "map_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One puffy cool-gray CLOUD, three rounded upper lobes, pale gray upper area and light blue/lavender underside, clean dark-indigo outline. No rain, sun or lightning.",
+      "status": "pending"
+    },
+    {
+      "key": "item_magnifier",
+      "path": "UI_Icon_Item_Magnifier.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One diagonal hand-held MAGNIFYING GLASS with large circular pale aqua lens, navy rim, one clean reflection and a short warm brown handle. No symbols or objects inside the lens.",
+      "status": "pending"
+    },
+    {
+      "key": "item_destroy",
+      "path": "UI_Icon_Item_Destroy.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One chunky CORAL-PINK and IVORY school ERASER, diagonally tilted, clean dark-indigo contour and simple cel shading, with just TWO tiny eraser crumbs. No words or explosion.",
+      "status": "pending"
+    },
+    {
+      "key": "item_transform",
+      "path": "UI_Icon_Item_Transform.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One diagonally tilted MAGIC WAND, brown handle and golden five-point STAR tip, a compact mint-blue puff and TWO tiny golden sparkles near the tip. No hat, hand or words.",
+      "status": "pending"
+    },
+    {
+      "key": "item_merge",
+      "path": "UI_Icon_Item_Merge.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: TWO small ivory-white SLIME BLOBS merging into one connected larger silhouette with a shared central joining bulge. Each side has two small black oval eyes and a tiny simple smile. TWO short curved golden arrows above point inward toward their joining center. One compact fusion pictogram, no other slimes or labels.",
+      "status": "pending"
+    },
+    {
+      "key": "item_joker",
+      "path": "UI_Icon_Item_Joker.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One playful TWO-POINT JESTER HAT only: left point coral-red, right point charcoal-black, opposite-color round pom-poms, short curved ivory lower brim. Dark-indigo outline, smooth cel shade and restrained shine, no slime body, face, cards or text.",
+      "status": "pending"
+    },
+    {
+      "key": "item_numberchange",
+      "path": "UI_Icon_Item_NumberChange.png",
+      "category": "item_icons",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. SQUARE 1:1 canvas, target 1254 x 1254. Complete silhouette fitted tightly to the square canvas, clear at small UI size. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: One chunky ivory-white six-sided DIE with DARK INDIGO PIP DOTS on visible faces, soft sky-blue lower shade, accompanied by ONE curved golden REROLL ARROW wrapping around upper-right. No written digits, words, table or second die.",
+      "status": "pending"
+    },
+    {
+      "key": "notebook_page",
+      "path": "UI_Paper_Torn_Notebook.png",
+      "category": "panels",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png",
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Paper_Torn_Notebook.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. PORTRAIT 3:4 canvas, a complete front-facing portrait page occupying nearly the entire image. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: a clean CARTOON notebook page, pale near-white/cream fill with a thin dark-indigo outer contour and a simple lower edge cel shade. Keep vertical row of binding holes down the LEFT edge and evenly spaced faint pale-blue HORIZONTAL RULED LINES across the writing area. Gently irregular torn left edge but drawn as clean cartoon shapes, no realistic torn fibers, grain or debris. Remaining edges slightly rounded. Quiet blank writing page, no text or symbols. Image2 is geometry/content reference only.",
+      "status": "pending"
+    },
+    {
+      "key": "sketchbook_cover",
+      "path": "Sketchbook_Cover_Tintable.png",
+      "category": "panels",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png",
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/Sketchbook_Cover_Tintable.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. LANDSCAPE 16:9 canvas, composition filling the image. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: EMPTY sketchbook COVER BACKING as a NEUTRAL WHITE/GRAY TINTABLE layer, smooth thick rounded rectangle with darker-gray outer contour and gray lower extrusion. No colored hues, paper, rings, holes, icons or title. Image2 is the previous cover geometry ONLY. Preserve full1600x900 canvas framing: rounded backing occupies x8..1592 and y5..895 in1600x900 coordinates, its bounds nearly touch the canvas. Only actual rounded corner cutouts are transparent. This will sit beneath a smaller separate white paper layer. Match approved clean cartoon edge and simple depth, no grain.",
+      "status": "pending"
+    },
+    {
+      "key": "sketchbook_paper",
+      "path": "Sketchbook_Paper_White.png",
+      "category": "panels",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png",
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/Sketchbook_Paper_White.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. LANDSCAPE 16:9 canvas, composition filling the image. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: EMPTY WHITE sketchbook PAPER stack layer, clean smooth white face, very thin neutral-gray contour, two clean light-gray page edges visible along lower side, no texture. Image2 is the previous PAPER GEOMETRY ONLY. Preserve full1600x900 canvas framing: page fills x30..1570 and y27..873 in1600x900 coordinates, leaving ONLY a narrow deliberate 22px inset relative to the separate nearly full-bleed cover. This small structural inset is needed for correct paper/cover layering, not decorative empty padding. Rounded corners consistent with the cover, radius roughly40 reference pixels. No cover backing, rings, holes, decorations, rulings, title or symbols. The interior is clean quiet white for game pieces, cel-shaded cartoon, no grain.",
+      "status": "pending"
+    },
+    {
+      "key": "touch_to_start",
+      "path": "TouchToStart_Crayon.png",
+      "category": "title",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. Wide HORIZONTAL 3:1 canvas. Occupy the entire canvas to the four outside edges; never output a square canvas or tiny centered object. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: ONLY the exact words 'TOUCH TO START' on ONE horizontal line, all uppercase. Bold playful rounded mobile-game lettering, solid DARK INDIGO letters with a narrow pale-cream outer keyline for readability, tiny subtle lower thickness. Wide3:1 canvas with large legible centered text occupying most of width, transparent everywhere except letters/keyline. No button panel, icon, underline, backing rectangle, crayon grain or other text. Fit the letter outlines tightly to the canvas in both axes. Choose condensed playful uppercase proportions to minimize empty upper/lower bands; do not place a thin line of text in the middle of a tall empty image.",
+      "status": "pending"
+    },
+    {
+      "key": "title_letters",
+      "path": "SlimePop_TitleLetters.png",
+      "category": "title",
+      "transparent": true,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png",
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/SlimePop_TitleLetters.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. WIDE LANDSCAPE 2:1 canvas, preserving the supplied atlas's four equal columns by two equal rows. TRUE transparent alpha background outside the subject, no opaque backdrop or ground shadow. SUBJECT: one reusable TITLE LETTER ATLAS of exactly EIGHT separate UPPERCASE glyphs. Preserve image2's EXACT 4-column by2-row cell arrangement and generous transparent separation. Top row left to right: S, L, I, M. Bottom row: E, P, O, !. Same individual glyph center locations and relative sizes as image2. Top row and E are fresh bright emerald GREEN, P and O coral-red, exclamation mark GOLDEN YELLOW. Bold round bubble lettering with DARK INDIGO outline, thin warm cream inner keyline, small white upper-left shine and simple clean cel shading. Uppercase I MUST have top and bottom horizontal crossbars. Each glyph stays entirely inside its own tile, no connecting words or overlaps. Full target1774x887 2:1 canvas, every cell443.5square. No label, frame, grid lines, background or extra glyphs. Image2 is atlas GEOMETRY reference only, replace its grainy texture with approved clean cartoon style. For this multi-glyph atlas, apply tight fitting INSIDE EACH tile, with glyph upper/lower extremities close to its tile boundaries while preserving separation. Do not add outer atlas padding.",
+      "status": "pending"
+    },
+    {
+      "key": "background",
+      "path": "BackGround.png",
+      "category": "background",
+      "transparent": false,
+      "refs": [
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/UI_Cartoon/UI_Cartoon_Concept.png",
+        "D:/MyGitHub/ProjectB/Project-B-SilmePOP/Assets/4. SlimeAsset/BackGround.png"
+      ],
+      "prompt": "TIGHT CANVAS / NO OUTER PADDING: The user requires the subject to fill its image with the LEAST POSSIBLE outside transparent margin on ALL FOUR SIDES. Fit the complete subject's outermost silhouette within approximately 0-1% of each canvas edge. For panels/buttons/slider parts, the outer boundary must touch or nearly touch top, bottom, left and right; alpha is allowed ONLY in the actual rounded-corner cutouts, NOT as empty border strips. For icons, keep every tip visible but fit the overall silhouette tightly to the image bounds. Do not shrink the subject to sit inside a generous safety area. Use case: stylized-concept. Production replacement sprite for the SLIME POP casual mobile game. PRIMARY STYLE REFERENCE is image 1, the approved cartoon UI concept: match its clean smooth color fields, bold rounded DARK INDIGO contour, friendly chunky shape, crisp 2-3 tone cel shading, small controlled white shine, modest lower-edge depth, bright pastel/jewel accents. All edges are clean; no crayon/pencil grain, watercolor brush texture, rough sketch, photo realism, realistic materials, busy sparkle or 3D render. Deliver ONE isolated asset, NOT a UI sheet or full dialog screenshot. No labels, words, watermark, scenery, extra badges or detached decorative pieces unless explicitly requested in SUBJECT. LANDSCAPE 16:9 canvas, composition filling the image. Opaque background, no transparency. SUBJECT: a clean lively CARTOON ART-TABLE UI BACKGROUND, same broad arrangement as image2: large QUIET nearly-white/very pale lavender CENTER taking about70% of scene for game UI; keep props on extreme outer edges. Upper-left small smiling coral devil slime and red paint tube/pencils; upper-right cropped tan artist palette with mint/pink/yellow/blue/violet paint blobs; lower-left smiling lime king slime with tiny crown and green paint tube; lower-right smiling sky-blue angel slime with halo and little wings; colorful pencils and a paintbrush along edges. Keep central rectangular area entirely clear and bright. Redraw ALL props with approved smooth colored planes, thick dark-indigo outlines, clean2-3tone cel shade, modest controlled shine and friendly rounded shapes. No crayon grain, canvas texture, realistic art supply detail, text, logo, UI panel, buttons, gear or power icon. Landscape1920x1080 16:9, opaque background filling all canvas. Image2 is overall content/layout reference only.",
+      "status": "pending"
+    }
+  ]
+}

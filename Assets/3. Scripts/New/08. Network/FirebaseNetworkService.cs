@@ -5,12 +5,14 @@ using UnityEngine;
 // Firebase Realtime Database로 하는 실제 네트워크. LocalNetworkService와 같은 약속(INetworkService)을 지킴.
 //
 // 데이터베이스 모양 (기획 [6])
-//   guestCounter                 게스트 번호표. 접속할 때마다 1씩 올림
-//   users/{uid}                  nickname, guestNumber, lastSeen(하트비트 시각)
+//   guestCounter                 계정 번호표. 회원가입할 때마다 1씩 올림
+//   profiles/{uid}               nickname, number (회원가입 때 저장, 로그인할 때 읽음)
+//   users/{uid}                  접속 중인 사람: nickname, guestNumber, lastSeen(하트비트 시각)
 //   lobbyChat/{id}               로비 채팅
 //   rooms/{roomId}               roomName, hostUid, maxPlayers, state, seed, targetSum, startAt, slots/0 ~ 3
 //     scores/s{자리}              점수 (판이 끝나 대기실로 돌아가면 지움)
 //     finalBoards/s{자리}         최종 판 (BoardSnapshot JSON 문자열)
+//     left/s{자리}                대전·결과 중에 나간 사람 (자리는 결과 화면 때문에 남겨 두고, 대기실로 돌아갈 때 비움)
 //     chat/{id}                   방·대전·결과 채팅 (channel로 구분)
 //
 // 받는 쪽: users, rooms, lobbyChat 세 곳을 실시간 수신으로 메모리에 들고 있다가(FirebaseData 나무)
@@ -35,7 +37,6 @@ public sealed class FirebaseNetworkService : INetworkService
 
     private readonly FirebaseRestClient client;
     private UserInfo me;
-    private int reservedGuestNumber;
     private string myColor = "#FFFFFF";
     private readonly System.Random nicknameRandom = new System.Random();   // AI 이름
 
@@ -56,6 +57,9 @@ public sealed class FirebaseNetworkService : INetworkService
     // 내가 들어간 모습의 방이 실시간 수신으로 도착했는가. 도착 전에는 방이 없거나 내 자리가 없어도
     // 아직 소식이 늦은 것이므로 나가지 않음 (방을 만들거나 들어간 직후의 짧은 사이)
     private bool roomArrived;
+    // 방을 만들거나 들어가는 중 (그 방이 수신에 먼저 보여도 지난 방으로 여겨 나가지 않게)
+    private bool entering;
+    private readonly HashSet<string> leavingRooms = new HashSet<string>();   // 나가기 트랜잭션을 보낸 방
 
     public long ServerNow => client.ServerNow;
 
@@ -71,30 +75,10 @@ public sealed class FirebaseNetworkService : INetworkService
         client.CheckConnection(onDone);
     }
 
-    public void ReserveGuestNumber(Action<int> onDone)
+    // 회원가입: 이메일 계정을 만들고, 번호를 받아 닉네임과 함께 profiles/{uid}에 저장한 뒤 접속
+    public void SignUpWithEmail(string email, string password, string nickname, Action<UserInfo> onDone)
     {
-        if (reservedGuestNumber > 0)
-        {
-            onDone?.Invoke(reservedGuestNumber);
-            return;
-        }
-
-        EnsureAuth(ok =>
-        {
-            if (!ok) { Fail("서버에 로그인하지 못했습니다."); onDone?.Invoke(0); return; }
-
-            client.Transaction("guestCounter", current => (current is long number ? number : 0L) + 1, (written, value) =>
-            {
-                if (!written || !(value is long number)) { Fail("UID를 받지 못했습니다."); onDone?.Invoke(0); return; }
-
-                reservedGuestNumber = (int)number;
-                onDone?.Invoke(reservedGuestNumber);
-            });
-        });
-    }
-
-    public void SignIn(string nickname, Action<UserInfo> onDone)
-    {
+        if (!CheckEmailInput(email, password, onDone)) return;
         if (string.IsNullOrWhiteSpace(nickname))
         {
             Fail("닉네임을 입력하세요.");
@@ -102,30 +86,100 @@ public sealed class FirebaseNetworkService : INetworkService
             return;
         }
 
-        ReserveGuestNumber(number =>
+        client.SignUpWithEmail(email.Trim(), password, (ok, code) =>
         {
-            if (number <= 0) { onDone?.Invoke(null); return; }
+            if (!ok) { Fail(AuthMessage(code)); onDone?.Invoke(null); return; }
 
-            Dictionary<string, object> user = new Dictionary<string, object>
+            // 계정 번호(#0001)는 가입한 순서대로. 여럿이 동시에 가입해도 겹치지 않게 트랜잭션으로 1씩 올림.
+            client.Transaction("guestCounter", current => (current is long count ? count : 0L) + 1, (written, value) =>
             {
-                { "nickname", nickname.Trim() },
-                { "guestNumber", number },
-                { "lastSeen", FirebaseData.ServerTimestamp }
-            };
-            client.Put("users/" + client.Uid, user, (ok, _) =>
-            {
-                if (!ok) { Fail("로그인하지 못했습니다."); onDone?.Invoke(null); return; }
+                if (!written || !(value is long counter)) { Fail("계정 번호를 받지 못했습니다."); onDone?.Invoke(null); return; }
+                int number = (int)counter;
 
-                client.SyncServerTime($"users/{client.Uid}/lastSeen", () =>
+                Dictionary<string, object> profile = new Dictionary<string, object>
                 {
-                    me = new UserInfo(client.Uid, nickname.Trim(), number);
-                    reservedGuestNumber = 0;
-                    StartStreams();
-                    Connected?.Invoke();
-                    onDone?.Invoke(me);
+                    { "nickname", nickname.Trim() },
+                    { "number", number }
+                };
+                client.Put("profiles/" + client.Uid, profile, (saved, _) =>
+                {
+                    if (!saved) { Fail("계정 정보를 저장하지 못했습니다."); onDone?.Invoke(null); return; }
+                    StartSession(nickname.Trim(), number, onDone);
                 });
             });
         });
+    }
+
+    // 이메일 로그인: 저장된 닉네임·번호(profiles/{uid})로 접속
+    public void SignInWithEmail(string email, string password, Action<UserInfo> onDone)
+    {
+        if (!CheckEmailInput(email, password, onDone)) return;
+
+        client.SignInWithEmail(email.Trim(), password, (ok, code) =>
+        {
+            if (!ok) { Fail(AuthMessage(code)); onDone?.Invoke(null); return; }
+
+            client.Get("profiles/" + client.Uid, (found, profile) =>
+            {
+                if (!found || profile == null) { Fail("계정 정보를 찾지 못했습니다."); onDone?.Invoke(null); return; }
+                StartSession(FirebaseData.Str(profile, "nickname"), FirebaseData.Int(profile, "number"), onDone);
+            });
+        });
+    }
+
+    // 로그인 뒤 공통: 접속자 목록(users)에 나를 올리고, 서버 시각을 맞추고, 실시간 수신을 시작함
+    private void StartSession(string nickname, int number, Action<UserInfo> onDone)
+    {
+        Dictionary<string, object> user = new Dictionary<string, object>
+        {
+            { "nickname", nickname },
+            { "guestNumber", number },
+            { "lastSeen", FirebaseData.ServerTimestamp }
+        };
+        client.Put("users/" + client.Uid, user, (ok, _) =>
+        {
+            if (!ok) { Fail("로그인하지 못했습니다."); onDone?.Invoke(null); return; }
+
+            client.SyncServerTime($"users/{client.Uid}/lastSeen", () =>
+            {
+                me = new UserInfo(client.Uid, nickname, number);
+                StartStreams();
+                Connected?.Invoke();
+                onDone?.Invoke(me);
+            });
+        });
+    }
+
+    private bool CheckEmailInput(string email, string password, Action<UserInfo> onDone)
+    {
+        string problem = string.IsNullOrWhiteSpace(email) ? "이메일을 입력하세요."
+                       : string.IsNullOrEmpty(password) ? "비밀번호를 입력하세요."
+                       : null;
+        if (problem == null) return true;
+
+        Fail(problem);
+        onDone?.Invoke(null);
+        return false;
+    }
+
+    // Firebase 인증 오류 코드 → 사람이 읽을 이유
+    private static string AuthMessage(string code)
+    {
+        switch (code)
+        {
+            case "EMAIL_EXISTS": return "이미 가입된 이메일입니다.";
+            case "INVALID_EMAIL": return "이메일 형식이 올바르지 않습니다.";
+            case "WEAK_PASSWORD": return "비밀번호는 6자 이상이어야 합니다.";
+            case "MISSING_PASSWORD": return "비밀번호를 입력하세요.";
+            case "EMAIL_NOT_FOUND":
+            case "INVALID_PASSWORD":
+            case "INVALID_LOGIN_CREDENTIALS": return "이메일 또는 비밀번호가 맞지 않습니다.";
+            case "USER_DISABLED": return "사용이 중지된 계정입니다.";
+            case "TOO_MANY_ATTEMPTS_TRY_LATER": return "시도가 너무 많습니다. 잠시 뒤 다시 시도해 주세요.";
+            case "OPERATION_NOT_ALLOWED": return "이메일 로그인이 꺼져 있습니다. Firebase 콘솔에서 켜 주세요.";
+            case "NETWORK_ERROR": return "서버에 연결할 수 없습니다.";
+            default: return "로그인하지 못했습니다.";
+        }
     }
 
     public void SignOut()
@@ -157,12 +211,6 @@ public sealed class FirebaseNetworkService : INetworkService
         PublishLobbyUsers();   // 시간이 지나 끊긴 것으로 바뀐 사람이 있을 수 있음
         CheckPresence();
         if (currentRoom != null) TryStartCountdown();   // 안 온 사람이 있어도 시간이 다 되면 시작
-    }
-
-    private void EnsureAuth(Action<bool> onDone)
-    {
-        if (client.IsSignedIn) onDone(true);
-        else client.SignInAnonymously(onDone);
     }
 
     // ── 실시간 수신 ─────────────────────────────────────────────
@@ -243,6 +291,22 @@ public sealed class FirebaseNetworkService : INetworkService
         RoomListChanged?.Invoke(rooms);
 
         if (currentRoomId != null) UpdateCurrentRoom();
+        if (usersLoaded) LeaveStaleRooms();
+    }
+
+    // 내가 자리에 있는데 지금 방이 아닌 방은 제대로 나가지 못한 방 (대전 중에 게임을 끄는 등).
+    // 그대로 두면 내가 접속할 때마다 목록에 다시 보이므로 지금 나감.
+    private void LeaveStaleRooms()
+    {
+        if (me == null || entering || !(roomsTree is Dictionary<string, object> all)) return;
+
+        foreach (KeyValuePair<string, object> pair in all)
+        {
+            if (pair.Key == currentRoomId) continue;
+
+            int slot = FirebaseData.ToRoom(pair.Key, pair.Value).FindSlot(me.uid);
+            if (slot >= 0 && !HasLeft(pair.Value, slot)) RemoveMe(pair.Key);
+        }
     }
 
     // 지금 방이 이전과 달라졌으면 해당 이벤트를 쏨
@@ -345,8 +409,10 @@ public sealed class FirebaseNetworkService : INetworkService
         for (int i = 0; i < room.slots.Length; i++) room.slots[i] = new SlotInfo { kind = SlotKind.Empty };
         room.slots[0] = MySlot();
 
+        entering = true;
         client.Post("rooms", FirebaseData.FromRoom(room), roomId =>
         {
+            entering = false;
             if (roomId == null) { Fail("방을 만들지 못했습니다."); onDone?.Invoke(null); return; }
 
             room.roomId = roomId;
@@ -361,6 +427,7 @@ public sealed class FirebaseNetworkService : INetworkService
 
         LeaveRoom();
         string reason = null;
+        entering = true;
         client.Transaction("rooms/" + roomId, current =>
         {
             if (current == null) { reason = "방을 찾을 수 없습니다."; return FirebaseRestClient.Abort; }
@@ -373,10 +440,11 @@ public sealed class FirebaseNetworkService : INetworkService
             int free = room.FindEmptySlot();
             if (free < 0) { reason = "방이 가득 찼습니다."; return FirebaseRestClient.Abort; }
 
-            SlotsOf(node)[free.ToString()] = FirebaseData.FromSlot(MySlot());
+            ChildOrCreate(node, "slots")[free.ToString()] = FirebaseData.FromSlot(MySlot());
             return node;
         }, (ok, value) =>
         {
+            entering = false;
             if (!ok) { Fail(reason ?? "방에 들어가지 못했습니다."); onDone?.Invoke(null); return; }
 
             RoomInfo room = FirebaseData.ToRoom(roomId, FirebaseData.Normalize(value));
@@ -385,16 +453,23 @@ public sealed class FirebaseNetworkService : INetworkService
         });
     }
 
-    // 대기 중이면 자리를 비우고, 대전 중이면 기권으로 남김. 방장이 나가면 남은 사람에게 넘기고, 사람이 없으면 방을 지움.
     public void LeaveRoom()
     {
         if (currentRoomId == null || me == null) return;
 
         string roomId = currentRoomId;
+        ExitRoomLocally();
+        RemoveMe(roomId);
+    }
+
+    // 대기 중이면 자리를 비우고, 대전·결과 중이면 기권 + 나감 표시로 남김 (결과 화면에 이름이 보여야 함).
+    // 남은 사람이 없으면 방을 지우고, 방장이 나가면 남은 사람에게 넘김.
+    private void RemoveMe(string roomId)
+    {
+        if (!leavingRooms.Add(roomId)) return;   // 이미 보냄
+
         string myUid = me.uid;
         long now = ServerNow;
-        ExitRoomLocally();
-
         client.Transaction("rooms/" + roomId, current =>
         {
             if (current == null) return FirebaseRestClient.Abort;
@@ -402,26 +477,24 @@ public sealed class FirebaseNetworkService : INetworkService
             Dictionary<string, object> node = (Dictionary<string, object>)FirebaseData.Normalize(current);
             RoomInfo room = FirebaseData.ToRoom(roomId, node);
             int slot = room.FindSlot(myUid);
-            if (slot < 0) return FirebaseRestClient.Abort;
+            if (slot < 0 || HasLeft(node, slot)) return FirebaseRestClient.Abort;
 
             if (room.state == RoomState.Waiting)
             {
-                SlotsOf(node)[slot.ToString()] = FirebaseData.FromSlot(new SlotInfo { kind = SlotKind.Empty });
+                ChildOrCreate(node, "slots")[slot.ToString()] = FirebaseData.FromSlot(new SlotInfo { kind = SlotKind.Empty });
                 room.slots[slot] = new SlotInfo { kind = SlotKind.Empty };
             }
             else
             {
                 MarkForfeit(node, slot, room, now);
+                ChildOrCreate(node, "left")[FirebaseData.ScoreKey(slot)] = true;
             }
 
-            if (room.hostUid == myUid)
-            {
-                string nextHost = FirstHuman(room, exceptUid: myUid);
-                if (nextHost == null) return null;   // 사람이 없으면 방을 지움
-                node["hostUid"] = nextHost;
-            }
+            string nextHost = FirstHuman(room, node, exceptUid: myUid);
+            if (nextHost == null) return null;   // 남은 사람이 없으면 방을 지움
+            if (room.hostUid == myUid) node["hostUid"] = nextHost;
             return node;
-        }, (ok, value) => { });
+        }, (ok, value) => leavingRooms.Remove(roomId));
     }
 
     public void SetMyColor(string colorHex)
@@ -435,13 +508,14 @@ public sealed class FirebaseNetworkService : INetworkService
         if (!CanEditSlot(slot)) return;
 
         string newName = GameRules.RandomNickname(nicknameRandom);
+        bool humanThere = false;
         // 그 사이에 누가 그 자리에 들어왔으면 넣지 않음
         client.Transaction($"rooms/{currentRoomId}/slots/{slot}", current =>
         {
             SlotInfo existing = FirebaseData.ToSlot(current);
             if (existing.kind == SlotKind.Human)
             {
-                Fail("사람이 있는 자리에는 AI를 넣을 수 없습니다.");
+                humanThere = true;
                 return FirebaseRestClient.Abort;
             }
 
@@ -453,18 +527,27 @@ public sealed class FirebaseNetworkService : INetworkService
                 difficulty = difficulty,
                 slimeColor = GameRules.AiSlimeColors[slot % GameRules.AiSlimeColors.Length]
             });
-        }, (ok, value) => { });
+        }, (ok, value) =>
+        {
+            // 실패를 알려야 화면(RoomPanel)이 토글을 실제 상태로 되돌림
+            if (humanThere) Fail("사람이 있는 자리에는 AI를 넣을 수 없습니다.");
+            else if (!ok) Fail("AI를 넣지 못했습니다. 다시 시도해 주세요.");
+        });
     }
 
     public void RemoveAi(int slot)
     {
         if (!CanEditSlot(slot)) return;
 
+        bool notAi = false;
         client.Transaction($"rooms/{currentRoomId}/slots/{slot}", current =>
         {
-            if (FirebaseData.ToSlot(current).kind != SlotKind.Ai) return FirebaseRestClient.Abort;
+            if (FirebaseData.ToSlot(current).kind != SlotKind.Ai) { notAi = true; return FirebaseRestClient.Abort; }
             return FirebaseData.FromSlot(new SlotInfo { kind = SlotKind.Empty });
-        }, (ok, value) => { });
+        }, (ok, value) =>
+        {
+            if (!ok && !notAi) Fail("AI를 빼지 못했습니다. 다시 시도해 주세요.");
+        });
     }
 
     public void StartMatch()
@@ -536,14 +619,22 @@ public sealed class FirebaseNetworkService : INetworkService
     {
         if (currentRoom == null) return;
 
-        client.Patch("rooms/" + currentRoomId, new Dictionary<string, object>
+        Dictionary<string, object> changes = new Dictionary<string, object>
         {
             { "state", (int)RoomState.Waiting },
             { "playAt", 0 },
             { "scores", null },
             { "loaded", null },
-            { "finalBoards", null }
-        });
+            { "finalBoards", null },
+            { "left", null }
+        };
+        // 대전·결과 중에 나간 사람의 자리를 비움
+        object node = FirebaseData.Get(roomsTree, currentRoomId);
+        for (int i = 0; i < currentRoom.slots.Length; i++)
+        {
+            if (HasLeft(node, i)) changes[$"slots/{i}"] = FirebaseData.FromSlot(new SlotInfo { kind = SlotKind.Empty });
+        }
+        client.Patch("rooms/" + currentRoomId, changes);
     }
 
     // ── 채팅과 점수 ─────────────────────────────────────────────
@@ -597,7 +688,7 @@ public sealed class FirebaseNetworkService : INetworkService
         if (room.hostUid != me.uid && !IsAlive(room.hostUid))
         {
             // 방장이 끊김: 살아 있는 사람 중 자리 번호가 가장 앞인 사람이 방장을 맡음
-            if (FirstHuman(room, exceptUid: room.hostUid) == me.uid)
+            if (FirstHuman(room, FirebaseData.Get(roomsTree, currentRoomId), exceptUid: room.hostUid) == me.uid)
             {
                 client.Patch("rooms/" + currentRoomId, new Dictionary<string, object> { { "hostUid", me.uid } });
             }
@@ -679,25 +770,31 @@ public sealed class FirebaseNetworkService : INetworkService
         return IsHostOf(currentRoom) && currentRoom.state == RoomState.Waiting && slot >= 0 && slot < currentRoom.maxPlayers;
     }
 
-    // 살아 있는 사람 중 자리 번호가 가장 앞인 사람 (exceptUid는 뺌)
-    private string FirstHuman(RoomInfo room, string exceptUid)
+    // 살아 있고 방에 남아 있는 사람 중 자리 번호가 가장 앞인 사람 (exceptUid는 뺌)
+    private string FirstHuman(RoomInfo room, object roomNode, string exceptUid)
     {
-        foreach (SlotInfo slot in room.slots)
+        for (int i = 0; i < room.slots.Length; i++)
         {
-            if (slot.kind != SlotKind.Human || slot.uid == exceptUid) continue;
+            SlotInfo slot = room.slots[i];
+            if (slot.kind != SlotKind.Human || slot.uid == exceptUid || HasLeft(roomNode, i)) continue;
             if (!usersLoaded || IsAlive(slot.uid)) return slot.uid;
         }
         return null;
     }
 
-    private static Dictionary<string, object> SlotsOf(Dictionary<string, object> roomNode)
+    private static bool HasLeft(object roomNode, int slot)
     {
-        if (!(FirebaseData.Get(roomNode, "slots") is Dictionary<string, object> slots))
+        return FirebaseData.Bool(FirebaseData.Get(roomNode, "left"), FirebaseData.ScoreKey(slot));
+    }
+
+    private static Dictionary<string, object> ChildOrCreate(Dictionary<string, object> node, string key)
+    {
+        if (!(FirebaseData.Get(node, key) is Dictionary<string, object> child))
         {
-            slots = new Dictionary<string, object>();
-            roomNode["slots"] = slots;
+            child = new Dictionary<string, object>();
+            node[key] = child;
         }
-        return slots;
+        return child;
     }
 
     private static void MarkForfeit(Dictionary<string, object> roomNode, int slot, RoomInfo room, long now)

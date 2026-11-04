@@ -25,7 +25,7 @@ public class AiPlayer : MonoBehaviour
         ai.slot = slot;
         ai.difficulty = difficulty;
         ai.board = BoardGenerator.Generate(settings.Seed);
-        ai.skills = new SkillSet(settings.Seed);
+        ai.skills = new SkillSet(settings.Seed, settings.Skills);   // 사람과 같은 아이템 3개만
         ai.targetSum = settings.TargetSum;
         ai.random = new System.Random(unchecked(settings.Seed * 397 + slot));
         ai.waitLeft = ai.NextWait(1);

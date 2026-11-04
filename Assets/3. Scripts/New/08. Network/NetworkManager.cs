@@ -9,6 +9,8 @@ using UnityEngine;
 public class NetworkManager : Singleton<NetworkManager>
 {
     private const string NicknameKey = "Network.Nickname";
+    private const string EmailKey = "Network.Email";
+    private const int ChatHistoryLimit = 100;
 
     [SerializeField] private NetworkBackend backend = NetworkBackend.Local;
 
@@ -37,6 +39,7 @@ public class NetworkManager : Singleton<NetworkManager>
     public MatchSettings CurrentMatch { get; private set; }   // 진행 중인 판. 없으면 null
     public MatchScores Scores { get; } = new MatchScores();
     public IReadOnlyList<RoomInfo> Rooms { get; private set; } = new RoomInfo[0];   // 마지막으로 받은 방 목록
+    public IReadOnlyList<UserInfo> LobbyUsers { get; private set; } = new UserInfo[0];   // 마지막으로 받은 접속자 목록
 
     public bool IsConnected => CurrentUser != null;
 
@@ -52,8 +55,12 @@ public class NetworkManager : Singleton<NetworkManager>
     public int MySlot => CurrentUser != null && CurrentRoom != null ? CurrentRoom.FindSlot(CurrentUser.uid) : -1;
     public long ServerNow => service.ServerNow;
 
-    // 지난 접속 때의 닉네임. 로그인 입력칸에 미리 채움.
+    // 지난 접속 때의 닉네임·이메일. 로그인 입력칸에 미리 채움 (비밀번호는 저장하지 않음).
     public string SavedNickname => PlayerPrefs.GetString(NicknameKey, "");
+    public string SavedEmail => PlayerPrefs.GetString(EmailKey, "");
+
+    // 받은 채팅 기록. 씬이 바뀌어 채팅창이 새로 생겨도 지난 대화를 다시 보여 주려고 들고 있음.
+    private readonly List<KeyValuePair<ChatChannel, ChatMessage>> chatHistory = new List<KeyValuePair<ChatChannel, ChatMessage>>();
 
     private readonly ConcurrentQueue<Action> mainThreadQueue = new ConcurrentQueue<Action>();
     private INetworkService service;
@@ -108,14 +115,18 @@ public class NetworkManager : Singleton<NetworkManager>
         service.Connected += () => Post(() => Connected?.Invoke());
         service.Disconnected += () => Post(HandleDisconnected);
         service.ErrorOccurred += message => Post(() => ErrorOccurred?.Invoke(message));
-        service.LobbyUsersChanged += users => Post(() => LobbyUsersChanged?.Invoke(users));
+        service.LobbyUsersChanged += users => Post(() =>
+        {
+            LobbyUsers = users;
+            LobbyUsersChanged?.Invoke(users);
+        });
         service.RoomListChanged += rooms => Post(() =>
         {
             Rooms = rooms;
             RoomListChanged?.Invoke(rooms);
         });
         service.RoomChanged += room => Post(() => HandleRoomChanged(room));
-        service.ChatReceived += (channel, message) => Post(() => ChatReceived?.Invoke(channel, message));
+        service.ChatReceived += (channel, message) => Post(() => AddChat(channel, message));
         service.MatchStarting += settings => Post(() => HandleMatchStarting(settings));
         service.ScoresChanged += entries => Post(() => HandleScoresChanged(entries));
         service.FinalBoardReceived += (slot, snapshot) => Post(() => FinalBoardReceived?.Invoke(slot, snapshot));
@@ -150,18 +161,73 @@ public class NetworkManager : Singleton<NetworkManager>
         CurrentRoom = null;
         CurrentMatch = null;
         Scores.Clear();
+        LobbyUsers = new UserInfo[0];
+        Rooms = new RoomInfo[0];
+        chatHistory.Clear();
         Disconnected?.Invoke();
     }
 
     private void HandleRoomChanged(RoomInfo room)
     {
+        RoomInfo previous = CurrentRoom;
         CurrentRoom = room;
         if (room == null || room.state == RoomState.Waiting)
         {
             CurrentMatch = null;
             Scores.Clear();
         }
+
+        // 다른 방이면 지난 방의 대화를 지우고, 같은 방이면 누가 들어오고 나갔는지 방 채팅에 알림
+        if (previous == null || room == null || previous.roomId != room.roomId)
+        {
+            chatHistory.RemoveAll(entry => entry.Key != ChatChannel.Lobby);
+        }
         RoomChanged?.Invoke(room);
+        if (previous != null && room != null && previous.roomId == room.roomId) AnnounceRoomChanges(previous, room);
+    }
+
+    // 자리마다 이전과 비교: 빈자리에 누가 오면 입장, 있던 사람이 빠지면 퇴장, 방장이 바뀌면 알림
+    private void AnnounceRoomChanges(RoomInfo previous, RoomInfo room)
+    {
+        for (int i = 0; i < room.slots.Length && i < previous.slots.Length; i++)
+        {
+            SlotInfo before = previous.slots[i];
+            SlotInfo after = room.slots[i];
+            bool sameOccupant = before.kind == after.kind && before.uid == after.uid && before.displayName == after.displayName;
+            if (sameOccupant) continue;
+
+            if (before.kind != SlotKind.Empty) ShowSystemMessage(ChatChannel.Room, $"{SlotLabel(before)}님이 퇴장했습니다.");
+            if (after.kind != SlotKind.Empty) ShowSystemMessage(ChatChannel.Room, $"{SlotLabel(after)}님이 입장했습니다.");
+        }
+
+        if (previous.hostUid != room.hostUid)
+        {
+            int hostSlot = room.FindSlot(room.hostUid);
+            if (hostSlot >= 0) ShowSystemMessage(ChatChannel.Room, $"{SlotLabel(room.slots[hostSlot])}님이 방장이 되었습니다.");
+        }
+    }
+
+    private static string SlotLabel(SlotInfo slot)
+    {
+        return slot.kind == SlotKind.Ai ? $"AI {slot.displayName}" : slot.displayName;
+    }
+
+    private void AddChat(ChatChannel channel, ChatMessage message)
+    {
+        chatHistory.Add(new KeyValuePair<ChatChannel, ChatMessage>(channel, message));
+        if (chatHistory.Count > ChatHistoryLimit) chatHistory.RemoveAt(0);
+        ChatReceived?.Invoke(channel, message);
+    }
+
+    // 지금까지 받은 채팅 (오래된 순). 채팅창이 새로 생길 때 다시 보여 주는 데 씀.
+    public List<ChatMessage> ChatHistory(ChatChannel channel)
+    {
+        List<ChatMessage> messages = new List<ChatMessage>();
+        foreach (KeyValuePair<ChatChannel, ChatMessage> entry in chatHistory)
+        {
+            if (entry.Key == channel) messages.Add(entry.Value);
+        }
+        return messages;
     }
 
     private void HandleMatchStarting(MatchSettings settings)
@@ -181,12 +247,7 @@ public class NetworkManager : Singleton<NetworkManager>
         service.CheckConnection(isConnected => Post(() => onDone?.Invoke(isConnected)));
     }
 
-    public void ReserveGuestNumber(Action<int> onDone)
-    {
-        service.ReserveGuestNumber(number => Post(() => onDone?.Invoke(number)));
-    }
-
-    // 로그인 창에 미리 채울 닉네임. 지난번 닉네임이 없으면 성격 + 색깔 + 슬라임을 무작위로 조합.
+    // 회원가입 창에 미리 채울 닉네임. 지난번 닉네임이 없으면 성격 + 색깔 + 슬라임을 무작위로 조합.
     public string SuggestNickname()
     {
         string saved = SavedNickname;
@@ -195,19 +256,30 @@ public class NetworkManager : Singleton<NetworkManager>
         return GameRules.RandomNickname(new System.Random());
     }
 
-    public void SignIn(string nickname, Action<UserInfo> onDone = null)
+    // 이메일 회원가입. 성공하면 바로 로그인된 상태가 됨.
+    public void SignUpWithEmail(string email, string password, string nickname, Action<UserInfo> onDone = null)
     {
-        service.SignIn(nickname, user => Post(() =>
-        {
-            CurrentUser = user;
-            if (user != null)
-            {
-                PlayerPrefs.SetString(NicknameKey, user.nickname);
-            }
-            onDone?.Invoke(user);
-        }));
+        service.SignUpWithEmail(email, password, nickname, user => Post(() => FinishSignIn(user, email, onDone)));
     }
 
+    // 이메일 로그인. 실패 이유는 ErrorOccurred로 옴.
+    public void SignInWithEmail(string email, string password, Action<UserInfo> onDone = null)
+    {
+        service.SignInWithEmail(email, password, user => Post(() => FinishSignIn(user, email, onDone)));
+    }
+
+    private void FinishSignIn(UserInfo user, string email, Action<UserInfo> onDone)
+    {
+        CurrentUser = user;
+        if (user != null)
+        {
+            PlayerPrefs.SetString(NicknameKey, user.nickname);
+            if (!string.IsNullOrWhiteSpace(email)) PlayerPrefs.SetString(EmailKey, email.Trim());
+        }
+        onDone?.Invoke(user);
+    }
+
+    // 로그아웃: 방에서 나가고 접속을 끊음. 끊기면 Disconnected가 옴.
     public void SignOut() => service.SignOut();
 
     // 방 이름이 비어 있으면 "닉네임의 방". 너무 길면 자름.
@@ -240,7 +312,7 @@ public class NetworkManager : Singleton<NetworkManager>
     // 이 PC에서만 보이는 안내 메시지를 채팅으로 띄움 (서버로 보내지 않음)
     public void ShowSystemMessage(ChatChannel channel, string text)
     {
-        ChatReceived?.Invoke(channel, new ChatMessage { text = text, time = ServerNow });
+        AddChat(channel, new ChatMessage { text = text, time = ServerNow });
     }
     public void ReturnToRoom() => service.ReturnToRoom();
 
@@ -249,6 +321,11 @@ public class NetworkManager : Singleton<NetworkManager>
     {
         if (string.IsNullOrWhiteSpace(text)) return false;
         if (Time.unscaledTime - lastChatTime < GameRules.ChatCooldown) return false;
+        if (channel != ChatChannel.Lobby && CurrentRoom == null)
+        {
+            Debug.LogWarning($"방에 들어가 있지 않아서 {channel} 채팅을 보낼 수 없습니다. 로비 채팅창이면 ChatPanel의 Channel을 Lobby로 바꾸세요.");
+            return false;
+        }
 
         lastChatTime = Time.unscaledTime;
         string trimmed = text.Trim();

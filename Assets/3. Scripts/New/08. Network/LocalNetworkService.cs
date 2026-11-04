@@ -22,10 +22,10 @@ public sealed class LocalNetworkService : INetworkService
     private readonly List<ScoreEntry> scores = new List<ScoreEntry>();
     private UserInfo me;
     private RoomInfo room;
-    private int lastGuestNumber;
-    private int reservedGuestNumber;
+    private int lastAccountNumber;   // 가입한 순서대로 #0001, #0002 ...
     private string myColor = "#FFFFFF";
     private readonly Random nicknameRandom = new Random();   // AI 이름
+    private readonly Dictionary<string, Account> accounts = new Dictionary<string, Account>();   // 이메일 → 계정
 
     public long ServerNow => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -34,28 +34,64 @@ public sealed class LocalNetworkService : INetworkService
         onDone?.Invoke(true);   // 서버가 없으니 항상 연결됨
     }
 
-    public void ReserveGuestNumber(Action<int> onDone)
+    // 회원가입. 계정은 이 서비스가 살아 있는 동안(게임을 켜 둔 동안)만 메모리에 있음.
+    public void SignUpWithEmail(string email, string password, string nickname, Action<UserInfo> onDone)
     {
-        if (reservedGuestNumber == 0) reservedGuestNumber = ++lastGuestNumber;
-        onDone?.Invoke(reservedGuestNumber);
-    }
-
-    public void SignIn(string nickname, Action<UserInfo> onDone)
-    {
-        if (string.IsNullOrWhiteSpace(nickname))
+        string problem = CheckEmailInput(email, password)
+                      ?? (string.IsNullOrWhiteSpace(nickname) ? "닉네임을 입력하세요." : null)
+                      ?? (accounts.ContainsKey(email.Trim()) ? "이미 가입된 이메일입니다." : null);
+        if (problem != null)
         {
-            ErrorOccurred?.Invoke("닉네임을 입력하세요.");
+            ErrorOccurred?.Invoke(problem);
             onDone?.Invoke(null);
             return;
         }
 
-        ReserveGuestNumber(null);
-        me = new UserInfo(Guid.NewGuid().ToString("N"), nickname.Trim(), reservedGuestNumber);
-        reservedGuestNumber = 0;
+        UserInfo user = new UserInfo(Guid.NewGuid().ToString("N"), nickname.Trim(), ++lastAccountNumber);
+        accounts[email.Trim()] = new Account { password = password, user = user };
+        StartSession(user, onDone);
+    }
+
+    public void SignInWithEmail(string email, string password, Action<UserInfo> onDone)
+    {
+        string problem = CheckEmailInput(email, password);
+        if (problem == null && (!accounts.TryGetValue(email.Trim(), out Account account) || account.password != password))
+        {
+            problem = "이메일 또는 비밀번호가 맞지 않습니다.";
+        }
+        if (problem != null)
+        {
+            ErrorOccurred?.Invoke(problem);
+            onDone?.Invoke(null);
+            return;
+        }
+
+        StartSession(accounts[email.Trim()].user, onDone);
+    }
+
+    private void StartSession(UserInfo user, Action<UserInfo> onDone)
+    {
+        me = user;
         Connected?.Invoke();
         onDone?.Invoke(me);
         LobbyUsersChanged?.Invoke(new[] { me });
-        RoomListChanged?.Invoke(new RoomInfo[0]);
+        RoomListChanged?.Invoke(room != null ? new[] { room.Clone() } : new RoomInfo[0]);
+    }
+
+    // Firebase와 같은 규칙: 이메일 모양, 비밀번호 6자 이상
+    private static string CheckEmailInput(string email, string password)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return "이메일을 입력하세요.";
+        if (!email.Contains("@") || !email.Contains(".")) return "이메일 형식이 올바르지 않습니다.";
+        if (string.IsNullOrEmpty(password)) return "비밀번호를 입력하세요.";
+        if (password.Length < 6) return "비밀번호는 6자 이상이어야 합니다.";
+        return null;
+    }
+
+    private sealed class Account
+    {
+        public string password;
+        public UserInfo user;
     }
 
     public void SignOut()

@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "Assets/4. SlimeAsset/BackGround.png",
+  "prompt": "Use case: style-transfer. Asset type: single modular 2D mobile-game slime BODY sprite, 1024 by 1024 square PNG with transparent background. Reference image: the supplied BackGround.png is the exact design reference. Look specifically at the BLUE ANGEL SLIME IN THE LOWER RIGHT CORNER. Reproduce that slime's cute soft body design and polished cartoon rendering as a standalone neutral-white FACELESS body. Its body has a smoothly rounded broad dome, soft full curved cheeks, a gently spreading lower body, and a broad softly curved flattened base. Preserve the appealing slightly squashed jelly silhouette of that particular blue angel slime. This is NOT a pointed triangular mound, NOT a tall egg, NOT a rounded rectangle, NOT a circular disk, NOT a generic blob from another style. Smooth thick near-black charcoal contour, neutral opaque white/light-gray main body, one clean neutral-gray lower/side cel-shaded band matching the reference's blue shade arrangement, small controlled white shine at upper-left. No blue pigment: neutral grayscale is needed for Unity tinting. No eyes, mouth, blush, wings, halo, crown, accessories, ground shadow, letters, text, frame, or other objects. Canvas framing: draw the BODY ITSELF very large, with the outer outline touching/nearly touching ALL FOUR image edges, including TOP AND BOTTOM; NO transparent horizontal padding bands above or below. Adapt the round soft body fullness to fill a 1:1 square naturally without making it triangular. Fully opaque solid white body interior, no transparent cloud or holes inside; genuine alpha only outside the silhouette. Crisp smooth clean cartoon edges, no outer glow, blur, grain, crayon or sketch texture. Deliver just ONE faceless body, not a sheet or comparison.",
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a19996-8135-7271-9545-228715db1958/exec-86bfce8c-cf9d-42cb-b0d9-79a64ed840ef.png",
+  "savedPaths": [
+    "Assets/4. SlimeAsset/Slime_Modular/Slime_White_Faceless.png",
+    "Assets/4. SlimeAsset/Slime_Modular/Slime_White_Normal.png"
+  ],
+  "export": "Outer alpha trimmed, mapped to requested 1024x1024. Existing expression composited on UI variant. No Unity metadata or validation."
+}

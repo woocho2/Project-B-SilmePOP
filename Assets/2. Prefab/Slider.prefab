@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
   part: 0
+  themeSprites: []
 --- !u!1 &4897048250226953701
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +124,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -40, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5046296397582863052
 GameObject:
@@ -307,6 +308,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 1173882944937522381, guid: 235ac3c597349984fa101f50959356ff, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173882944937522381, guid: 235ac3c597349984fa101f50959356ff, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569000096854201062, guid: 235ac3c597349984fa101f50959356ff, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569000096854201062, guid: 235ac3c597349984fa101f50959356ff, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 9155632031010677677, guid: 235ac3c597349984fa101f50959356ff, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -373,7 +390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9155632031010677677, guid: 235ac3c597349984fa101f50959356ff, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9155632031010677677, guid: 235ac3c597349984fa101f50959356ff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

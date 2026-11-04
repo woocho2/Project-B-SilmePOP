@@ -7,7 +7,7 @@ public sealed class UserInfo
 {
     public string uid;
     public string nickname;
-    public int guestNumber;   // 게스트가 생성된 순서. 화면의 UID이자 # 뒤의 번호
+    public int guestNumber;   // 회원가입한 순서(계정 번호). # 뒤의 번호
 
     public UserInfo() { }
 
