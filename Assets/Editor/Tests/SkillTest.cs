@@ -33,6 +33,23 @@ public class SkillTest
     }
 
     [Test]
+    public void Magnifier_HintsMatchWithoutDevil_AndFallsBackWhenOnlyDevilMatchesLeft()
+    {
+        BoardModel board = new BoardModel();
+        BoardSlime devil = board.AddSlime(5, SlimeType.Devil, Cell(0, 0));
+        BoardSlime five = board.AddSlime(5, SlimeType.Basic, Cell(1, 0));   // 악마 낀 조합 (먼저 찾아짐)
+        BoardSlime three = board.AddSlime(3, SlimeType.Basic, Cell(5, 5));
+        BoardSlime seven = board.AddSlime(7, SlimeType.Basic, Cell(6, 5));   // 악마 없는 조합
+
+        Assert.IsTrue(MagnifierSkill.FindHint(board, Target, out BoardRect hint));
+        CollectionAssert.AreEquivalent(new[] { three, seven }, board.GetSlimesInCells(hint.GetCells()));
+
+        board.Remove(new List<BoardSlime> { three, seven });
+        Assert.IsTrue(MagnifierSkill.FindHint(board, Target, out hint));   // 악마 조합밖에 없으면 그거라도
+        CollectionAssert.AreEquivalent(new[] { devil, five }, board.GetSlimesInCells(hint.GetCells()));
+    }
+
+    [Test]
     public void NumberChange_NeverKeepsOriginal_AndStaysInOneToNine()
     {
         BoardModel board = new BoardModel();
@@ -149,10 +166,10 @@ public class SkillTest
     [Test]
     public void MatchSkills_DifferentSeeds_GiveDifferentPicks()
     {
-        HashSet<string> seen = new HashSet<string>();
-        for (int seed = 0; seed < 200; seed++) seen.Add(string.Join(",", MatchSettings.PickSkills(seed)));
+        HashSet<SkillType> seen = new HashSet<SkillType>();
+        for (int seed = 0; seed < 200; seed++) seen.UnionWith(MatchSettings.PickSkills(seed));
 
-        Assert.Greater(seen.Count, 20);   // 늘 같은 3개가 나오지 않음
+        Assert.AreEqual(SkillSet.All.Length, seen.Count);   // 늘 같은 것만 나오지 않고 6종이 다 뽑힘
     }
 
     [Test]

@@ -104,3 +104,11 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Unity 밖에서 돌리는 AI 시뮬레이션·테스트 프로젝트 (Tools/AiSim, Tools/AiTest). csproj는 올리고 빌드 결과는 빼기
+!/Tools/AiSim/AiSim.csproj
+!/Tools/AiTest/AiTest.csproj
+/Tools/AiSim/bin/
+/Tools/AiSim/obj/
+/Tools/AiTest/bin/
+/Tools/AiTest/obj/

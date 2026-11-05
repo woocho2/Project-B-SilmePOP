@@ -1,0 +1,42 @@
+{
+  "tool": "built-in image_gen",
+  "scope": "Item UI icons only: Transform, NumberChange, Merge, Magnifier, Joker, Destroy",
+  "requestedChange": "Approximately 30 percent thicker existing dark-indigo contours; retain original composition and colors.",
+  "prompt": "Use case: precise-object-edit. Edit the provided SLIME POP item UI sprite. Make ONLY its existing dark-indigo contour strokes moderately thicker, approximately 1.3 times their current width (30 percent thicker), to improve small-screen readability. Keep the EXACT original design, arrangement, object positions, relative sizes, silhouette placement, colors, cel shading, white shines, all original details and empty alpha margins. Do not redesign, redraw the subject differently, enlarge the subject, change perspective, move elements, crop, tighten framing, simplify, change colors or add any object. Preserve the SAME square 1254x1254 canvas and the original layout; no added safety margin or new padding. Maintain crisp smooth rounded stroke edges. Preserve fully opaque filled interiors and existing transparent gaps/background. All existing pale white/cream filled shapes must remain fully OPAQUE, never transparent. Keep the original deep-indigo stroke color, not pure black. Make the outside boundary and existing object-separating contour strokes a little heavier consistently, without thickening white highlights or turning shading boundaries into new ink lines. No blur, texture, glow, outer shadow, labels, text, frame, badge or extra marks. This is a restrained LINE-WEIGHT ADJUSTMENT ONLY, not a new illustration. ",
+  "files": [
+    {
+      "name": "Transform",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-b8d16538-b94f-4884-87f1-453d905ba3f8.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_Transform.png"
+    },
+    {
+      "name": "NumberChange",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-95e74178-249a-4526-accf-d816b1849e76.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_NumberChange.png"
+    },
+    {
+      "name": "Merge",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-37d5d8a1-c4e6-4b0f-b11c-53e0472f3bb3.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_Merge.png"
+    },
+    {
+      "name": "Magnifier",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-1eb8ba9d-c4c3-48af-8deb-d34403d7f8c6.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_Magnifier.png"
+    },
+    {
+      "name": "Joker",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-bf5ae74c-c9ec-458d-a2f7-15c88b3fe7dc.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_Joker.png"
+    },
+    {
+      "name": "Destroy",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a19996-8135-7271-9545-228715db1958\\exec-a2e01d9c-ad58-4cf7-85e3-e232de440512.png",
+      "destination": "Assets/4. SlimeAsset/UI_Icon_Item_Destroy.png"
+    }
+  ],
+  "backup": "Tools/CartoonUI/BeforeItemOutlineThicken/",
+  "processing": "Generated PNGs copied to original asset paths; no further resizing or alpha processing.",
+  "metadata": "No Unity metadata created, modified or inspected.",
+  "validation": "No Unity execution, tests, import validation or output verification, per user request."
+}

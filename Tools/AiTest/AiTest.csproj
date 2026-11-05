@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Assets/Editor/Tests를 Unity 없이 돌림 (순수 C# 규칙·AI 코드만). 실행: dotnet test Tools/AiTest -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <NoWarn>CS0067;NUNIT2005;NUNIT2004;NUNIT2003;NUNIT2002;NUNIT2007;NUNIT2045;NUNIT2015;NUNIT2010;NUNIT2009;NUNIT2031;NUNIT2046</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Src>$(MSBuildThisFileDirectory)..\..\Assets\3. Scripts\</Src>
+    <Tests>$(MSBuildThisFileDirectory)..\..\Assets\Editor\Tests\</Tests>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(Src)00. Core\GameEnums.cs;$(Src)00. Core\GameRandom.cs;$(Src)00. Core\GameRules.cs;$(Src)01. Data\MatchSettings.cs" />
+    <Compile Include="$(Src)02. Board\*.cs;$(Src)06. Skill\SkillBase.cs;$(Src)06. Skill\SkillSet.cs" />
+    <Compile Include="$(Src)07. AI\AiAgent.cs;$(Src)07. AI\AiBrain.cs;$(Src)07. AI\AiDifficultyTable.cs;$(Src)07. AI\AiSkillAdvisor.cs;$(Src)07. AI\AiStrategy.cs;$(Src)07. AI\AiSimulator.cs" />
+    <Compile Include="$(Src)12. Dev\PlayerRecord.cs" />
+    <Compile Include="$(Tests)AiBrainTest.cs;$(Tests)MatchFinderTest.cs;$(Tests)ScoreCalculatorTest.cs;$(Tests)SkillTest.cs;$(Tests)BoardGeneratorTest.cs;$(Tests)PlayerRecordTest.cs" />
+  </ItemGroup>
+</Project>

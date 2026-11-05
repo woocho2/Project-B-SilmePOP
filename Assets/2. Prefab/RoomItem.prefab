@@ -548,7 +548,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d99467ef0da074595a35acfd853dba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSkin
   part: 1
   themeSprites: []
 --- !u!114 &-3761371140982255047

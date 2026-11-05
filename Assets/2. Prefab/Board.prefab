@@ -87,7 +87,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d99467ef0da074595a35acfd853dba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSkin
   part: 3
   themeSprites:
   - {fileID: 21300000, guid: 4df1d0c0688b4510a0ef6d15fbf9f783, type: 3}
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d99467ef0da074595a35acfd853dba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSkin
   part: 1
   themeSprites: []
 --- !u!1 &2194315999085926939
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d99467ef0da074595a35acfd853dba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSkin
   part: 0
   themeSprites: []
 --- !u!1 &7614084285167145975
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d99467ef0da074595a35acfd853dba, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Change_Theme
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSkin
   part: 3
   themeSprites:
   - {fileID: 21300000, guid: 4df1d0c0688b4510a0ef6d15fbf9f783, type: 3}
