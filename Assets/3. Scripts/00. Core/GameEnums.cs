@@ -34,16 +34,6 @@ public enum AiDifficulty
     Hell = 3   // 가장 어려움 (0.5 ~ 1초, 100%). 게임판 확인용으로도 씀
 }
 
-// 한 판의 진행 단계. GameManager가 이 순서로만 넘어감.
-public enum MatchPhase
-{
-    Waiting = 0,     // 시작 시각(startAt)을 기다리는 중
-    Reveal = 1,      // 목표 합 공개 연출
-    Countdown = 2,   // 3, 2, 1
-    Playing = 3,     // 판 시간 (GameRules.MatchDuration)
-    Ended = 4        // 입력 막음, 최종 판 모으기, 결과
-}
-
 // 대기실 자리 한 칸에 누가 있는가.
 public enum SlotKind
 {

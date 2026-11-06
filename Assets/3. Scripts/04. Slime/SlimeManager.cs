@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -43,6 +44,22 @@ public class SlimeManager : Singleton<SlimeManager>
         return GameRules.IsInside(x, y) ? GameRules.ToIndex(x, y) : -1;
     }
 
+    // 칸의 월드 좌표 (칸 가운데)
+    public Vector2 CellToWorld(int cell)
+    {
+        return GridOrigin + new Vector2(GameRules.IndexToX(cell) * Spacing.x, GameRules.IndexToY(cell) * Spacing.y);
+    }
+
+    // 사각형을 덮는 드래그의 시작·끝 월드 좌표 (왼쪽 위 → 오른쪽 아래). 옆 칸 슬라임에는 닿지 않을 만큼만 바깥으로.
+    public void RectToWorld(BoardRect rect, out Vector2 start, out Vector2 end)
+    {
+        Vector2 pad = Spacing * 0.35f;
+        Vector2 min = CellToWorld(GameRules.ToIndex(rect.MinX, rect.MinY)) - pad;
+        Vector2 max = CellToWorld(GameRules.ToIndex(rect.MaxX, rect.MaxY)) + pad;
+        start = new Vector2(min.x, max.y);
+        end = new Vector2(max.x, min.y);
+    }
+
     // 스킬 범위 미리보기 (가능하면 초록, 불가면 빨강 외곽선)
     public void SetSkillPreview(IReadOnlyList<int> cells, bool isActive, Color color)
     {
@@ -74,9 +91,45 @@ public class SlimeManager : Singleton<SlimeManager>
         }
     }
 
+    // 터짐·파괴: 슬라임마다 조금씩 시간차를 두고 톡톡 터지는 연출 뒤에 빈칸으로
     private void OnSlimesRemoved(IReadOnlyList<BoardSlime> slimes)
     {
-        RefreshSlimes(slimes);
+        for (int i = 0; i < slimes.Count; i++)
+        {
+            BoardSlime slime = slimes[i];
+            int anchor = slime.Anchor;
+            foreach (int cell in slime.Cells)
+            {
+                if (cell != anchor) RefreshCell(cell);   // 합체 슬라임의 나머지 칸은 그림이 없으므로 바로
+            }
+            cellViews[anchor].PlayPop(i * PopStagger, () => RefreshCell(anchor));
+        }
+    }
+
+    private const float PopStagger = 0.035f;
+
+    // ── 점수 글자 ──────────────────────────────────────────────
+
+    [Header("점수 글자 (+12)")]
+    [SerializeField] private float scorePopupSize = 5f;
+
+    // 칸들의 가운데에 "+점수"를 띄움 (터뜨린 조합, 파괴, 합체로 얻은 점수)
+    public void ShowScore(IEnumerable<int> cells, int score)
+    {
+        if (cellViews == null) return;
+
+        Vector2 sum = Vector2.zero;
+        int count = 0;
+        foreach (int cell in cells)
+        {
+            if (cell < 0 || cell >= cellViews.Length) continue;
+            sum += CellToWorld(cell);
+            count++;
+        }
+        if (count == 0) return;
+
+        SlimeController sample = cellViews[0];
+        ScorePopup.Show(sum / count, score, scorePopupSize, sample.NumberFont, sample.Body);
     }
 
     private void OnSlimeChanged(BoardSlime slime)
@@ -149,23 +202,29 @@ public class SlimeManager : Singleton<SlimeManager>
         ClearAllHints();
     }
 
-    // 돋보기: 가능한 조합 1개를 노란 외곽선으로 표시 (악마 없는 조합 먼저, MagnifierSkill.FindHint)
-    public void ShowHint()
+    // 돋보기: 알려 줄 조합(MagnifierSkill.LastHint)을 노란 외곽선으로 표시
+    public void ShowHint(BoardRect match)
     {
         if (cellViews == null) return;
 
         ClearAllHints();
-
-        if (MagnifierSkill.FindHint(board, GameManager.Instance.TargetSum, out BoardRect match))
+        foreach (int cell in match.GetCells())
         {
-            foreach (int cell in match.GetCells())
+            if (board.GetSlimeAt(cell) != null)
             {
-                if (board.GetSlimeAt(cell) != null)
-                {
-                    cellViews[cell].SetHintHighlight(true);
-                }
+                cellViews[cell].SetHintHighlight(true);
             }
         }
+    }
+
+    // 조커: 어디가 조커가 됐는지 잠깐 외곽선으로 알려 줌
+    public void FlashCell(int cell, Color color, float seconds)
+    {
+        if (cellViews == null || cell < 0 || cell >= cellViews.Length) return;
+
+        int[] cells = { cell };
+        SetSkillPreview(cells, true, color);
+        DOVirtual.DelayedCall(seconds, () => SetSkillPreview(cells, false, Color.clear)).SetLink(gameObject);
     }
 
     public void ClearAllHints()

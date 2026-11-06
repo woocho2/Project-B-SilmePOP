@@ -1,0 +1,18 @@
+{
+  "method": "Deterministic offline canvas layout; existing artwork reused without generation",
+  "exporter": "Tools/ModularSlimes/OverlayCanvas2048.cs",
+  "inputDirectory": "Tools/ModularSlimes/BeforeOverlayCanvas2048/",
+  "outputDirectory": "Assets/4. SlimeAsset/Slime_Modular/",
+  "unchangedBodies": ["Slime_White_Faceless.png", "Slime_White_Normal.png"],
+  "overlayFiles": ["Slime_Face_Normal.png", "Slime_Costume_Crown.png", "Slime_Costume_Angel.png", "Slime_Costume_Horns.png", "Slime_Costume_Joker.png"],
+  "canvas": { "width": 2048, "height": 2048, "pivotX": 1024, "pivotY": 1024 },
+  "bodyReference": { "x": 512, "y": 512, "width": 1024, "height": 1024, "scale": 1 },
+  "face": "Original aligned 1024px layer copied unscaled to bodyReference origin",
+  "crown": { "artWidth": 760, "contactRange": [0.12, 0.88], "foreheadOverlap": 14 },
+  "joker": { "artWidth": 1100, "contactRange": [0.225, 0.775], "foreheadOverlap": 16, "contactCurve": "Smooth quadratic fitted inside the continuous head opening; preserve center seat and width, prevent curled-tip discontinuity" },
+  "angel": { "haloWidth": 560, "haloGap": -98, "haloShiftDownFromInitial": 168, "wingWidth": 330, "wingRootBodyX": [0.105, 0.895] },
+  "horns": { "partWidth": 220, "rootBodyX": [0.28, 0.72], "rootOverlap": 110, "shiftDownFromInitial": 72, "outwardRotationDegrees": [-28, 28] },
+  "unityPlacement": "Shared PPU, center pivot, position and scale. UI overlays need twice the body's RectTransform dimensions.",
+  "metadata": "Not created, read or modified",
+  "validation": "No Unity execution, tests or output verification performed, at user request"
+}

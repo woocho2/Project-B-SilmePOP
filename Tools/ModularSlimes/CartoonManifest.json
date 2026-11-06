@@ -2,8 +2,8 @@
     "style":  "Approved clean cartoon mobile-game style",
     "metaActions":  "None; no .meta files created, modified or inspected",
     "validation":  "No Unity execution, compilation, tests, import checks or output validation",
-    "scope":  "Seven existing PNGs replaced at their original filenames; scenes/prefabs/scripts not edited",
-    "layout":  "Both 1024x1024 body sprites now reference the blue angel slime in the lower-right of BackGround.png. Generated padding is trimmed and the body fills all square edges. Other modular parts are unchanged.",
+    "scope":  "Only the four costume PNGs and face PNG replaced; body PNGs, Unity metadata, scripts, scenes and prefabs unchanged.",
+    "layout":  "Bodies remain unchanged at 1024x1024. Four costumes and the face use 2048x2048 canvases, referencing the unscaled body rectangle at x=512,y=512,width=1024,height=1024. All layers share the same center and pixel scale. Use matching PPU and centered sprite pivots; UI overlay RectTransforms must be twice the body dimensions.",
     "backup":  "Tools/ModularSlimes/BeforeCartoon/",
     "assets":  [
                    {
@@ -28,12 +28,13 @@
                        "prompt":  "Use case: stylized-concept. Create ONE standalone modular game-character layer for SLIME POP. Image1 is the APPROVED CARTOON STYLE: smooth clean color planes, bold friendly dark contours, controlled small white shines, simple2-3tone cel shading, cute mainstream casual mobile game art. Image2 is SUBJECT/DESIGN ONLY, ignore its existing crayon grain and huge transparent canvas. Redraw the requested layer cleanly with no crayon/pencil/watercolor grain, rough smudges, realism or exaggerated3D. TRUE TRANSPARENT alpha only outside the actual shapes. Every filled shape must be fully OPAQUE, no accidental alpha holes, partial-opacity face areas or central gray cloud. TIGHT BOUNDS are critical: fill essentially the ENTIRE requested canvas, with each outermost top/bottom/left/right extremity within0-1% of its image edge. Do not surround a small drawing with a big invisible square. Preserve the natural aspect ratio of the subject using the specified canvas. No labels, letters, numbers, ground shadows, extra costume, background or UI frame. SUBJECT: ONLY a simple cute SLIME EXPRESSION layer: two black oval eyes spaced widely apart and a tiny black U-shaped smile centered between and slightly below them. Exactly three filled face marks; each eye may have one tiny white specular dot INSIDE its black oval. WIDE LANDSCAPE3:1 canvas tightly bounding the entire eye-and-mouth arrangement, the top of eyes near top edge, bottom of smile near bottom edge, left and right eyes close to left/right canvas edges. All remaining pixels transparent, including the gaps BETWEEN eyes and mouth. There is NO face background, head, white body, cheeks, brows, nose, border or skin patch. Friendly clean cartoon marks with consistent smooth dark contour.",
                        "savedPath":  "Assets/4. SlimeAsset/Slime_Modular/Slime_Face_Normal.png",
                        "canvas":  {
-                                      "width":  1024,
-                                      "height":  1024,
-                                      "placement":  "body-aligned 1024 square: expression width 369px, height 123px, left 327px, top 502px; surrounding alpha is intentional positioning",
-                                      "operation":  "Tools/ModularSlimes/ModularCartoonBody.cs: WriteFaceLayer"
+                                      "width":  2048,
+                                      "height":  2048,
+                                      "placement":  "Centered unscaled 1024 body reference at (512,512); shared PPU and center pivot",
+                                      "operation":  "Tools/ModularSlimes/OverlayCanvas2048.cs"
                                   },
-                       "processing":  "Existing expression artwork only resized/repositioned on a body-sized transparent canvas; no redraw. Identical-size centered overlay matches Slime_White_Normal."
+                       "processing":  "Original aligned 1024px face layer copied unscaled to (512,512) on a transparent 2048px canvas; expression artwork not redrawn.",
+                       "layoutSource":  "Tools/ModularSlimes/BeforeOverlayCanvas2048/Slime_Face_Normal.png"
                    },
                    {
                        "key":  "crown",
@@ -43,11 +44,13 @@
                        "prompt":  "Use case: stylized-concept. Create ONE standalone modular game-character layer for SLIME POP. Image1 is the APPROVED CARTOON STYLE: smooth clean color planes, bold friendly dark contours, controlled small white shines, simple2-3tone cel shading, cute mainstream casual mobile game art. Image2 is SUBJECT/DESIGN ONLY, ignore its existing crayon grain and huge transparent canvas. Redraw the requested layer cleanly with no crayon/pencil/watercolor grain, rough smudges, realism or exaggerated3D. TRUE TRANSPARENT alpha only outside the actual shapes. Every filled shape must be fully OPAQUE, no accidental alpha holes, partial-opacity face areas or central gray cloud. TIGHT BOUNDS are critical: fill essentially the ENTIRE requested canvas, with each outermost top/bottom/left/right extremity within0-1% of its image edge. Do not surround a small drawing with a big invisible square. Preserve the natural aspect ratio of the subject using the specified canvas. No labels, letters, numbers, ground shadows, extra costume, background or UI frame. SUBJECT: ONLY the GOLD KING CROWN, three round-tipped points, ruby-red oval jewel at center and curved gold lower band, matching reference2 design with clean cartoon polish. LANDSCAPE3:2 canvas tightly bounding the crown itself; tip and lower band touch/nearly touch top and bottom, outermost left/right round tips nearly touch side edges. NO slime body or face. Lower contact band is a strongly rounded ARCH, HIGH in center and lower on both ends, designed to sit against a dome slime head, not a nearly-flat floating edge. All gold metal and red jewel fully opaque, smooth yellow/gold cel shading and small shine, dark-indigo outer contour. Natural crown proportions, no invisible space reserved below for a body.",
                        "savedPath":  "Assets/4. SlimeAsset/Slime_Modular/Slime_Costume_Crown.png",
                        "canvas":  {
-                                      "width":  1024,
-                                      "height":  1024,
-                                      "placement":  "uniform fit, centered",
-                                      "operation":  "Tools/ModularSlimes/SquareCanvas1024.cs"
-                                  }
+                                      "width":  2048,
+                                      "height":  2048,
+                                      "placement":  "Centered unscaled 1024 body reference at (512,512); shared PPU and center pivot",
+                                      "operation":  "Tools/ModularSlimes/OverlayCanvas2048.cs"
+                                  },
+                       "layoutSource":  "Tools/ModularSlimes/BeforeOverlayCanvas2048/Slime_Costume_Crown.png",
+                       "layoutProcessing":  "Existing lower contact band fitted column-by-column to the actual body forehead contour, with slight overlap to prevent a gap; original colors and transparent areas retained."
                    },
                    {
                        "key":  "angel",
@@ -57,11 +60,12 @@
                        "prompt":  "Use case: stylized-concept. Create ONE standalone modular game-character layer for SLIME POP. Image1 is the APPROVED CARTOON STYLE: smooth clean color planes, bold friendly dark contours, controlled small white shines, simple2-3tone cel shading, cute mainstream casual mobile game art. Image2 is SUBJECT/DESIGN ONLY, ignore its existing crayon grain and huge transparent canvas. Redraw the requested layer cleanly with no crayon/pencil/watercolor grain, rough smudges, realism or exaggerated3D. TRUE TRANSPARENT alpha only outside the actual shapes. Every filled shape must be fully OPAQUE, no accidental alpha holes, partial-opacity face areas or central gray cloud. TIGHT BOUNDS are critical: fill essentially the ENTIRE requested canvas, with each outermost top/bottom/left/right extremity within0-1% of its image edge. Do not surround a small drawing with a big invisible square. Preserve the natural aspect ratio of the subject using the specified canvas. No labels, letters, numbers, ground shadows, extra costume, background or UI frame. SUBJECT: ONLY the ANGEL COSTUME: two small cream-white feather wings at left and right, each three soft rounded feathers, and one gold elliptical HALO centered ABOVE. WIDE LANDSCAPE2:1 canvas tightly bounding the three-piece arrangement, left wing reaches left edge, right wing reaches right edge, halo reaches top edge, lowest feather tips reach bottom edge. Keep a transparent OPEN CENTRAL GAP for the separate slime body; do not draw any body silhouette/outline there. Halo center hole is intentionally transparent. The wing feathers themselves and the golden ring must be fully opaque. Dark-indigo cartoon outlines, simple pale-gray/blue feather-edge cel shade, gold halo highlight. Keep wings level and symmetric; no connecting line or shared frame. Do not reserve unused transparent space above/below the complete costume arrangement.",
                        "savedPath":  "Assets/4. SlimeAsset/Slime_Modular/Slime_Costume_Angel.png",
                        "canvas":  {
-                                      "width":  1024,
-                                      "height":  1024,
-                                      "placement":  "uniform fit, centered",
-                                      "operation":  "Tools/ModularSlimes/SquareCanvas1024.cs"
-                                  }
+                                      "width":  2048,
+                                      "height":  2048,
+                                      "placement":  "Centered unscaled 1024 body reference at (512,512); shared PPU and center pivot",
+                                      "operation":  "Tools/ModularSlimes/OverlayCanvas2048.cs"
+                                  },
+                       "layoutSource":  "Tools/ModularSlimes/BeforeOverlayCanvas2048/Slime_Costume_Angel.png"
                    },
                    {
                        "key":  "horns",
@@ -71,11 +75,12 @@
                        "prompt":  "Use case: stylized-concept. Create ONE standalone modular game-character layer for SLIME POP. Image1 is the APPROVED CARTOON STYLE: smooth clean color planes, bold friendly dark contours, controlled small white shines, simple2-3tone cel shading, cute mainstream casual mobile game art. Image2 is SUBJECT/DESIGN ONLY, ignore its existing crayon grain and huge transparent canvas. Redraw the requested layer cleanly with no crayon/pencil/watercolor grain, rough smudges, realism or exaggerated3D. TRUE TRANSPARENT alpha only outside the actual shapes. Every filled shape must be fully OPAQUE, no accidental alpha holes, partial-opacity face areas or central gray cloud. TIGHT BOUNDS are critical: fill essentially the ENTIRE requested canvas, with each outermost top/bottom/left/right extremity within0-1% of its image edge. Do not surround a small drawing with a big invisible square. Preserve the natural aspect ratio of the subject using the specified canvas. No labels, letters, numbers, ground shadows, extra costume, background or UI frame. SUBJECT: ONLY the PAIR OF RED DEVIL HORNS, two separate short curved tapered red horns with small clean upper-left shine and dark-indigo contour, mirror-symmetric left and right. WIDE LANDSCAPE3:1 canvas tightly bounding the horn pair. Two horns at far left and far right with a purposeful transparent gap between them for the separate head. Horn tips reach nearly top edge; horn bases nearly bottom edge; outside left/right horn contours nearly the side edges. No slime material, body contour, face, head, connecting red band, ears or new accessories. Each red horn shape is fully opaque, coral red main face and deeper-red lower rim.",
                        "savedPath":  "Assets/4. SlimeAsset/Slime_Modular/Slime_Costume_Horns.png",
                        "canvas":  {
-                                      "width":  1024,
-                                      "height":  1024,
-                                      "placement":  "uniform fit, centered",
-                                      "operation":  "Tools/ModularSlimes/SquareCanvas1024.cs"
-                                  }
+                                      "width":  2048,
+                                      "height":  2048,
+                                      "placement":  "Centered unscaled 1024 body reference at (512,512); shared PPU and center pivot",
+                                      "operation":  "Tools/ModularSlimes/OverlayCanvas2048.cs"
+                                  },
+                       "layoutSource":  "Tools/ModularSlimes/BeforeOverlayCanvas2048/Slime_Costume_Horns.png"
                    },
                    {
                        "key":  "joker",
@@ -85,11 +90,13 @@
                        "prompt":  "Use case: stylized-concept. Create ONE standalone modular game-character layer for SLIME POP. Image1 is the APPROVED CARTOON STYLE: smooth clean color planes, bold friendly dark contours, controlled small white shines, simple2-3tone cel shading, cute mainstream casual mobile game art. Image2 is SUBJECT/DESIGN ONLY, ignore its existing crayon grain and huge transparent canvas. Redraw the requested layer cleanly with no crayon/pencil/watercolor grain, rough smudges, realism or exaggerated3D. TRUE TRANSPARENT alpha only outside the actual shapes. Every filled shape must be fully OPAQUE, no accidental alpha holes, partial-opacity face areas or central gray cloud. TIGHT BOUNDS are critical: fill essentially the ENTIRE requested canvas, with each outermost top/bottom/left/right extremity within0-1% of its image edge. Do not surround a small drawing with a big invisible square. Preserve the natural aspect ratio of the subject using the specified canvas. No labels, letters, numbers, ground shadows, extra costume, background or UI frame. SUBJECT: ONLY a TWO-POINT JESTER HAT accessory: LEFT point charcoal-black with coral-red rounded pom-pom, RIGHT point coral-red with charcoal-black rounded pom-pom. WIDE LANDSCAPE3:1 canvas tightly bounding the whole hat, bell/point extremities nearly touch top/left/right edges and lower side tips nearly bottom edge. Preserve existing two-color cap design, no white brim. Lower contact edge is a deep rounded ARCH rising in the center and descending at both sides, designed to overlap a dome slime head. Keep the upper central valley shallow enough to leave a solid continuous fabric bridge above the lower arch, so a body cannot poke out between the two points. Smooth clean red/charcoal opaque fabric, bold dark-indigo outline, simple cel shading and small controlled white shines. NO face, body, playing card, numbers, words or transparent holes inside the fabric. Only below the curved hat edge and around the outer silhouette are transparent. No unused space reserved below for a slime body.",
                        "savedPath":  "Assets/4. SlimeAsset/Slime_Modular/Slime_Costume_Joker.png",
                        "canvas":  {
-                                      "width":  1024,
-                                      "height":  1024,
-                                      "placement":  "uniform fit, centered",
-                                      "operation":  "Tools/ModularSlimes/SquareCanvas1024.cs"
-                                  }
+                                      "width":  2048,
+                                      "height":  2048,
+                                      "placement":  "Centered unscaled 1024 body reference at (512,512); shared PPU and center pivot",
+                                      "operation":  "Tools/ModularSlimes/OverlayCanvas2048.cs"
+                                  },
+                       "layoutSource":  "Tools/ModularSlimes/BeforeOverlayCanvas2048/Slime_Costume_Joker.png",
+                       "layoutProcessing":  "Existing lower contact band fitted column-by-column to the actual body forehead contour, with slight overlap to prevent a gap; original colors and transparent areas retained."
                    },
                    {
                        "key":  "body_ui",

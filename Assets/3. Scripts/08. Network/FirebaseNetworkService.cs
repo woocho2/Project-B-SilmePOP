@@ -44,6 +44,7 @@ public sealed class FirebaseNetworkService : INetworkService
     private FirebaseRestClient.Stream usersStream, roomsStream, lobbyChatStream;
     private object usersTree, roomsTree, lobbyChatTree;
     private bool usersLoaded;
+    private string lastUsersKey;   // 마지막으로 알린 접속자 목록 (같으면 다시 알리지 않음)
     private bool streamsBroken;
     private readonly HashSet<string> seenChat = new HashSet<string>();
 
@@ -192,6 +193,7 @@ public sealed class FirebaseNetworkService : INetworkService
         me = null;
         usersTree = roomsTree = lobbyChatTree = null;
         usersLoaded = false;
+        lastUsersKey = null;
         seenChat.Clear();
         Disconnected?.Invoke();
     }
@@ -208,7 +210,7 @@ public sealed class FirebaseNetworkService : INetworkService
         if (streamsBroken) StartStreams();
 
         client.Patch("users/" + me.uid, new Dictionary<string, object> { { "lastSeen", FirebaseData.ServerTimestamp } });
-        PublishLobbyUsers();   // 시간이 지나 끊긴 것으로 바뀐 사람이 있을 수 있음
+        if (PublishLobbyUsers()) PublishRooms();   // 시간이 지나 끊긴 것으로 바뀐 사람이 있을 수 있음 (그 사람이 방장인 방은 목록에서 뺌)
         CheckPresence();
         if (currentRoom != null) TryStartCountdown();   // 안 온 사람이 있어도 시간이 다 되면 시작
     }
@@ -222,9 +224,10 @@ public sealed class FirebaseNetworkService : INetworkService
         usersStream = client.Listen("users", null, (e, path, data) =>
         {
             usersTree = Apply(usersTree, e, path, data);
+            bool firstLoad = !usersLoaded;
             usersLoaded = true;
-            PublishLobbyUsers();
-            PublishRooms();   // 방장이 살아 있는지가 바뀌었을 수 있음
+            // 대부분은 누군가의 하트비트(lastSeen)라 접속자가 그대로임 → 바뀌었을 때만 방 목록도 다시 (방장이 살아 있는지)
+            if (PublishLobbyUsers() || firstLoad) PublishRooms();
         }, OnStreamEnded);
         roomsStream = client.Listen("rooms", null, (e, path, data) =>
         {
@@ -264,17 +267,27 @@ public sealed class FirebaseNetworkService : INetworkService
         return ServerNow - FirebaseData.Long(user, "lastSeen") <= (long)(GameRules.DisconnectTimeout * 1000f);
     }
 
-    private void PublishLobbyUsers()
+    // 살아 있는 접속자 목록이 지난번과 다를 때만 알림. 알렸으면 true.
+    private bool PublishLobbyUsers()
     {
         List<UserInfo> users = new List<UserInfo>();
+        System.Text.StringBuilder key = new System.Text.StringBuilder();
         if (usersTree is Dictionary<string, object> all)
         {
             foreach (KeyValuePair<string, object> pair in all)
             {
-                if (IsAlive(pair.Key)) users.Add(FirebaseData.ToUser(pair.Key, pair.Value));
+                if (!IsAlive(pair.Key)) continue;
+                UserInfo user = FirebaseData.ToUser(pair.Key, pair.Value);
+                users.Add(user);
+                key.Append(user.uid).Append('\n').Append(user.nickname).Append('\n').Append(user.guestNumber).Append('\n');
             }
         }
+
+        string usersKey = key.ToString();
+        if (usersKey == lastUsersKey) return false;
+        lastUsersKey = usersKey;
         LobbyUsersChanged?.Invoke(users);
+        return true;
     }
 
     private void PublishRooms()

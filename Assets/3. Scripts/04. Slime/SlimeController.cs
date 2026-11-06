@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +15,11 @@ public class SlimeController : MonoBehaviour
     private SpriteRenderer highlightRenderer;
 
     private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
+    private static readonly int OutlineUVRectId = Shader.PropertyToID("_SpriteUVRect");
     private MaterialPropertyBlock outlineBlock;
+    private Sprite outlineSprite;
+    private Vector4 outlineUVRect = new Vector4(0f, 0f, 1f, 1f);
+    private Color currentOutlineColor = Color.clear;
 
     [Header("특수 슬라임 코스튬 (Costume 자식에 씌움)")]
     [SerializeField] private Sprite costumeKing;
@@ -47,8 +53,17 @@ public class SlimeController : MonoBehaviour
     // 슬라임이 없는 칸에서 끄는 그림들 (강조는 따로 관리)
     private readonly List<GameObject> visualObjects = new List<GameObject>();
 
+    // 터지는 연출 (PlayPop)
+    private Vector3 baseScale;
+    private Tween popTween;
+
+    // 점수 글자(ScorePopup)를 슬라임 위에 그리기 위한 정보
+    public SpriteRenderer Body => bodyRenderer;
+    public TMP_FontAsset NumberFont => numberText != null ? numberText.font : null;
+
     private void Awake()
     {
+        baseScale = transform.localScale;
         if (highlightObject != null)
         {
             highlightRenderer = highlightObject.GetComponent<SpriteRenderer>();
@@ -93,6 +108,7 @@ public class SlimeController : MonoBehaviour
     // 합체 슬라임의 나머지 세 칸은 그림만 끄고 콜라이더는 켜 둠: 한 칸만 걸쳐도 포함되어야 함 (기획 [4-1] 4번).
     public void Refresh(BoardSlime slime)
     {
+        StopPop();
         bool hasSlime = slime != null;
         bool showVisuals = hasSlime && slime.Anchor == Cell;
 
@@ -116,6 +132,38 @@ public class SlimeController : MonoBehaviour
         if (showVisuals) DoodleLabSkin.ApplySlime(this);
     }
 
+    // 터짐: delay 뒤 살짝 부풀었다가 쏙 작아져 사라짐. 끝나면 onDone (보통 SlimeManager가 이 칸을 다시 그림).
+    // 이미 판에서는 없어진 슬라임이라 바로 콜라이더를 꺼서 다음 드래그에 걸리지 않게 함.
+    // 그사이 이 칸을 다시 그리면(Refresh) 연출은 멈추고 원래 크기로.
+    public void PlayPop(float delay, Action onDone)
+    {
+        StopPop();
+        if (slimeCollider != null) slimeCollider.enabled = false;
+        isDragHighlighted = false;
+        isHintActive = false;
+        UpdateHighlight();
+
+        popTween = DOTween.Sequence()
+            .AppendInterval(delay)
+            .Append(transform.DOScale(baseScale * 1.25f, 0.08f).SetEase(Ease.OutQuad))
+            .Append(transform.DOScale(Vector3.zero, 0.14f).SetEase(Ease.InBack))
+            .OnComplete(() =>
+            {
+                popTween = null;
+                transform.localScale = baseScale;
+                onDone?.Invoke();
+            })
+            .SetLink(gameObject);
+    }
+
+    private void StopPop()
+    {
+        if (popTween == null) return;
+        popTween.Kill();
+        popTween = null;
+        transform.localScale = baseScale;
+    }
+
     // 종류에 맞는 코스튬. 기본·합체는 없음 (null).
     public Sprite CostumeFor(SlimeType type)
     {
@@ -133,7 +181,11 @@ public class SlimeController : MonoBehaviour
     {
         if (bodyRenderer == null) return;
 
-        if (bodySprite != null) bodyRenderer.sprite = bodySprite;
+        if (bodySprite != null && bodyRenderer.sprite != bodySprite)
+        {
+            bodyRenderer.sprite = bodySprite;
+            SetOutlineColor(currentOutlineColor);
+        }
         bodyRenderer.color = color;
 
         // 판에서는 숫자가 보이도록 얼굴을 끔.
@@ -225,11 +277,36 @@ public class SlimeController : MonoBehaviour
     // 몸통의 SlimeOutline 셰이더에 외곽선 색을 넘김 (투명이면 외곽선 없음). 슬라임마다 다른 색이라 재질 대신 블록으로 넘김.
     private void SetOutlineColor(Color color)
     {
+        currentOutlineColor = color;
         if (bodyRenderer == null) return;
+
+        // textureRect는 Tight 패킹에서 사용할 수 없으므로 실제 UV에서 범위를 구한다.
+        // UV 배열은 스프라이트가 바뀔 때만 읽는다.
+        if (outlineSprite != bodyRenderer.sprite)
+        {
+            outlineSprite = bodyRenderer.sprite;
+            outlineUVRect = new Vector4(0f, 0f, 1f, 1f);
+            if (outlineSprite != null)
+            {
+                Vector2[] uv = outlineSprite.uv;
+                if (uv.Length > 0)
+                {
+                    Vector2 min = uv[0];
+                    Vector2 max = uv[0];
+                    for (int i = 1; i < uv.Length; i++)
+                    {
+                        min = Vector2.Min(min, uv[i]);
+                        max = Vector2.Max(max, uv[i]);
+                    }
+                    outlineUVRect = new Vector4(min.x, min.y, max.x, max.y);
+                }
+            }
+        }
 
         if (outlineBlock == null) outlineBlock = new MaterialPropertyBlock();
         bodyRenderer.GetPropertyBlock(outlineBlock);
         outlineBlock.SetColor(OutlineColorId, color);
+        outlineBlock.SetVector(OutlineUVRectId, outlineUVRect);
         bodyRenderer.SetPropertyBlock(outlineBlock);
     }
 }

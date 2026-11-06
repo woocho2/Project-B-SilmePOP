@@ -3549,6 +3549,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 107543645911189372, guid: 235ac3c597349984fa101f50959356ff, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 148920806277922429, guid: 235ac3c597349984fa101f50959356ff, type: 3}
       propertyPath: m_RaycastPadding.w
       value: 75

@@ -24,9 +24,17 @@ public static class AiBrain
                                               IReadOnlyList<BoardRect> candidates, Random random, bool focus,
                                               AiStrategy strategy)
     {
+        return board.GetSlimesInCells(ChooseRect(board, targetSum, difficulty, candidates, random, focus, strategy).GetCells());
+    }
+
+    // ChooseMove와 같지만 고른 사각형을 돌려줌 (화면에서 그 사각형을 끄는 연출에 씀)
+    public static BoardRect ChooseRect(BoardModel board, int targetSum, AiDifficulty difficulty,
+                                       IReadOnlyList<BoardRect> candidates, Random random, bool focus,
+                                       AiStrategy strategy)
+    {
         if (!focus && random.NextDouble() >= AiDifficultyTable.Accuracy(difficulty))
         {
-            return board.GetSlimesInCells(candidates[random.Next(candidates.Count)].GetCells());
+            return candidates[random.Next(candidates.Count)];
         }
 
         // 바로 얻는 점수로 줄 세운 뒤, 앞의 몇 개는 둔 뒤의 판까지 봄
@@ -50,7 +58,24 @@ public static class AiBrain
                 best = scored[i].Value;
             }
         }
-        return board.GetSlimesInCells(best.GetCells());
+        return best;
+    }
+
+    // 사각형을 실제로 슬라임이 있는 곳까지 좁힘 (안에 든 슬라임은 같음). 빈칸까지 크게 끄는 것보다 사람처럼 보임.
+    public static BoardRect Tighten(BoardModel board, BoardRect rect)
+    {
+        int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
+        foreach (int cell in rect.GetCells())
+        {
+            if (board.GetSlimeAt(cell) == null) continue;
+            int x = GameRules.IndexToX(cell);
+            int y = GameRules.IndexToY(cell);
+            minX = Math.Min(minX, x);
+            minY = Math.Min(minY, y);
+            maxX = Math.Max(maxX, x);
+            maxY = Math.Max(maxY, y);
+        }
+        return minX == int.MaxValue ? rect : new BoardRect(minX, minY, maxX, maxY);
     }
 
     // 수 하나의 바로 얻는 가치 (악마가 들어간 수는 손해, 킹·천사·조커가 들어간 수는 이득) + 마리 수 보정

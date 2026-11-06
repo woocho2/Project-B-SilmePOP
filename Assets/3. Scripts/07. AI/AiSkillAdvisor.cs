@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 // AI가 아이템을 쓸 만한 곳과 그 가치(점수로 환산)를 찾음. 순수 C#.
 //   가치 = 바로 얻는 점수 + 새로 생기는 조합의 점수 − 없어지거나 바뀌는 슬라임이 앞으로 벌어 줄 점수
-//   조커     : 지금 둘 수 있는 조합 속 기본 슬라임을 조커로 → 바로 그 조합을 터뜨려 목표 합 x 2를 더 얻음
+//   조커     : 무작위 기본 슬라임이 조커가 됨 → 기본 슬라임마다 조커가 되면 바로 얻는 이득의 평균
 //   합체     : 2 x 2 숫자 합의 일의 자리가 0이면 바로 터져 마리 수 x 4점 (막혔을 때는 합쳐서 조합이 생기는 곳도)
 //   파괴     : 없애면 남은 슬라임으로 조합이 생기는 칸 (특히 조합을 0점으로 만드는 악마)
 //   숫자변경 : 바뀔 수 있는 8가지 숫자마다 생기는 조합의 평균 점수
@@ -96,32 +96,37 @@ public static class AiSkillAdvisor
         return slime != null && slime.Type != SlimeType.Joker && slime.Type != SlimeType.Merged;
     }
 
+    // 조커는 무작위 기본 슬라임이 됨 (자리를 못 고름). 가치 = 기본 슬라임 아무거나 조커가 됐을 때 바로 얻는 이득의 평균
+    // (그 슬라임이 든 조합 중 가장 큰 이득, 조합에 안 든 슬라임은 0). 막혔으면 조커가 움직이다 짝을 만날 수 있으니 조금이라도 씀.
     private static bool FindJoker(BoardModel board, int targetSum, IReadOnlyList<BoardRect> candidates, Random random,
                                   out int cell, out float value)
     {
         cell = -1;
         value = 0f;
 
-        // 막혔으면: 조커가 5초마다 빈자리로 움직이다 짝(더하면 목표 합) 옆에 갈 수 있게, 짝이 있는 기본 슬라임을 조커로
+        Dictionary<BoardSlime, int> bestGain = new Dictionary<BoardSlime, int>();
+        int basics = 0;
+        foreach (BoardSlime slime in board.GetSlimesInCells(AllCells))
+        {
+            if (slime.Type != SlimeType.Basic) continue;
+            basics++;
+            bestGain[slime] = 0;
+        }
+        if (basics == 0) return false;
+
+        // 막혔으면: 조커가 움직이다 짝(더하면 목표 합)을 만날 수 있는 기본 슬라임이 하나라도 있을 때만
         if (candidates.Count == 0)
         {
             int[] numberCount = new int[10];
             foreach (BoardSlime slime in board.GetSlimesInCells(AllCells)) numberCount[slime.Number]++;
-
-            List<int> basics = new List<int>();
-            for (int c = 0; c < GameRules.CellCount; c++)
+            foreach (BoardSlime slime in bestGain.Keys)
             {
-                BoardSlime slime = board.GetSlimeAt(c);
-                if (slime == null || slime.Type != SlimeType.Basic) continue;
-
                 int partner = targetSum - slime.Number;
-                bool hasPartner = partner >= 1 && partner <= 9 && numberCount[partner] > (partner == slime.Number ? 1 : 0);
-                if (hasPartner) basics.Add(c);
+                if (partner < 1 || partner > 9 || numberCount[partner] <= (partner == slime.Number ? 1 : 0)) continue;
+                value = StuckThreshold;
+                return true;
             }
-            if (basics.Count == 0) return false;
-            cell = basics[random.Next(basics.Count)];
-            value = StuckThreshold;
-            return true;
+            return false;
         }
 
         int jokerBase = GameRules.BaseScore(SlimeType.Joker);
@@ -133,14 +138,14 @@ public static class AiSkillAdvisor
             {
                 if (slime.Type != SlimeType.Basic) continue;
                 int gain = ScoreCalculator.CalculateAs(slimes, targetSum, slime, SlimeType.Joker, jokerBase) - now;
-                if (cell < 0 || gain > value)
-                {
-                    cell = slime.Anchor;
-                    value = gain;
-                }
+                if (gain > bestGain[slime]) bestGain[slime] = gain;
             }
         }
-        return cell >= 0;
+
+        float total = 0f;
+        foreach (int gain in bestGain.Values) total += gain;
+        value = total / basics;
+        return true;
     }
 
     private static bool FindMerge(BoardModel board, int targetSum, bool stuck, out int cell, out float value)

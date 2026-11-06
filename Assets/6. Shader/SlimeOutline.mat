@@ -29,9 +29,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineWidth: 0.02
-    - _Softness: 0.35
+    - _OutlineWidth: 0.028
+    - _OutlineMinPixels: 3.2
+    - _RimWidthPixels: 0.9
+    - _FillStrength: 0.07
+    - _PulseSpeed: 1.1
+    - _PulseAmount: 0.1
+    - _Softness: 0.2
     m_Colors:
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0.9}
+    - _SpriteUVRect: {r: 0, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

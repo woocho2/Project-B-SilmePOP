@@ -21,9 +21,23 @@ public class Game_GamePanel : MonoBehaviour
     [Tooltip("막혔을 때 안내 글자. 비우면 이름 Txt_Warning")]
     [SerializeField] private TMP_Text txt_warning;
 
+    [Header("마지막 몇 초")]
+    [Tooltip("남은 시간이 이 초 이하면 시간 글자가 빨개지고 1초마다 톡 튐")]
+    [SerializeField, Min(0)] private int warningSeconds = 10;
+    [Tooltip("이 초 이하부터는 째깍 소리도")]
+    [SerializeField, Min(0)] private int tickSoundSeconds = 5;
+    [SerializeField] private Color warningColor = new Color(0.95f, 0.2f, 0.2f);
+
+    [Header("TIME UP")]
+    [SerializeField] private string timeUpText = "TIME UP!";
+    [Tooltip("TIME UP 글자를 보여 주는 시간 (그 뒤 결과 화면)")]
+    [SerializeField, Min(0f)] private float timeUpHold = 1.2f;
+
     private Sequence countdownTween;
     private Sequence warningTween;
     private Vector2 warningHomePosition;
+    private Color timerColor;
+    private Vector3 countdownScale = Vector3.one;
 
     // 목표 점수 슬라임이 앉을 자리 (그 위)
     public RectTransform TimerRect => txt_timer != null ? txt_timer.rectTransform : null;
@@ -36,9 +50,11 @@ public class Game_GamePanel : MonoBehaviour
 
         if (txt_countdown != null)
         {
+            countdownScale = txt_countdown.rectTransform.localScale;
             txt_countdown.raycastTarget = false;
             txt_countdown.gameObject.SetActive(false);
         }
+        if (txt_timer != null) timerColor = txt_timer.color;
         if (txt_warning != null)
         {
             warningHomePosition = txt_warning.rectTransform.anchoredPosition;
@@ -60,6 +76,7 @@ public class Game_GamePanel : MonoBehaviour
     {
         countdownTween?.Kill();
         warningTween?.Kill();
+        if (txt_timer != null) txt_timer.rectTransform.DOKill();
 
         GameManager game = GameManager.Instance;
         if (game == null) return;
@@ -104,16 +121,58 @@ public class Game_GamePanel : MonoBehaviour
         });
     }
 
+    // 3, 2, 1이나 TIME UP을 멈춤 (onDone은 부르지 않음)
     public void StopCountdown()
     {
         countdownTween?.Kill();
         countdownTween = null;
-        if (txt_countdown != null) txt_countdown.gameObject.SetActive(false);
+        if (txt_countdown == null) return;
+        txt_countdown.rectTransform.localScale = countdownScale;
+        txt_countdown.gameObject.SetActive(false);
     }
 
+    // 시간 끝: 카운트다운 자리에 TIME UP!이 크게 쿵 찍히고 잠깐 머문 뒤 onDone (결과 화면)
+    public void PlayTimeUp(Action onDone)
+    {
+        StopCountdown();
+        if (txt_countdown == null)
+        {
+            onDone?.Invoke();
+            return;
+        }
+
+        RectTransform rect = txt_countdown.rectTransform;
+        txt_countdown.text = timeUpText;
+        txt_countdown.gameObject.SetActive(true);
+        rect.localScale = countdownScale * 2.2f;
+        countdownTween = DOTween.Sequence().SetUpdate(true)
+            .Append(rect.DOScale(countdownScale, 0.35f).SetEase(Ease.OutBack))
+            .AppendInterval(timeUpHold)
+            .OnComplete(() =>
+            {
+                countdownTween = null;
+                rect.localScale = countdownScale;
+                txt_countdown.gameObject.SetActive(false);
+                onDone?.Invoke();
+            });
+    }
+
+    // 마지막 warningSeconds초는 빨갛게, 1초마다 톡. tickSoundSeconds초부터는 째깍 소리도
     private void ShowTimer(float remainingTime)
     {
-        if (txt_timer != null) txt_timer.text = ""+ Mathf.CeilToInt(remainingTime);
+        if (txt_timer == null) return;
+
+        int seconds = Mathf.CeilToInt(remainingTime);
+        txt_timer.text = seconds.ToString();
+
+        GameManager game = GameManager.Instance;
+        bool warning = seconds > 0 && seconds <= warningSeconds && game != null && game.IsPlaying;
+        txt_timer.color = warning ? warningColor : timerColor;
+        if (!warning) return;
+
+        txt_timer.rectTransform.DOKill(true);
+        txt_timer.rectTransform.DOPunchScale(Vector3.one * 0.3f, 0.4f, 6, 0.6f);
+        if (seconds <= tickSoundSeconds) SoundManager.Play(SoundEffect.Countdown);
     }
 
 

@@ -8,7 +8,8 @@
 //   보통        : 3.6 ~ 7.2초       33%     82 / 68 / 83마리
 //   어려움      : 2.8 ~ 5.6초       67%    100 / 85 / 103마리
 //   지옥        : 2.4 ~ 4.8초       100%   110 / 118 / 151마리  (늘 같은 속도)
-// 직접 해 보고 너무 쉽거나 어려우면 반응 시간(또는 HighSumReactionScale)만 고치면 됨.
+// 2026-11-06: 목표 10 ~ 15 기록을 다 모아서 목표 합별 배율로 바꿈 (ReactionScale: 11 1.2 · 12 1.35 · 13 1.5 · 14 1.65 · 15 1.65).
+// 직접 해 보고 너무 쉽거나 어려우면 반응 시간(또는 ReactionScale)만 고치면 됨.
 public static class AiDifficultyTable
 {
     public static float MinReaction(AiDifficulty difficulty)
@@ -35,13 +36,21 @@ public static class AiDifficultyTable
         }
     }
 
-    // 목표 합 11 ~ 15는 사람이 훨씬 느려서 쉬움·보통·어려움은 반응 시간을 이만큼 늘림 (10은 그대로, 지옥은 늘 그대로)
-    public const float HighSumReactionScale = 1.2f;
-
+    // 목표 합이 클수록 사람이 느려서 쉬움·보통·어려움은 반응 시간을 이만큼 늘림 (지옥은 늘 그대로).
+    // 기록 모드(목표 10 ~ 15 각 10판)의 fit 결과: 11 1.22 · 12 1.37 · 13 1.55 · 14 1.67 · 15 1.69 → 조금 낮춰서 씀.
     public static float ReactionScale(AiDifficulty difficulty, int targetSum)
     {
-        if (difficulty == AiDifficulty.Hell || targetSum <= GameRules.MinTargetSum) return 1f;
-        return HighSumReactionScale;
+        if (difficulty == AiDifficulty.Hell) return 1f;
+
+        switch (targetSum)
+        {
+            case 11: return 1.2f;
+            case 12: return 1.35f;
+            case 13: return 1.5f;
+            case 14: return 1.65f;
+            case 15: return 1.65f;
+            default: return targetSum > 15 ? 1.65f : 1f;
+        }
     }
 
     public static float Accuracy(AiDifficulty difficulty)

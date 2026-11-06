@@ -41,12 +41,34 @@ public class SkillTest
         BoardSlime three = board.AddSlime(3, SlimeType.Basic, Cell(5, 5));
         BoardSlime seven = board.AddSlime(7, SlimeType.Basic, Cell(6, 5));   // 악마 없는 조합
 
-        Assert.IsTrue(MagnifierSkill.FindHint(board, Target, out BoardRect hint));
-        CollectionAssert.AreEquivalent(new[] { three, seven }, board.GetSlimesInCells(hint.GetCells()));
+        for (int seed = 0; seed < 20; seed++)
+        {
+            Assert.IsTrue(MagnifierSkill.FindHint(board, Target, new GameRandom(seed), out BoardRect hint));
+            CollectionAssert.AreEquivalent(new[] { three, seven }, board.GetSlimesInCells(hint.GetCells()));
+        }
 
         board.Remove(new List<BoardSlime> { three, seven });
-        Assert.IsTrue(MagnifierSkill.FindHint(board, Target, out hint));   // 악마 조합밖에 없으면 그거라도
-        CollectionAssert.AreEquivalent(new[] { devil, five }, board.GetSlimesInCells(hint.GetCells()));
+        Assert.IsTrue(MagnifierSkill.FindHint(board, Target, new GameRandom(1), out BoardRect last));   // 악마 조합밖에 없으면 그거라도
+        CollectionAssert.AreEquivalent(new[] { devil, five }, board.GetSlimesInCells(last.GetCells()));
+    }
+
+    // 최고 점수 조합(킹)만 알려 주지 않음: 악마 없는 조합 중 무작위
+    [Test]
+    public void Magnifier_IsNotAlwaysTheBestMove()
+    {
+        BoardModel board = new BoardModel();
+        BoardSlime king = board.AddSlime(4, SlimeType.King, Cell(0, 0));
+        board.AddSlime(6, SlimeType.Basic, Cell(1, 0));
+        board.AddSlime(3, SlimeType.Basic, Cell(10, 7));
+        board.AddSlime(7, SlimeType.Basic, Cell(11, 7));
+
+        int withKing = 0;
+        for (int seed = 0; seed < 40; seed++)
+        {
+            Assert.IsTrue(MagnifierSkill.FindHint(board, Target, new GameRandom(seed), out BoardRect hint));
+            if (board.GetSlimesInCells(hint.GetCells()).Contains(king)) withKing++;
+        }
+        Assert.That(withKing, Is.InRange(1, 39));
     }
 
     [Test]
@@ -105,15 +127,39 @@ public class SkillTest
     }
 
     [Test]
-    public void Joker_OnlyOnBasicSlime()
+    public void Joker_GoesOnRandomBasicSlime_NotWhereClicked()
     {
         BoardModel board = new BoardModel();
-        board.AddSlime(3, SlimeType.King, Cell(0, 0));
-        board.AddSlime(4, SlimeType.Basic, Cell(1, 0));
+        BoardSlime king = board.AddSlime(3, SlimeType.King, Cell(0, 0));
+        BoardSlime basic = board.AddSlime(4, SlimeType.Basic, Cell(16, 9));
         JokerSkill skill = new JokerSkill();
 
-        Assert.IsFalse(skill.CanApply(board, Cell(0, 0), Target));
-        Assert.IsTrue(skill.CanApply(board, Cell(1, 0), Target));
+        Assert.IsFalse(skill.NeedsTarget);
+        Assert.IsTrue(skill.CanApply(board, -1, Target));
+        skill.Apply(board, Cell(0, 0), new GameRandom(1), Target);   // 칸을 줘도 무시
+
+        Assert.AreEqual(SlimeType.King, king.Type);
+        Assert.AreEqual(SlimeType.Joker, basic.Type);
+        Assert.AreEqual(Cell(16, 9), skill.LastCell);
+        Assert.IsFalse(skill.CanApply(board, -1, Target));   // 기본 슬라임이 없으면 못 씀
+    }
+
+    // 같은 시드·같은 판이면 모든 참가자에게 같은 슬라임이 조커가 됨
+    [Test]
+    public void Joker_SameSeed_SameSlime()
+    {
+        int RunOnce(int seed)
+        {
+            BoardModel board = BoardGenerator.Generate(5);
+            SkillSet skills = new SkillSet(seed);
+            skills.TryUse(SkillType.Joker, board, -1, Target, out _);
+            return ((JokerSkill)skills.Get(SkillType.Joker)).LastCell;
+        }
+
+        Assert.AreEqual(RunOnce(77), RunOnce(77));
+        HashSet<int> cells = new HashSet<int>();
+        for (int seed = 0; seed < 20; seed++) cells.Add(RunOnce(seed));
+        Assert.Greater(cells.Count, 5);   // 시드마다 다른 곳
     }
 
     [Test]

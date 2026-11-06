@@ -41,6 +41,10 @@ public class NetworkManager : Singleton<NetworkManager>
     public IReadOnlyList<RoomInfo> Rooms { get; private set; } = new RoomInfo[0];   // 마지막으로 받은 방 목록
     public IReadOnlyList<UserInfo> LobbyUsers { get; private set; } = new UserInfo[0];   // 마지막으로 받은 접속자 목록
 
+    // 이번 판에 받은 최종 판 (자리 → 판). 결과 화면이 늦게 열려도 먼저 온 판을 볼 수 있게 들고 있음. 새 판이 시작되면 비움.
+    public IReadOnlyDictionary<int, BoardSnapshot> FinalBoards => finalBoards;
+    private readonly Dictionary<int, BoardSnapshot> finalBoards = new Dictionary<int, BoardSnapshot>();
+
     public bool IsConnected => CurrentUser != null;
 
     // 로그인한 상태면 NetworkManager, 아니면 경고를 남기고 null. 방 만들기·들어가기 전에 씀.
@@ -129,7 +133,12 @@ public class NetworkManager : Singleton<NetworkManager>
         service.ChatReceived += (channel, message) => Post(() => AddChat(channel, message));
         service.MatchStarting += settings => Post(() => HandleMatchStarting(settings));
         service.ScoresChanged += entries => Post(() => HandleScoresChanged(entries));
-        service.FinalBoardReceived += (slot, snapshot) => Post(() => FinalBoardReceived?.Invoke(slot, snapshot));
+        service.FinalBoardReceived += (slot, snapshot) => Post(() =>
+        {
+            if (snapshot == null) return;
+            finalBoards[slot] = snapshot;
+            FinalBoardReceived?.Invoke(slot, snapshot);
+        });
         service.HostChanged += slot => Post(() => HostChanged?.Invoke(slot));
     }
 
@@ -161,6 +170,7 @@ public class NetworkManager : Singleton<NetworkManager>
         CurrentRoom = null;
         CurrentMatch = null;
         Scores.Clear();
+        finalBoards.Clear();
         LobbyUsers = new UserInfo[0];
         Rooms = new RoomInfo[0];
         chatHistory.Clear();
@@ -233,6 +243,7 @@ public class NetworkManager : Singleton<NetworkManager>
     private void HandleMatchStarting(MatchSettings settings)
     {
         CurrentMatch = settings;
+        finalBoards.Clear();
         MatchStarting?.Invoke(settings);
     }
 

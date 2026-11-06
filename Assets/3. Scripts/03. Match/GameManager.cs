@@ -84,16 +84,11 @@ public class GameManager : Singleton<GameManager>
 
     private long PlayAt => NetworkManager.Instance.CurrentRoom != null ? NetworkManager.Instance.CurrentRoom.playAt : 0;
 
-    // 개발용 기록 모드(DebugCheat)가 정한 목표 합. 값이 있으면 혼자 시험하는 판을 늘 이 목표 합으로 만듦 (판·아이템은 새로).
-    public int? DebugTargetSum { get; set; }
-
     // 새 판을 만듦. 방의 값이 있으면 그것을 쓰고, 없으면 혼자 시험하는 판을 만듦.
     private void CreateMatch()
     {
         Settings = IsNetworkMatch ? NetworkManager.Instance.CurrentMatch
                                   : MatchSettings.CreateNew(0L, 1, GameRandom.NewSeed());
-        if (!IsNetworkMatch && DebugTargetSum.HasValue)
-            Settings = new MatchSettings(Settings.Seed, DebugTargetSum.Value, Settings.StartAt, Settings.SlotCount);
         Board = BoardGenerator.Generate(Settings.Seed);
         Score = 0;
         LastScoreTime = 0f;
@@ -103,9 +98,11 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 방장만 AI 자리를 맡음 (다른 PC에서도 만들면 점수가 두 번 올라감). 혼자 시험하는 판에는 AI가 없음.
+    // 발표용 자동 플레이(AiAutoPlay)가 켜져 있으면 내 판도 AI가 풂.
     private void SpawnAiPlayers()
     {
         ClearAiPlayers();
+        if (AiAutoPlay.IsOn) aiPlayers.Add(AiPlayer.CreateForMyBoard(AiAutoPlay.Difficulty));
         if (!IsNetworkMatch || !NetworkManager.Instance.IsHost) return;
 
         RoomInfo room = NetworkManager.Instance.CurrentRoom;
@@ -230,10 +227,35 @@ public class GameManager : Singleton<GameManager>
         hasEnded = true;
         StopGameTimer();
         SoundManager.Play(SoundEffect.GameOver);
-        OnGameOver?.Invoke();
-        if (m_slimeManager != null) m_slimeManager.SetActive(false);
+        UploadFinalBoards();
         if (m_dragManager != null) m_dragManager.SetActive(false);
+        // 판은 바로 숨기지 않음: TIME UP 연출 동안 마지막 판이 보이게. 결과 화면이 뜰 때 UIManager_Game이 HideBoard
+        if (UIManager_Game.Instance == null || !UIManager_Game.Instance.isActiveAndEnabled) HideBoard();
+        OnGameOver?.Invoke();
         Debug.Log("게임 종료");
+    }
+
+    public void HideBoard()
+    {
+        if (m_slimeManager != null) m_slimeManager.SetActive(false);
+    }
+
+    // 결과 화면(Game_EndPanel)에 보여 줄 최종 판을 올림: 각자 자기 판, 방장은 AI 판까지. 방장은 방을 결과 단계로.
+    private void UploadFinalBoards()
+    {
+        if (!IsNetworkMatch) return;
+
+        NetworkManager network = NetworkManager.Instance;
+        if (network.MySlot >= 0 && Board != null)
+            network.UploadFinalBoard(network.MySlot, BoardSnapshot.FromBoard(Board, 0, ""));   // 색은 방 자리의 slimeColor로 칠함
+        if (!network.IsHost) return;
+
+        foreach (AiPlayer ai in aiPlayers)
+        {
+            if (ai != null && ai.Slot >= 0 && ai.OwnBoard != null)
+                network.UploadFinalBoard(ai.Slot, BoardSnapshot.FromBoard(ai.OwnBoard, 0, ""));
+        }
+        network.EndMatch();
     }
 
     public void StopGameTimer()

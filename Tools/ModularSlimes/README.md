@@ -1,40 +1,43 @@
-CURRENT FACE ALIGNMENT: Slime_Face_Normal.png shares the body's 1024x1024 canvas. The existing expression is 369x123px at (327,502), centered horizontally. Place body and face at the same position and size to match Slime_White_Normal.png. Outer alpha in the face layer is intentional alignment space. Only face size/placement changed; body artwork and Unity files remain untouched. No metadata edits or validation.
+# Modular slime overlay layout
 
-CURRENT BODY: built-in image_gen redraw from the BLUE ANGEL SLIME at the lower right of Assets/4. SlimeAsset/BackGround.png. ExportAngelReferenceBody.cs trims outer padding and saves 1024x1024. ComposeFace overlays the existing expression for the UI variant. Cartoon_Body.svg and WriteBody are obsolete historical attempts and are NOT sources of the current PNGs. BeforeAngelReference/ preserves the rejected round version. No metadata edits or output validation.
+Current asset directory: `Assets/4. SlimeAsset/Slime_Modular/`.
 
-Latest correction: Slime_White_Faceless.png and Slime_White_Normal.png now use newly drawn round, plump 1024x1024 silhouettes. The contour reaches the top, bottom, left and right canvas edges; there are no vertical padding bands. SVG and ModularCartoonBody.cs contain the editable geometry. BeforeRoundBody1024/ preserves the previous padded bodies. Other modular parts remain unchanged. No .meta edits or output validation performed.
+The body files `Slime_White_Faceless.png` and `Slime_White_Normal.png` are unchanged. They retain their original 1024x1024 canvases.
 
-# Modular slime sprites — current cartoon assets
+The following files now use 2048x2048 transparent canvases:
 
-Latest user override: ALL seven PNGs now have exactly 1024x1024 square canvases. SquareCanvas1024.cs uniformly fits and centers each existing image without stretching its artwork. Transparent space needed to retain each part's natural proportions is kept. BeforeSquare1024/ contains the previous images. The natural-aspect production dimensions described below are historical source dimensions, not the current exported canvas dimensions. No .meta edits or validation were performed.
+- `Slime_Face_Normal.png`
+- `Slime_Costume_Crown.png`
+- `Slime_Costume_Angel.png`
+- `Slime_Costume_Horns.png`
+- `Slime_Costume_Joker.png`
 
-Assets: Assets/4. SlimeAsset/Slime_Modular/. Seven existing PNG filenames were retained and replaced with clean cartoon artwork.
+## Common coordinates
 
-| File | Use | Canvas |
-| --- | --- | --- |
-| Slime_White_Faceless.png | Fully opaque neutral-white body, crisp charcoal outline, simple gray lower cel shade | 1536x1024 (3:2) |
-| Slime_White_Normal.png | EXACT same body with the new expression composited for standalone UI | Same as body |
-| Slime_Face_Normal.png | Two black eyes and U smile only | Tight3:1 |
-| Slime_Costume_Crown.png | Gold crown with red jewel only | Tight3:2 |
-| Slime_Costume_Angel.png | Two wings and golden halo only | Tight2:1 |
-| Slime_Costume_Horns.png | Two red horns only | Tight3:1 |
-| Slime_Costume_Joker.png | Red/charcoal jester hat only | Tight3:1 |
+All five overlays reference the unchanged 1024px body at **(512,512)** within the 2048px canvas. The shared pivot is **(1024,1024)**. Coordinates in this document use a top-left origin.
 
-## Placement
+The face layer is copied without scaling from its already aligned original canvas to (512,512). Its expression retains the same size and position as the one in Slime_White_Normal. Intentional transparency surrounding the face and costumes provides assembly space.
 
-The user requested removal of large outer alpha margins. Each image is now framed to the part itself, with its natural aspect ratio. This deliberately replaces the old shared square canvas with embedded positioning offsets. Do not assume matching-size RectTransforms for body, face and costume will automatically align.
+Crown: 760px artwork width. Its lower band follows the existing body's forehead contour, with a 14px overlap.
 
-The user authors scene and prefab layout. Set each part's size and placement in the Editor, preserving its image aspect ratio. Use Slime_White_Normal as a single faced UI image if a separate expression layer is unnecessary. Gameplay can continue to use the faceless body plus the selected costume.
+Joker: 1100px artwork width, same centered placement and 16px center overlap. A smooth quadratic contact arch is fitted using the continuous center portion of the source opening, avoiding the incorrect jump to curled-tip/bell boundaries. The bells can overhang the body within the larger canvas.
 
-Transparent gaps BETWEEN eyes/mouth, BETWEEN horns, and between angel wings/halo are intentional assembly spaces, not outer canvas padding. Body interiors and filled accessory parts are opaque. Tint the neutral body; leave colored costumes and expression layers white.
+Angel: halo and each wing are separated from their original combined sprite and repositioned independently. Halo width 560px, lower edge 98px below the center forehead (moved down 168px from the initial layout). Wing width 330px each, roots overlap the body shoulders; wing placement unchanged.
 
-No Unity .meta files were created, edited or inspected. No Unity execution, compilation, tests, output checks, Sprite slicing or layout validation was run. Existing game scripts, scene layout and prefabs were not changed.
+Horns: each existing horn is placed independently at 28%/72% of the body width, scaled to 220px wide, tilted outward 28 degrees and seated against the forehead with 110px root overlap (moved down 72px from the initial layout). Size, angle and horizontal position unchanged.
 
-## Production sources
+## Unity placement, authored by the user
 
-- CartoonPlan.json: six built-in image_gen prompts and reference inputs.
-- CartoonManifest.json: seven final output paths, production methods and sources.
-- Cartoon_Body.svg: editable vector artwork for the simple solid grayscale body.
-- ModularCartoonBody.cs: body PNG export and faced-body assembly; this is an offline asset utility, not runtime UI generation.
-- BeforeCartoon/: original seven PNGs.
-- README_PreCartoon.md and earlier previews: historical shared-canvas/crayon workflow; superseded by this cartoon pass.
+- SpriteRenderer: use the same **Pixels Per Unit**, a **center pivot (0.5,0.5)**, matching local position and matching local scale for body and overlays. The 2048px sprite occupies twice the body's width and height in world space, while its artwork aligns to the smaller body at the center.
+- UI Image: center both layers on the same anchor/pivot. Set the overlay RectTransform to **twice the body's width and height**. For example, a 100x100 body requires a 200x200 face or costume layer. Do not give the 1024px body and 2048px overlays identical UI dimensions.
+- Keep face/costume Image or SpriteRenderer color white. Only tint the neutral body.
+
+No Unity metadata, scene, prefab or runtime script was changed. No Unity execution, tests or output verification was performed, per user instructions.
+
+## Reproduction and history
+
+- `OverlayCanvas2048.cs`: offline deterministic layout exporter. Uses the actual faceless-body contour for positioning; never writes a body file.
+- `BeforeOverlayCanvas2048/`: the original five PNGs used as export inputs. Always use these originals when rerunning the exporter, not the expanded outputs.
+- `OverlayCanvas2048.json`: layout/export record.
+- `README_BeforeOverlayCanvas2048.md`: historical notes superseded by this layout.
+- Earlier SVGs, generated references and 1024px conversion utilities are historical sources, not the current overlay-layout export path.

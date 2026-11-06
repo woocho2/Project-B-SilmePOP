@@ -20,7 +20,6 @@
     <Compile Include="$(Src)00. Core\GameEnums.cs;$(Src)00. Core\GameRandom.cs;$(Src)00. Core\GameRules.cs;$(Src)01. Data\MatchSettings.cs" />
     <Compile Include="$(Src)02. Board\*.cs;$(Src)06. Skill\SkillBase.cs;$(Src)06. Skill\SkillSet.cs" />
     <Compile Include="$(Src)07. AI\AiAgent.cs;$(Src)07. AI\AiBrain.cs;$(Src)07. AI\AiDifficultyTable.cs;$(Src)07. AI\AiSkillAdvisor.cs;$(Src)07. AI\AiStrategy.cs;$(Src)07. AI\AiSimulator.cs" />
-    <Compile Include="$(Src)12. Dev\PlayerRecord.cs" />
-    <Compile Include="$(Tests)AiBrainTest.cs;$(Tests)MatchFinderTest.cs;$(Tests)ScoreCalculatorTest.cs;$(Tests)SkillTest.cs;$(Tests)BoardGeneratorTest.cs;$(Tests)PlayerRecordTest.cs" />
+    <Compile Include="$(Tests)AiBrainTest.cs;$(Tests)MatchFinderTest.cs;$(Tests)ScoreCalculatorTest.cs;$(Tests)SkillTest.cs;$(Tests)BoardGeneratorTest.cs" />
   </ItemGroup>
 </Project>

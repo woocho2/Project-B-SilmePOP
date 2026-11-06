@@ -9,7 +9,7 @@ using UnityEngine.UI;
 // 이번 판의 아이템(스킬) 칸 (기획 [4-1]). 6종 중 판마다 뽑힌 GameRules.SkillsPerMatch개만 씀 (MatchSettings.Skills, 모두 같음).
 // 씬에 칸이 더 있으면(Skill_item2, 3 ...) 숨김.
 // 단축키 A(, S, D) 또는 칸 클릭으로 고르고, 판 위에 적용 범위를 보여 준 뒤 클릭으로 적용,
-// ESC(또는 오른쪽 클릭)로 취소 (취소는 횟수를 쓰지 않음). 돋보기는 고르는 순간 바로 씀.
+// ESC(또는 오른쪽 클릭)로 취소 (취소는 횟수를 쓰지 않음). 돋보기·조커는 고르는 순간 바로 씀 (자리를 고르지 않음).
 // 칸은 시작 전 아이템 뽑기(Game_ReadyPanel)가 하나씩 RevealSlot으로 채움. 뽑기가 없으면 시작할 때 한 번에 채움.
 // 채팅 입력 중에는 단축키를 막음. 규칙은 SkillSet(순수 C#)에 있고 여기는 입력과 표시만 함.
 public class SkillManager : Singleton<SkillManager>
@@ -79,14 +79,31 @@ public class SkillManager : Singleton<SkillManager>
         base.OnDestroy();
     }
 
-    // 씬에 SkillManager를 놓지 않아도 GameManager가 만들어 주므로, 칸은 이름으로 찾음
+    // 씬에 SkillManager를 놓지 않아도 GameManager가 만들어 주므로, 칸은 이름으로 찾음.
+    // 칸이 1개뿐이면 게임 패널(Game_GamePanel) 아래의 Item / txt_item도 칸으로 봄 (0.2.4에서 씬 이름이 이렇게 바뀜).
+    // 준비 패널에도 Item이라는 오브젝트가 있으므로 게임 패널 아래에서만 찾음.
     private void FindMissingParts()
     {
+        Game_GamePanel gamePanel = FindAnyObjectByType<Game_GamePanel>(FindObjectsInactive.Include);
         for (int i = 0; i < SlotCount; i++)
         {
             if (slotIcons[i] == null) slotIcons[i] = FindByName<Image>($"Skill_item{i + 1}");
             if (usesTexts[i] == null) usesTexts[i] = FindByName<TMP_Text>($"txt_item{i + 1}");
+            if (SlotCount != 1 || gamePanel == null) continue;
+
+            if (slotIcons[i] == null) slotIcons[i] = FindChildByName<Image>(gamePanel.transform, "Item");
+            if (usesTexts[i] == null) usesTexts[i] = FindChildByName<TMP_Text>(gamePanel.transform, "txt_item");
         }
+        if (slotIcons[0] == null) Debug.LogWarning("SkillManager: 게임 화면의 아이템 칸(Skill_item1 또는 게임 패널의 Item)을 찾지 못했습니다.");
+    }
+
+    private static T FindChildByName<T>(Transform root, string objectName) where T : Component
+    {
+        foreach (T component in root.GetComponentsInChildren<T>(true))
+        {
+            if (component.name == objectName) return component;
+        }
+        return null;
     }
 
     // 판마다 쓰는 칸 수보다 씬에 칸이 더 있으면 숨김 (횟수 글자는 칸 안에 있지만 따로 있어도 숨김)
@@ -159,6 +176,7 @@ public class SkillManager : Singleton<SkillManager>
             CancelTargeting();
             return;
         }
+        if (AiAutoPlay.IsOn) return;   // AI가 대신 씀 (AiUse). 내 단축키·마우스는 쓰지 않음
 
         Keyboard keyboard = Keyboard.current;
         if (keyboard != null && !ChatPanel.IsTyping)
@@ -223,20 +241,79 @@ public class SkillManager : Singleton<SkillManager>
         Targeting = SkillType.None;
     }
 
-    // 돋보기: 가능한 조합이 있으면 표시하고 횟수를 씀. 없으면 쓰지 않음.
+    // 자동 플레이(AiAutoPlay): AI가 사람처럼 아이템을 씀. 칸을 반짝이고, 대상이 필요한 아이템은
+    // 범위를 previewTime 동안 보여 준 뒤 그 칸에 적용. 끝나면 onDone (판이 끝나 못 썼어도 부름).
+    public void AiUse(SkillType type, int cell, float previewTime, System.Action onDone)
+    {
+        GameManager game = GameManager.Instance;
+        if (game == null || !game.IsPlaying || Skills == null || Skills.UsesLeft(type) <= 0)
+        {
+            onDone?.Invoke();
+            return;
+        }
+
+        int slot = -1;
+        for (int i = 0; i < SlotCount; i++)
+        {
+            if (SlotSkill(i) == type) slot = i;
+        }
+        if (slot >= 0 && slotIcons[slot] != null)
+        {
+            slotIcons[slot].rectTransform.DOKill(true);
+            slotIcons[slot].rectTransform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 6, 0.6f);
+        }
+
+        if (!Skills.Get(type).NeedsTarget)
+        {
+            CancelTargeting();
+            UseInstant(type);
+            onDone?.Invoke();
+            return;
+        }
+
+        CancelTargeting();
+        Targeting = type;
+        SoundManager.Play(SoundEffect.Click);
+        UpdatePreview(cell);
+        DOVirtual.DelayedCall(previewTime, () =>
+        {
+            if (Targeting == type && GameManager.Instance != null && GameManager.Instance.IsPlaying)
+            {
+                ApplyTargeting(cell);
+                CancelTargeting();   // 못 쓰는 칸이었으면 (그사이 판이 바뀜) 실패 소리만 내고 그만둠
+            }
+            onDone?.Invoke();
+        }).SetLink(gameObject);
+    }
+
+    // 고르는 순간 바로 쓰는 아이템. 쓸 수 없으면(조합·기본 슬라임이 없음) 횟수를 쓰지 않음.
+    //   돋보기: 악마 없는 아무 조합 하나를 표시
+    //   조커  : 무작위 기본 슬라임 하나가 조커가 됨. 어디인지 잠깐 표시
     private void UseInstant(SkillType type)
     {
         GameManager game = GameManager.Instance;
-        if (Skills.TryUse(type, game.Board, -1, game.TargetSum, out _))
+        if (!Skills.TryUse(type, game.Board, -1, game.TargetSum, out int score))
+        {
+            SoundManager.Play(SoundEffect.Miss);
+            return;
+        }
+
+        SlimeManager view = SlimeManager.Instance;
+        if (type == SkillType.Magnifier)
         {
             SoundManager.Play(SoundEffect.Hint);
-            if (type == SkillType.Magnifier && SlimeManager.Instance != null) SlimeManager.Instance.ShowHint();
+            if (view != null) view.ShowHint(((MagnifierSkill)Skills.Get(type)).LastHint);
         }
         else
         {
-            SoundManager.Play(SoundEffect.Miss);
+            SoundManager.Play(SoundEffect.Mix);
+            if (type == SkillType.Joker && view != null) view.FlashCell(((JokerSkill)Skills.Get(type)).LastCell, canApplyColor, JokerFlashTime);
         }
+        if (score != 0) game.AddScore(score);
+        game.CheckForMoves();
     }
+
+    private const float JokerFlashTime = 1.2f;
 
     private void ApplyTargeting(int cell)
     {
@@ -252,6 +329,7 @@ public class SkillManager : Singleton<SkillManager>
 
         CancelTargeting();
         SoundManager.Play(type == SkillType.Destroy ? SoundEffect.Destroy : SoundEffect.Mix);
+        if (score != 0 && SlimeManager.Instance != null) SlimeManager.Instance.ShowScore(Skills.Get(type).GetArea(cell), score);
         if (score != 0) game.AddScore(score);
         game.CheckForMoves();
     }

@@ -199,6 +199,46 @@ public static class Program
             }
             TargetOverride = 0;
         }
+        else if (mode == "look")
+        {
+            // 한 수 앞 보기(Lookahead)를 켜면 더 많이 지우는가: 목표 합 10 ~ 15 × 어려움·지옥 (+ 판이 먼저 바닥나는 아주 빠른 AI)
+            int n = args.Length > 1 ? int.Parse(args[1]) : 150;
+            int[] seeds = Enumerable.Range(90000, n).ToArray();
+            var variants = new List<(string name, AiStrategy s)> { ("안 봄", AiStrategy.Best) };
+            foreach (int look in new[] { 5, 20 })
+                foreach (float fw in new[] { 2f, 6f })
+                {
+                    AiStrategy s = AiStrategy.Best.Clone();
+                    s.Lookahead = look;
+                    s.FutureWeight = fw;
+                    variants.Add(($"앞 {look}개 x{fw}", s));
+                }
+
+            var cases = new (string name, AiDifficulty d, float minR, float maxR)[]
+            {
+                ("어려움", AiDifficulty.Hard, -1, -1),
+                ("지옥", AiDifficulty.Hell, -1, -1),
+                ("지옥 0.5~1초", AiDifficulty.Hell, 0.5f, 1f),
+            };
+            foreach (var c in cases)
+            {
+                Console.WriteLine($"== {c.name} (평균 제거, {n}판)");
+                Console.WriteLine("목표       " + string.Join("", variants.Select(v => $"{v.name,12}")));
+                for (int target = GameRules.MinTargetSum; target <= GameRules.MaxTargetSum; target++)
+                {
+                    TargetOverride = target;
+                    var line = $"{target,4}      ";
+                    foreach (var v in variants)
+                    {
+                        float minR = c.minR, maxR = c.maxR;
+                        if (minR > 0) { float k = AiDifficultyTable.ReactionScale(c.d, target); minR *= k; maxR *= k; }
+                        line += $"{PlayMany(seeds, c.d, v.s, minR, maxR).Average(r => r.Removed),12:0.0}";
+                    }
+                    Console.WriteLine(line);
+                }
+                TargetOverride = 0;
+            }
+        }
         else if (mode == "search") Search(int.Parse(args[1]), int.Parse(args[2]));
         else if (mode == "calib") Calibrate(args.Length > 1 ? int.Parse(args[1]) : 100);
         else if (mode == "items") Items();

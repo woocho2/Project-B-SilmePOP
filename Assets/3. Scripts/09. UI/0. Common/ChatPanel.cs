@@ -158,10 +158,20 @@ public class ChatPanel : MonoBehaviour
         lines.Enqueue(line.gameObject);
         while (lines.Count > MaxLines) Destroy(lines.Dequeue());
 
+        scrollPending = true;   // 한 프레임에 여러 줄이 와도(씬에 들어올 때 지난 대화 100줄) 맨 아래로는 한 번만
+    }
+
+    private bool scrollPending;
+
+    private void LateUpdate()
+    {
+        if (!scrollPending) return;
+        scrollPending = false;
         ScrollToBottom();
     }
 
-    // 레이아웃이 줄 높이를 계산한 뒤 맨 아래로 내림 (접혀 있는 동안 온 메시지는 펼칠 때 내림)
+    // 레이아웃이 줄 높이를 계산한 뒤 맨 아래로 내림 (접혀 있는 동안 온 메시지는 펼칠 때 내림).
+    // ForceUpdateCanvases는 화면 전체 레이아웃을 다시 계산해서 비싸므로 줄마다 부르지 않음 (LateUpdate에서 한 번).
     private void ScrollToBottom()
     {
         if (!isActiveAndEnabled) return;

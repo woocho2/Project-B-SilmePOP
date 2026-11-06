@@ -41,14 +41,19 @@ public sealed class AiAgent
 
     public float FirstWait(int targetSum) => NextWait(1, targetSum);
 
+    // true면 고르기만 하고 판에는 적용하지 않음 (Score는 0). 화면에서 사각형을 끄는 연출을 보여 준 뒤 부르는 쪽이 적용함.
+    public bool PlanOnly { get; set; }
+
     public AiAction Act(BoardModel board, SkillSet skills, int targetSum, float timeLeft)
     {
         List<BoardRect> candidates = MatchFinder.FindAll(board, targetSum);
 
+        int skillScore = 0;
         if (skills != null
             && AiBrain.TryChooseSkill(board, targetSum, difficulty, skills, candidates, timeLeft, random, strategy,
                                       out SkillType skill, out int cell)
-            && skills.TryUse(skill, board, cell, targetSum, out int skillScore))
+            && (PlanOnly ? skills.CanUse(skill, board, cell, targetSum)
+                         : skills.TryUse(skill, board, cell, targetSum, out skillScore)))
         {
             focusNext = skill == SkillType.Joker || skill == SkillType.Magnifier;
             float wait = focusNext ? MinReaction * AiDifficultyTable.ReactionScale(difficulty, targetSum) : NextWait(1, targetSum);
@@ -57,11 +62,16 @@ public sealed class AiAgent
 
         if (candidates.Count == 0) return AiAction.Waited(StuckRetry);
 
-        List<BoardSlime> move = AiBrain.ChooseMove(board, targetSum, difficulty, candidates, random, focusNext, strategy);
+        BoardRect rect = AiBrain.ChooseRect(board, targetSum, difficulty, candidates, random, focusNext, strategy);
+        List<BoardSlime> move = board.GetSlimesInCells(rect.GetCells());
         focusNext = false;
-        int score = ScoreCalculator.Calculate(move, targetSum);
-        board.Remove(move);
-        return AiAction.Moved(move.Count, score, NextWait(move.Count, targetSum));
+        int score = 0;
+        if (!PlanOnly)
+        {
+            score = ScoreCalculator.Calculate(move, targetSum);
+            board.Remove(move);
+        }
+        return AiAction.Moved(move.Count, score, NextWait(move.Count, targetSum), rect);
     }
 
     // 다음 행동까지 기다릴 시간: 난이도별 반응 시간 + 큰 사각형 보정 (목표 합 11 이상이면 더 느리게), 가끔 빠르게
@@ -90,19 +100,21 @@ public readonly struct AiAction
     public readonly int SlimeCount;    // 수: 터뜨린 슬라임 수
     public readonly SkillType Skill;   // 아이템: 쓴 아이템과 칸
     public readonly int Cell;
+    public readonly BoardRect Rect;    // 수: 고른 사각형
     public readonly float Wait;        // 다음 행동까지
 
-    private AiAction(AiActionKind kind, int score, int slimeCount, SkillType skill, int cell, float wait)
+    private AiAction(AiActionKind kind, int score, int slimeCount, SkillType skill, int cell, BoardRect rect, float wait)
     {
         Kind = kind;
         Score = score;
         SlimeCount = slimeCount;
         Skill = skill;
         Cell = cell;
+        Rect = rect;
         Wait = wait;
     }
 
-    public static AiAction Moved(int slimeCount, int score, float wait) => new AiAction(AiActionKind.Move, score, slimeCount, SkillType.None, -1, wait);
-    public static AiAction UsedSkill(SkillType skill, int cell, int score, float wait) => new AiAction(AiActionKind.Skill, score, 0, skill, cell, wait);
-    public static AiAction Waited(float wait) => new AiAction(AiActionKind.Wait, 0, 0, SkillType.None, -1, wait);
+    public static AiAction Moved(int slimeCount, int score, float wait, BoardRect rect) => new AiAction(AiActionKind.Move, score, slimeCount, SkillType.None, -1, rect, wait);
+    public static AiAction UsedSkill(SkillType skill, int cell, int score, float wait) => new AiAction(AiActionKind.Skill, score, 0, skill, cell, default, wait);
+    public static AiAction Waited(float wait) => new AiAction(AiActionKind.Wait, 0, 0, SkillType.None, -1, default, wait);
 }

@@ -75,7 +75,7 @@ public class RoomSlotItem : MonoBehaviour
         if (txt_PlayerName != null)
         {
             txt_PlayerName.gameObject.SetActive(hasPlayer);
-            if (hasPlayer) txt_PlayerName.text = Nickname(info.displayName);
+            if (hasPlayer) txt_PlayerName.text = TextLines.Nickname(info.displayName);
         }
         if (txt_AI != null) txt_AI.gameObject.SetActive(isAi);
 
@@ -132,12 +132,5 @@ public class RoomSlotItem : MonoBehaviour
         {
             if (item != sample) Destroy(item.gameObject);
         }
-    }
-
-    // "닉네임#0012" → "닉네임"
-    private static string Nickname(string displayName)
-    {
-        int tag = displayName.LastIndexOf('#');
-        return tag > 0 ? displayName.Substring(0, tag) : displayName;
     }
 }

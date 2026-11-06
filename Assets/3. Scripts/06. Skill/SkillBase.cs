@@ -53,33 +53,62 @@ public abstract class SkillBase
     }
 }
 
-// 1. 돋보기: 가능한 조합 1개를 표시. 고르는 순간 바로 씀. 표시는 부르는 쪽(SlimeManager.ShowHint)이 함.
+// 1. 돋보기: 가능한 조합 1개를 표시. 고르는 순간 바로 씀. 표시는 부르는 쪽(SlimeManager.ShowHint(LastHint))이 함.
+//    최고의 수가 아니라 아무 조합 하나 (일찍 써서 킹 조합을 찾는 것처럼 쓰는 때에 따라 이득이 크게 달라지지 않게).
+//    악마가 든 조합만 피함. 고르는 난수는 경기 시드라 모든 참가자가 같은 판·같은 순서면 같은 조합.
 public sealed class MagnifierSkill : SkillBase
 {
     public override SkillType Type => SkillType.Magnifier;
     public override bool NeedsTarget => false;
 
-    // 알려 줄 조합: 악마가 적은 것, 그중 점수가 높은 것 (악마 없는 조합이 있으면 악마는 절대 안 끼움)
-    public static bool FindHint(BoardModel board, int targetSum, out BoardRect hint)
+    // 마지막으로 Apply가 고른 조합 (화면 표시용)
+    public BoardRect LastHint { get; private set; }
+
+    // 알려 줄 조합: 악마가 가장 적은 조합들 중 무작위 하나 (악마 없는 조합이 있으면 악마는 절대 안 끼움).
+    // 같은 슬라임 묶음을 빈칸만 더 덮은 사각형은 하나로 셈. hint는 슬라임이 있는 곳까지 좁힌 사각형.
+    public static bool FindHint(BoardModel board, int targetSum, GameRandom random, out BoardRect hint)
     {
         hint = default;
-        int bestDevils = int.MaxValue, bestScore = int.MinValue;
+        int fewestDevils = int.MaxValue;
+        List<BoardRect> best = new List<BoardRect>();
+        HashSet<BoardRect> seen = new HashSet<BoardRect>();
         foreach (BoardRect rect in MatchFinder.FindAll(board, targetSum))
         {
-            List<BoardSlime> slimes = board.GetSlimesInCells(rect.GetCells());
-            int devils = 0;
-            foreach (BoardSlime slime in slimes)
-                if (slime.Type == SlimeType.Devil) devils++;
-            int score = ScoreCalculator.Calculate(slimes, targetSum);
+            BoardRect tight = Tighten(board, rect);
+            if (!seen.Add(tight)) continue;
 
-            if (devils < bestDevils || (devils == bestDevils && score > bestScore))
+            int devils = 0;
+            foreach (BoardSlime slime in board.GetSlimesInCells(tight.GetCells()))
+                if (slime.Type == SlimeType.Devil) devils++;
+
+            if (devils < fewestDevils)
             {
-                hint = rect;
-                bestDevils = devils;
-                bestScore = score;
+                fewestDevils = devils;
+                best.Clear();
             }
+            if (devils == fewestDevils) best.Add(tight);
         }
-        return bestDevils != int.MaxValue;
+        if (best.Count == 0) return false;
+
+        hint = best[random.Next(0, best.Count)];
+        return true;
+    }
+
+    // 사각형을 실제로 슬라임이 있는 칸까지 좁힘 (안에 든 슬라임은 같음)
+    private static BoardRect Tighten(BoardModel board, BoardRect rect)
+    {
+        int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
+        foreach (int cell in rect.GetCells())
+        {
+            if (board.GetSlimeAt(cell) == null) continue;
+            int x = GameRules.IndexToX(cell);
+            int y = GameRules.IndexToY(cell);
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+        }
+        return minX == int.MaxValue ? rect : new BoardRect(minX, minY, maxX, maxY);
     }
 
     public override bool CanApply(BoardModel board, int cell, int targetSum)
@@ -89,6 +118,7 @@ public sealed class MagnifierSkill : SkillBase
 
     public override int Apply(BoardModel board, int cell, GameRandom random, int targetSum)
     {
+        if (FindHint(board, targetSum, random, out BoardRect hint)) LastHint = hint;
         return 0;
     }
 }
@@ -168,21 +198,59 @@ public sealed class MergeSkill : SkillBase
     }
 }
 
-// 5. 조커: 기본 슬라임 1개를 조커로 (5초마다 빈자리로 이동)
+// 5. 조커: 누르는 순간 무작위 기본 슬라임 1개가 조커가 됨 (5초마다 빈자리로 이동). 자리를 고를 수 없음.
+//    (원하는 곳에 넣고 바로 터뜨리는 고득점 플레이가 너무 쉬워서 바꿈)
+//    경기 시드로 칸 하나를 뽑고, 그 칸에서 가장 가까운 기본 슬라임 → 모든 참가자가 같은 순서로 쓰면 같은 자리 근처.
 public sealed class JokerSkill : SkillBase
 {
     public override SkillType Type => SkillType.Joker;
+    public override bool NeedsTarget => false;
+
+    // 마지막으로 조커가 된 칸 (화면에서 잠깐 표시)
+    public int LastCell { get; private set; } = -1;
 
     public override bool CanApply(BoardModel board, int cell, int targetSum)
     {
-        BoardSlime slime = SlimeAt(board, cell);
-        return slime != null && slime.Type == SlimeType.Basic;
+        for (int c = 0; c < GameRules.CellCount; c++)
+        {
+            BoardSlime slime = board.GetSlimeAt(c);
+            if (slime != null && slime.Type == SlimeType.Basic) return true;
+        }
+        return false;
     }
 
     public override int Apply(BoardModel board, int cell, GameRandom random, int targetSum)
     {
-        board.MakeJoker(SlimeAt(board, cell));
+        BoardSlime target = NearestBasic(board, random.Next(0, GameRules.CellCount));
+        if (target == null) return 0;
+
+        board.MakeJoker(target);
+        LastCell = target.Anchor;
         return 0;
+    }
+
+    // from에서 가장 가까운 기본 슬라임 (거리가 같으면 칸 번호가 작은 쪽)
+    public static BoardSlime NearestBasic(BoardModel board, int from)
+    {
+        int fromX = GameRules.IndexToX(from);
+        int fromY = GameRules.IndexToY(from);
+        BoardSlime best = null;
+        int bestDistance = int.MaxValue;
+        for (int c = 0; c < GameRules.CellCount; c++)
+        {
+            BoardSlime slime = board.GetSlimeAt(c);
+            if (slime == null || slime.Type != SlimeType.Basic) continue;
+
+            int dx = GameRules.IndexToX(c) - fromX;
+            int dy = GameRules.IndexToY(c) - fromY;
+            int distance = dx * dx + dy * dy;
+            if (distance < bestDistance)
+            {
+                best = slime;
+                bestDistance = distance;
+            }
+        }
+        return best;
     }
 }
 

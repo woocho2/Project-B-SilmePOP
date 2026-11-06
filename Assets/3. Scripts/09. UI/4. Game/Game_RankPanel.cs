@@ -17,7 +17,7 @@ public class Game_RankPanel : MonoBehaviour
     [SerializeField] private RectTransform slimeTemplate;
     [Header("이름·점수 글자 (굵게)")]
     [Tooltip("본보기 슬라임 안에 Txt_Name, Txt_Score 글자를 만들어 두면 그것을 씀. 없으면 이름은 슬라임 바로 밑, 점수는 슬라임 가운데에 만듦")]
-    [SerializeField] private float nameGap = 2f;   // 슬라임 몸통 아래 끝과 이름 사이
+    [SerializeField] private float nameGap = -8f;   // 슬라임 몸통 아래 끝과 이름 사이. 음수면 그만큼 몸통 쪽으로 올라감
     [SerializeField] private float nameFontSize = 24f;
     [SerializeField] private float scoreFontSize = 28f;
     [SerializeField] private Color myNameColor = new Color(0.2f, 0.45f, 0.9f);
@@ -163,8 +163,8 @@ public class Game_RankPanel : MonoBehaviour
         }
     }
 
-    // 서버 점수 + 내 점수는 바로. 점수가 아직 없으면(시작 전) 방의 참가자를 0점으로.
-    private List<ScoreEntry> CurrentRanking()
+    // 서버 점수 + 내 점수는 바로. 점수가 아직 없으면(시작 전) 방의 참가자를 0점으로. 결과 화면(Game_EndPanel)도 씀.
+    public static List<ScoreEntry> CurrentRanking()
     {
         NetworkManager network = NetworkManager.Instance;
         GameManager game = GameManager.Instance;
@@ -224,9 +224,12 @@ public class Game_RankPanel : MonoBehaviour
         return network == null || network.CurrentRoom == null ? slot == 0 : slot == network.MySlot;
     }
 
+    // 줄을 지울 때 글자마다 따로 만든 빛 머티리얼(AddGlow)도 지움. 안 지우면 판마다 쌓여 메모리에 남음.
     private void RemoveRow(Row row)
     {
         StopTweens(row);
+        if (row.nameGlow != null) Destroy(row.nameGlow);
+        if (row.scoreGlow != null) Destroy(row.scoreGlow);
         if (row.root != null) Destroy(row.root.gameObject);
     }
 
@@ -234,6 +237,8 @@ public class Game_RankPanel : MonoBehaviour
     {
         row.pulse?.Kill();
         if (row.root != null) row.root.DOKill();
+        if (row.name != null) row.name.rectTransform.DOKill();     // 내 이름 숨쉬기
+        if (row.score != null) row.score.rectTransform.DOKill();   // 점수가 오를 때 톡 튐
         if (row.nameGlow != null) DOTween.Kill(row.nameGlow);
         if (row.scoreGlow != null) DOTween.Kill(row.scoreGlow);
     }

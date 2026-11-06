@@ -2,8 +2,13 @@ using System;
 using System.Collections.Generic;
 
 // 판 위의 사각형 하나 (양 끝 칸 포함).
-public readonly struct BoardRect
+// 같음 비교를 직접 둠: 기본 구조체 비교는 박싱·리플렉션을 쓰고, Unity(Mono)의 기본 해시는 첫 필드만 봐서 HashSet에서 느림.
+public readonly struct BoardRect : IEquatable<BoardRect>
 {
+    public bool Equals(BoardRect other) => MinX == other.MinX && MinY == other.MinY && MaxX == other.MaxX && MaxY == other.MaxY;
+    public override bool Equals(object obj) => obj is BoardRect other && Equals(other);
+    public override int GetHashCode() => ((MinX * 31 + MinY) * 31 + MaxX) * 31 + MaxY;
+
     public readonly int MinX;
     public readonly int MinY;
     public readonly int MaxX;
