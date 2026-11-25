@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>SlimePOP 개발 문서</title>
+<link rel="stylesheet" href="doc.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="top">
+    <div class="kicker">PROJECT-B · DEVELOPMENT DOCUMENT</div>
+    <h1>SlimePOP<br>개발 문서</h1>
+    <div class="subtitle">구조 · 판 규칙 엔진 · 네트워크 · AI · 검증</div>
+  </div>
+  <div>
+    <div class="grid">
+      <div><b>문서 버전</b>v1.0</div>
+      <div><b>기준일</b>2026-11-25</div>
+      <div><b>엔진</b>Unity 6000.3.9f1 · URP 2D</div>
+      <div><b>언어</b>C#</div>
+      <div><b>서버</b>Firebase Realtime Database (REST)</div>
+      <div><b>기준 빌드</b>Version 1.0.0 (2026-11-06)</div>
+    </div>
+    <p class="small muted" style="margin-top:5mm">이 문서는 게임이 <b>어떻게 만들어져 있는가</b>를 설명합니다. 게임 규칙은 별도의 기획서에 있습니다.</p>
+  </div>
+</div>
+
+<section>
+  <h2>차례</h2>
+  <div class="toc">
+    <div><span class="n">1</span>프로젝트 개요</div>
+    <div><span class="n">2</span>아키텍처</div>
+    <div><span class="n">3</span>판 규칙 엔진</div>
+    <div><span class="n">4</span>시드와 결정성</div>
+    <div><span class="n">5</span>아이템 시스템</div>
+    <div><span class="n">6</span>네트워크</div>
+    <div><span class="n">7</span>AI</div>
+    <div><span class="n">8</span>화면과 연출</div>
+    <div><span class="n">9</span>검증과 개발 도구</div>
+    <div><span class="n">10</span>설계 결정 기록 (Q&amp;A)</div>
+    <div><span class="n">11</span>남은 일</div>
+  </div>
+
+  <h2 style="margin-top:12mm"><span class="no">1</span>프로젝트 개요</h2>
+  <p>최대 4명이 같은 판·같은 목표 합으로 180초 동안 점수를 겨루는 슬라임 숫자 퍼즐 대전 게임. 로그인·로비·대기실·실시간 점수 동기화·채팅을 갖춘 온라인 게임이며, 빈 자리는 방장 PC에서 도는 AI가 채웁니다.</p>
+  <table class="kv">
+    <tbody>
+      <tr><td>엔진</td><td>Unity 6000.3.9f1, Universal Render Pipeline(2D)</td></tr>
+      <tr><td>언어</td><td>C#. 규칙 코드는 Unity에 의존하지 않는 순수 C#</td></tr>
+      <tr><td>서버</td><td>Firebase Realtime Database + Firebase Authentication(이메일). SDK 없이 REST API를 <code>UnityWebRequest</code>로 직접 호출</td></tr>
+      <tr><td>연출</td><td>DOTween</td></tr>
+      <tr><td>입력</td><td>Input System 1.18</td></tr>
+      <tr><td>도구</td><td>.NET SDK로 Unity 없이 테스트·AI 시뮬레이션 실행 (<code>Tools/AiTest</code>, <code>Tools/AiSim</code>)</td></tr>
+      <tr><td>씬</td><td><code>1. Login</code> → <code>2. Robby</code>(로비) → <code>3. Room</code> → <code>4. Game</code></td></tr>
+    </tbody>
+  </table>
+  <h3>코드 규모 (2026-11-25 파일 기준)</h3>
+  <table>
+    <thead><tr><th>구분</th><th class="num">파일</th><th class="num">줄 수</th></tr></thead>
+    <tbody>
+      <tr><td>게임 스크립트 (<code>Assets/3. Scripts</code>)</td><td class="num">78</td><td class="num">약 9,950</td></tr>
+      <tr><td>테스트 (<code>Assets/Editor/Tests</code>)</td><td class="num">8</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">2</span>아키텍처</h2>
+  <h3>계층과 의존 방향</h3>
+  <div class="layers">
+    <div class="lab">표현</div>
+    <div class="box ui">화면. 상태를 읽고 이벤트를 들어 다시 그림. 씬마다 <code>UIManager_씬</code> + <code>씬_패널</code>
+      <div class="chips"><span>SlimeManager</span><span>SlimeController</span><span>ScorePopup</span><span>UIManager_Game</span><span>Game_RankPanel</span><span>ChatPanel</span></div></div>
+    <div class="dir">▼ 요청 · ▲ 이벤트</div>
+    <div class="lab">진행</div>
+    <div class="box">순서를 정함 — 한 판의 단계, 네트워크 창구, 입력
+      <div class="chips"><span>GameManager</span><span>NetworkManager</span><span>DragManager</span><span>SkillManager</span><span>AiPlayer</span></div></div>
+    <div class="dir">▼</div>
+    <div class="lab">상태</div>
+    <div class="box">판 도중 바뀌는 값. 값마다 주인이 하나
+      <div class="chips"><span>BoardModel</span><span>SkillSet</span><span>MatchScores</span><span>StyleSettings</span></div></div>
+    <div class="dir">▼</div>
+    <div class="lab">계산</div>
+    <div class="box">입력 → 결과만. MonoBehaviour가 아니라 Unity 없이 테스트·시뮬레이션 가능
+      <div class="chips"><span>BoardGenerator</span><span>MatchFinder</span><span>ScoreCalculator</span><span>SkillBase</span><span>AiAgent</span><span>AiBrain</span><span>AiSkillAdvisor</span></div></div>
+    <div class="dir">▼</div>
+    <div class="lab">데이터</div>
+    <div class="box">원본 값
+      <div class="chips"><span>GameRules</span><span>MatchSettings</span><span>AiDifficultyTable</span><span>AiStrategy</span><span>ThemePalette</span><span>SoundData</span></div></div>
+  </div>
+  <p class="small muted">핵심은 <b>규칙과 화면의 분리</b>. 내 판(화면 있음), AI 판(화면 없음), 수천 판 시뮬레이션, 자동 테스트가 모두 같은 <code>BoardModel</code>·<code>MatchFinder</code>·<code>ScoreCalculator</code>를 씁니다.</p>
+
+  <h3>매니저</h3>
+  <table>
+    <thead><tr><th style="width:32mm">매니저</th><th>책임</th><th style="width:22mm">수명</th></tr></thead>
+    <tbody>
+      <tr><td><code>NetworkManager</code></td><td>접속·내 정보·지금 방·채팅 기록·점수와 최종 판 송수신·서버 시각. 실제 구현(<code>INetworkService</code>)을 인스펙터에서 Local / Firebase 중 선택</td><td>씬을 넘어 유지</td></tr>
+      <tr><td><code>SoundManager</code></td><td>BGM 1채널 + 효과음 채널 재사용, 볼륨 저장</td><td>씬을 넘어 유지</td></tr>
+      <tr><td><code>GameManager</code></td><td>한 판: 판 생성, 카운트다운 대기, 180초 타이머, 점수와 마지막 득점 시각, 막힘 확인, 종료와 최종 판 업로드, AI 생성(방장만)</td><td>게임 씬</td></tr>
+      <tr><td><code>SlimeManager</code></td><td>내 판의 화면. <code>BoardModel</code> 이벤트를 듣고 칸을 다시 그림, 칸 ↔ 월드 좌표</td><td>게임 씬</td></tr>
+      <tr><td><code>DragManager</code></td><td>드래그 상자와 놓는 순간의 판정</td><td>게임 씬</td></tr>
+      <tr><td><code>SkillManager</code></td><td>내 아이템 칸, 단축키, 대상 고르기 모드, 범위 미리보기</td><td>게임 씬</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">모두 <code>Singleton&lt;T&gt;</code>를 물려받고, 씬을 넘어 유지할 것만 <code>PersistAcrossScenes</code>를 켭니다. 계산·상태 클래스는 싱글톤으로 만들지 않고 인자로 받습니다.</p>
+</section>
+
+<section class="cont">
+  <h3>폴더 구조 — <code>Assets/3. Scripts</code></h3>
+  <table>
+    <thead><tr><th style="width:26mm">폴더</th><th class="num" style="width:12mm">파일</th><th class="num" style="width:14mm">줄 수</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>00. Core</td><td class="num">5</td><td class="num">336</td><td>enum 모음, 규칙 상수(<code>GameRules</code>), 시드 난수(<code>GameRandom</code>), <code>Singleton</code>, <code>SceneLoader</code></td></tr>
+      <tr><td>01. Data</td><td class="num">1</td><td class="num">37</td><td><code>MatchSettings</code> — 시드 → 목표 합 · 아이템</td></tr>
+      <tr><td>02. Board</td><td class="num">6</td><td class="num">507</td><td>판 모델, 생성, 조합 찾기, 점수, 결과용 스냅샷 (순수 C#)</td></tr>
+      <tr><td>03. Match</td><td class="num">2</td><td class="num">272</td><td><code>GameManager</code>, 순위 계산(<code>MatchScores</code>)</td></tr>
+      <tr><td>04. Slime</td><td class="num">3</td><td class="num">544</td><td>판 화면, 슬라임 한 칸, +점수 글자</td></tr>
+      <tr><td>05. Input</td><td class="num">3</td><td class="num">307</td><td>드래그 입력과 판정, 시연용 자동 플레이 키</td></tr>
+      <tr><td>06. Skill</td><td class="num">3</td><td class="num">688</td><td>아이템 6종 규칙, 참가자별 아이템 묶음, 아이템 입력</td></tr>
+      <tr><td>07. AI</td><td class="num">8</td><td class="num">791</td><td>AI 한 명의 생각·수 고르기·아이템 판단·전략값·난이도 표·Unity 래퍼·시뮬레이터</td></tr>
+      <tr><td>08. Network</td><td class="num">8</td><td class="num">2,226</td><td>인터페이스, 모델, Local 구현, Firebase 구현, REST 클라이언트, JSON, 수신 나무</td></tr>
+      <tr><td>09. UI</td><td class="num">30</td><td class="num">3,784</td><td><code>0. Common</code> · <code>1. Login</code> · <code>2. Lobby</code> · <code>3. Room</code> · <code>4. Game</code></td></tr>
+      <tr><td>10. Sound</td><td class="num">3</td><td class="num">218</td><td><code>SoundManager</code>, 효과음 표, 볼륨 슬라이더</td></tr>
+      <tr><td>11. Style</td><td class="num">5</td><td class="num">201</td><td>고른 색·테마(<code>StyleSettings</code>), 내 색 칠하기, 테마 색·그림 바꾸기</td></tr>
+      <tr><td>12. Dev</td><td class="num">1</td><td class="num">34</td><td>개발용 키 (에디터·개발 빌드에서만)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">3</span>판 규칙 엔진</h2>
+  <h3>판의 표현</h3>
+  <ul>
+    <li>칸 번호 = <code>y × 17 + x</code> (0 ~ 169). 네트워크와 결과용 스냅샷은 칸 번호로 주고받음.</li>
+    <li><code>BoardModel</code>은 칸 → <code>BoardSlime</code> 배열. 빈칸은 <code>null</code>.</li>
+    <li>합체 슬라임은 네 칸이 <b>같은</b> <code>BoardSlime</code>을 가리킴(<code>Cells</code> 4칸, <code>Anchor</code>는 왼쪽 아래). <code>GetSlimesInCells</code>가 중복을 제거하므로 합에 한 번만 들어감.</li>
+    <li>판이 바뀌면 이벤트로 알림: <code>SlimesRemoved</code> · <code>SlimeChanged</code> · <code>SlimeMoved</code>(조커) · <code>SlimesMerged</code>. 화면은 이것만 듣고 그림.</li>
+  </ul>
+
+  <h3>조합 찾기 — <code>MatchFinder</code></h3>
+  <p>17 × 10 판의 사각형은 C(18,2) × C(11,2) = 8,415개뿐이라 전부 봐도 충분히 빠릅니다. 칸마다 2차원 누적합을 만들어 사각형 하나의 합을 배열 조회 네 번으로 구합니다.</p>
+  <ul>
+    <li>합체 슬라임의 숫자는 <code>Anchor</code> 칸에만 넣고, 사각형이 네 칸 중 일부만 걸치면 따로 더함.</li>
+    <li>한쪽 모서리를 고정하고 넓혀 갈 때 합이 목표를 넘으면 그 방향은 더 보지 않음(숫자가 모두 양수라 합이 줄지 않음).</li>
+    <li>제공: <code>HasAnyMatch</code>(막힘 판정) · <code>FindFirst</code> · <code>FindAll</code>(AI·돋보기).</li>
+  </ul>
+
+  <h3>터뜨리기 한 번의 순서</h3>
+  <table>
+    <thead><tr><th class="c" style="width:9mm">순서</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td class="c">①</td><td>마우스를 놓는 순간 <code>Physics2D.OverlapBoxAll</code>로 상자 안 칸을 모음 (끄는 동안의 Trigger 결과는 강조 표시에만 씀)</td></tr>
+      <tr><td class="c">②</td><td>칸 → <code>BoardModel.GetSlimesInCells</code> (합체 중복 제거)</td></tr>
+      <tr><td class="c">③</td><td>숫자 합 = 목표 합인지 확인. 아니면 빨간 상자 흔들림 연출</td></tr>
+      <tr><td class="c">④</td><td><code>ScoreCalculator.Calculate</code>로 점수</td></tr>
+      <tr><td class="c">⑤</td><td><code>BoardModel.Remove</code> → <code>SlimesRemoved</code> → 화면 갱신·터짐 연출</td></tr>
+      <tr><td class="c">⑥</td><td><code>GameManager.AddScore</code> → 마지막 득점 시각 기록 → 서버로 점수 보고</td></tr>
+      <tr><td class="c">⑦</td><td><code>MatchFinder.HasAnyMatch</code>가 false면 "막힘" 안내 (판은 끝내지 않음)</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">조커는 드래그 중에도 움직이므로, 판정은 항상 ①의 순간의 판을 기준으로 합니다.</p>
+
+  <h3>점수 — <code>ScoreCalculator</code></h3>
+  <div class="formula">B = 슬라임들의 기본점수 합 (기본 1 · 악마 1 · 천사 2 · 킹 1 · 조커 3 · 합체 = 합쳐진 기본점수 합)<br>
+점수 = B + Σ천사(B × 2) + Σ악마(B × −1) + Σ킹(10) + Σ조커(목표 합 × 2)<br>
+파괴 아이템 = 그 슬라임의 기본점수만 · 합체 결과가 0 = 합쳐진 수 × 4</div>
+  <p class="small">규칙 숫자는 모두 <code>GameRules</code> 한 곳에 모으고, 기획서의 예시 점수를 테스트 정답으로 옮겨 고정했습니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">4</span>시드와 결정성</h2>
+  <p>모든 참가자가 같은 판으로 겨루려면, 판을 서버에서 통째로 보내지 않고 <b>시드 하나</b>만 공유해 각 PC가 똑같이 만들어 내야 합니다. 그래서 무작위가 필요한 곳마다 난수의 출처를 나눴습니다.</p>
+  <table>
+    <thead><tr><th style="width:34mm">무엇</th><th>난수</th><th style="width:38mm">결과</th></tr></thead>
+    <tbody>
+      <tr><td>판 (숫자·특수 배치)</td><td><code>GameRandom(seed)</code> — 칸 번호를 섞어 앞에서부터 킹 2 · 천사 3 · 악마 5</td><td>모두 같음</td></tr>
+      <tr><td>목표 합</td><td><code>GameRandom(seed)</code>의 첫 값으로 10 ~ 15</td><td>모두 같음</td></tr>
+      <tr><td>이번 판의 아이템</td><td><code>GameRandom(seed × 7919 + 17)</code>로 6종을 섞어 앞에서 1개</td><td>모두 같음</td></tr>
+      <tr><td>아이템 효과 (변신·숫자변경·조커·돋보기)</td><td>아이템마다 <code>GameRandom(seed × 31 + 종류)</code>를 따로 둠</td><td>같은 순서로 쓰면 같은 결과</td></tr>
+      <tr><td>조커 이동</td><td>판 안의 별도 난수</td><td>참가자마다 다를 수 있음</td></tr>
+      <tr><td>AI의 반응 시간·실수</td><td>AI마다 별도 난수</td><td>판과 무관</td></tr>
+    </tbody>
+  </table>
+  <div class="note">자리 번호로 시드를 나누지 않습니다. 같은 판 경쟁에서 시드 차이로 유불리가 생기면 안 되기 때문입니다. 판 생성 난수와 아이템 난수를 다른 시드로 나눠, 한쪽에서 난수를 몇 번 쓰든 다른 쪽 결과가 흔들리지 않게 했습니다.</div>
+</section>
+
+<section class="cont">
+  <h2><span class="no">5</span>아이템 시스템</h2>
+  <ul>
+    <li><b>전략 패턴</b>: <code>SkillBase</code>(대상이 필요한가, 범위 <code>GetArea</code>, 쓸 수 있는가 <code>CanApply</code>, 적용 <code>Apply</code>)를 6종이 각자 채움. 공통 규칙(조커·합체는 대상 아님)은 베이스에 한 번.</li>
+    <li><b>사람과 AI가 같은 클래스</b>: <code>SkillSet</code>(참가자 한 명의 아이템과 남은 횟수, <code>TryUse</code>)을 <code>SkillManager</code>(사람)와 <code>AiAgent</code>(AI)가 함께 씀. 규칙을 고치면 둘 다 바뀜.</li>
+    <li><code>TryUse</code>는 쓸 수 없으면 아무것도 바꾸지 않음(횟수 포함). 대상 고르기를 ESC로 취소하면 횟수를 쓰지 않음.</li>
+    <li>범위 미리보기는 슬라임 외곽선(가능 초록 · 불가 빨강), 판 밖은 잘라서 표시.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">6</span>네트워크</h2>
+  <h3>구조</h3>
+  <div class="layers">
+    <div class="lab">게임 코드</div>
+    <div class="box ui">UI · <code>GameManager</code> · <code>AiPlayer</code> — <code>NetworkManager</code>만 앎</div>
+    <div class="dir">▼</div>
+    <div class="lab">창구</div>
+    <div class="box"><code>NetworkManager</code> — 씬을 넘어 유지. 콜백을 큐에 담아 Update에서 메인 스레드로 처리, 하트비트, 채팅 기록·도배 제한, 입장·퇴장 시스템 메시지</div>
+    <div class="dir">▼ INetworkService</div>
+    <div class="lab">구현</div>
+    <div class="box"><code>LocalNetworkService</code> (서버 없이 메모리로 흉내 — 혼자서 로비 → 방 → AI 대전 → 결과까지) · <code>FirebaseNetworkService</code> (실제 서버)</div>
+    <div class="dir">▼</div>
+    <div class="lab">통신</div>
+    <div class="box"><code>FirebaseRestClient</code> — 인증, 읽기·쓰기, 트랜잭션, 실시간 수신(SSE), 서버 시각 · <code>Json</code> · <code>FirebaseData</code>(수신 나무와 변환)</div>
+  </div>
+  <p class="small">네트워크는 오래 걸리므로 결과는 반환값이 아니라 콜백과 이벤트(<code>RoomChanged</code>, <code>ScoresChanged</code>, <code>ChatReceived</code>, <code>MatchStarting</code>, <code>FinalBoardReceived</code>, <code>HostChanged</code> …)로 받습니다.</p>
+
+  <h3>Firebase를 REST로 — <code>FirebaseRestClient</code></h3>
+  <table>
+    <thead><tr><th style="width:28mm">기능</th><th>방식</th></tr></thead>
+    <tbody>
+      <tr><td>인증</td><td>Identity Toolkit REST로 이메일 회원가입·로그인 → ID 토큰(1시간). 끝나기 전에 Secure Token으로 갱신하고 실시간 수신을 새 토큰으로 다시 연결</td></tr>
+      <tr><td>읽기 · 쓰기</td><td>GET / PUT / PATCH / POST / DELETE. PATCH는 <code>"slots/1/kind"</code> 같은 경로 키로 여러 곳을 한 번에</td></tr>
+      <tr><td>트랜잭션</td><td><code>X-Firebase-ETag</code>로 읽고 <code>if-match</code>로 씀. 그사이 누가 바꿨으면(412) 다시 읽어 최대 8번 재시도 — 방 입장, 자리 정리, AI 추가, 계정 번호 발급에 사용</td></tr>
+      <tr><td>실시간 수신</td><td><code>text/event-stream</code>(SSE)을 직접 받아 <code>put</code> / <code>patch</code> 사건 단위로 자름. 글자가 여러 조각에 걸쳐 올 수 있어 한 사건이 다 모인 뒤 UTF-8로 변환. 끊기면 다음 하트비트에서 다시 연결</td></tr>
+      <tr><td>서버 시각</td><td>서버 타임스탬프를 써 보고, 돌아온 값과 요청 왕복의 <b>가운데</b> 시각의 차이로 내 시계를 보정. 경기 시간은 모두 이 <code>ServerNow</code>로만 잼</td></tr>
+    </tbody>
+  </table>
+
+  <h3>데이터베이스 구조</h3>
+  <div class="formula">guestCounter              계정 번호표 (가입할 때마다 트랜잭션으로 +1 → 닉네임#0012)<br>
+profiles/{uid}            nickname, number (가입 때 저장, 로그인 때 읽음)<br>
+users/{uid}               접속 중: nickname, guestNumber, lastSeen(하트비트)<br>
+lobbyChat/{id}            로비 채팅<br>
+rooms/{roomId}            roomName, hostUid, maxPlayers, state, seed, targetSum, startAt, playAt<br>
+  ├ slots/0 ~ 3           사람(uid) / AI(난이도·이름) / 빈칸, 슬라임 색<br>
+  ├ loaded/s{자리}        게임 씬에 도착함<br>
+  ├ scores/s{자리}        score, lastScoreTime, forfeited, forfeitTime<br>
+  ├ finalBoards/s{자리}   최종 판 (JSON)<br>
+  ├ left/s{자리}          대전·결과 중에 나간 사람<br>
+  └ chat/{id}             방 채팅</div>
+  <p class="small">보안 규칙(<code>database.rules.json</code>): 로그인한 사람만 읽기, 프로필·접속 정보는 본인만 쓰기, 채팅은 자기 uid로 새 글만·100자 이하, 계정 번호표는 정확히 +1만 허용.</p>
+</section>
+
+<section>
+  <h3>한 판의 동기화</h3>
+  <table>
+    <thead><tr><th class="c" style="width:9mm">순서</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td class="c">①</td><td>방장 <code>StartMatch</code>: seed · targetSum · startAt(지금 + 5초) · 빈 점수표 · state=Playing을 <b>PATCH 한 번</b>으로 씀 → 모두 같은 순간에 시작 정보를 받음</td></tr>
+      <tr><td class="c">②</td><td>각자 대기실에서 5초를 센 뒤 게임 씬으로. 도착하면 <code>loaded/s자리</code>를 씀</td></tr>
+      <tr><td class="c">③</td><td>방장: 사람이 모두 도착했거나 startAt + 15초가 지나면 <code>playAt</code> = 지금 + 1초를 씀</td></tr>
+      <tr><td class="c">④</td><td>모두 <code>playAt</code>(서버 시각)에 맞춰 3, 2, 1 → 180초</td></tr>
+      <tr><td class="c">⑤</td><td>점수가 바뀔 때마다 <code>scores/s자리</code>를 PATCH. AI 자리는 방장이 대신 올림</td></tr>
+      <tr><td class="c">⑥</td><td>시간 끝: 각자 최종 판을, 방장은 AI 판까지 올리고 state=Result</td></tr>
+      <tr><td class="c">⑦</td><td>먼저 대기실로 돌아가는 사람이 state=Waiting으로 되돌리고 점수·최종 판·나감 기록을 지움 (나간 사람의 자리도 비움)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>끊김과 방장</h3>
+  <ul>
+    <li>REST에는 "연결이 끊겼다"는 알림(onDisconnect)이 없으므로 <b>하트비트</b>로 판정: 5초마다 <code>lastSeen</code>을 쓰고, 15초 동안 없으면 끊긴 것으로 봄.</li>
+    <li>방장이 끊긴 사람을 정리: 대기 중이면 자리를 비우고, 대전 중이면 기권으로 표시.</li>
+    <li>방장이 끊기면 살아 있는 사람 중 자리 번호가 가장 앞인 사람이 스스로 방장을 맡음.</li>
+    <li>제대로 나가지 못한 방(대전 중 게임 종료 등)은 다음 접속 때 찾아서 나감.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">7</span>AI</h2>
+  <table>
+    <thead><tr><th style="width:32mm">클래스</th><th>역할</th></tr></thead>
+    <tbody>
+      <tr><td><code>AiAgent</code></td><td>AI 한 명의 생각(순수 C#). 무엇을 할지 정해 판에 적용하고 다음 행동까지 기다릴 시간을 돌려줌. 시뮬레이션도 이것을 그대로 돌림</td></tr>
+      <tr><td><code>AiBrain</code></td><td>수 고르기: 목표 합 사각형을 모두 찾고, 정확도만큼은 전략으로 가장 좋은 수, 나머지는 아무 수. 틀린 드래그는 하지 않음</td></tr>
+      <tr><td><code>AiSkillAdvisor</code></td><td>아이템을 쓸 곳과 가치(점수로 환산). 가치 = 바로 얻는 점수 + 새로 생기는 조합 − 없어지는 슬라임이 앞으로 벌 점수. 결과가 무작위인 아이템도 실제 결과는 보지 않고 가능성만 따짐</td></tr>
+      <tr><td><code>AiStrategy</code></td><td>전략 기준값. 모든 난이도가 같은 값을 쓰고 정확도·반응 시간만 다름</td></tr>
+      <tr><td><code>AiDifficultyTable</code></td><td>난이도별 반응 시간, 정확도, 목표 합별 반응 시간 배율</td></tr>
+      <tr><td><code>AiPlayer</code></td><td>Unity 래퍼. 방장 PC에서 AI 자리마다 하나. 시간을 재고 점수를 서버로 보냄. 시연용 자동 플레이에서는 내 판을 사람처럼 끌어서 둠</td></tr>
+      <tr><td><code>AiSimulator</code></td><td>화면 없이 한 판을 끝까지 (여러 스레드로 여러 판)</td></tr>
+    </tbody>
+  </table>
+  <h3>전략을 찾은 방법</h3>
+  <ul>
+    <li>지옥 속도·정확도 100%로 504판 탐색 + 새 시드 200판 검증.</li>
+    <li>가장 큰 차이는 <code>CountWeight = −3</code>: 같은 점수면 <b>슬라임을 적게 쓰는 수(큰 숫자부터)</b>를 고르면 작은 숫자가 남아 판이 늦게 막힘 → 평균 제거 129 → 150마리, 점수 187 → 208점.</li>
+    <li>한 수 앞 보기는 지금 속도에서 ±1마리 차이라 끔 (0.5 ~ 1초 속도에서만 +2 ~ 5마리).</li>
+    <li>아이템은 막혔을 때만이 아니라 이득이 기준값(조커 20 · 합체 12 · 파괴 12 · 숫자변경 6점)을 넘으면 씀. 마지막 20초에는 기준을 0.3배로 낮춤(남기면 손해).</li>
+  </ul>
+  <h3>방장 PC에서만</h3>
+  <p>AI는 방장 PC에서만 만들어집니다. 다른 PC에서도 만들면 같은 자리 점수가 두 번 올라가기 때문입니다. AI는 화면이 없으므로 <code>BoardModel</code>만 쓰고, <code>SlimeManager</code>는 내 판만 그립니다.</p>
+</section>
+
+<section class="cont">
+  <h2><span class="no">8</span>화면과 연출</h2>
+  <ul>
+    <li><b>슬라임 170칸은 한 번만 생성</b>하고, 슬라임이 없어지면 그림과 콜라이더를 끔. 재대결 때도 다시 만들지 않고 다시 그림.</li>
+    <li>연출은 DOTween: 터짐(부풀었다 쏙, 0.035초 시간차), 틀린 드래그 흔들림, 순위 슬라임 이동, 패널 전환(<code>PanelTransition</code>), 뽑기 룰렛.</li>
+    <li><code>ScorePopup</code>은 월드 TextMeshPro 글자를 모아 두었다가 다시 씀(풀).</li>
+    <li>UI는 씬마다 <code>UIManager_씬</code>이 패널을 켜고 끄기만 하고, 각 패널의 일은 패널 스크립트가 맡음(<code>Login_LoginPanel</code>, <code>RoomPanel</code>, <code>Game_RankPanel</code> …). 버튼 연결은 <code>UIButtons.Bind</code>로 코드에서만 — 클릭 소리를 한 곳에서 붙임.</li>
+    <li>꾸미기: <code>StyleSettings</code>(고른 색·테마)가 값이 바뀌면 이벤트를 쏘고, <code>MySlimeColor</code>(내 색)·<code>ThemeSkin</code>(테마 색·그림)이 붙은 오브젝트가 스스로 다시 칠함 → 씬과 상관없이 동작.</li>
+    <li>소리: <code>SoundManager</code>가 BGM 채널 1개와 효과음 채널 여러 개를 돌려 쓰고, 볼륨을 저장.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">9</span>검증과 개발 도구</h2>
+  <h3>자동 테스트</h3>
+  <table>
+    <thead><tr><th>테스트 파일</th><th class="num">테스트 표시 수</th><th>확인하는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>ScoreCalculatorTest</code></td><td class="num">21</td><td>기획서의 점수 예시 전부, 파괴·합체 0 점수</td></tr>
+      <tr><td><code>LocalNetworkServiceTest</code></td><td class="num">29</td><td>방 만들기·입장·AI·시작·점수·결과·나감 흐름</td></tr>
+      <tr><td><code>SkillTest</code></td><td class="num">15</td><td>변신 순환, 조커·합체 제외, 합체 일의 자리·불가 조건, 숫자변경</td></tr>
+      <tr><td><code>MatchFinderTest</code></td><td class="num">11</td><td>누적합 = 전부 세기, 합체 한 칸만 걸쳐도 포함·한 번만, 막힌 판</td></tr>
+      <tr><td><code>AiBrainTest</code></td><td class="num">10</td><td>AI 수 고르기·아이템 판단</td></tr>
+      <tr><td><code>MatchScoresTest</code></td><td class="num">6</td><td>점수순, 동점은 먼저 도달, 기권은 맨 아래, 마이너스 점수</td></tr>
+      <tr><td><code>BoardGeneratorTest</code></td><td class="num">5</td><td>같은 시드 = 같은 판, 출현 수, 숫자 1 ~ 9</td></tr>
+      <tr><td><code>FirebaseDataTest</code></td><td class="num">5</td><td>수신 나무 적용·변환</td></tr>
+    </tbody>
+  </table>
+  <p class="small">순수 C# 테스트는 Unity 없이 <code>dotnet test Tools/AiTest</code>로 돌림 — <b>2026-11-25 실행 결과 62개 모두 통과</b>. (Unity Test Runner 쪽은 이번에 다시 돌리지 않음)</p>
+
+  <h3>AI 시뮬레이션 — <code>dotnet run --project Tools/AiSim -- &lt;모드&gt;</code></h3>
+  <table>
+    <thead><tr><th style="width:26mm">모드</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><code>target</code></td><td>난이도 × 목표 합 10 ~ 15의 평균 제거 수</td></tr>
+      <tr><td><code>games</code></td><td>사람이 둔 판(<code>TestRecords/player_games.csv</code>)을 같은 시드로 AI가 다시 풀어, 난이도별 제거 수와 사람이 이긴 비율</td></tr>
+      <tr><td><code>fit</code></td><td>사람 평균의 60 / 80 / 95 / 100%를 지우려면 반응 시간이 몇 초여야 하는지 (목표 합별)</td></tr>
+      <tr><td><code>look</code></td><td>한 수 앞 보기를 켜고 끈 비교</td></tr>
+    </tbody>
+  </table>
+  <p class="small">사람의 플레이 기록(판마다 시드·목표 합·제거 수·실수·시간대별 제거 등)을 CSV로 남기고, 그 판을 AI에게 똑같이 다시 풀게 해서 난이도를 맞췄습니다(결과는 기획서 11장).</p>
+
+  <h3>개발용 키</h3>
+  <p class="small"><code>DebugCheat</code>(에디터·개발 빌드에서만): 타이틀 T = 글자 연출 다시, 게임 F1 = 목표 합 10 → 15 순환. 시연용 자동 플레이 키(대기실 T, 1 ~ 4)는 시연을 빌드로 하므로 출시 빌드에도 들어 있음.</p>
+</section>
+
+<section>
+  <h2><span class="no">10</span>설계 결정 기록 (Q&amp;A)</h2>
+  <p>개발하면서 고민했던 질문과, 그 답으로 실제 어떻게 구현했는지를 정리했습니다.</p>
+
+  <h3>구조</h3>
+  <div class="qa"><div class="q">처음 버전의 코드를 그대로 키우지 않고 왜 규칙을 따로 뺐나?</div><div class="a">
+    <p>처음 버전은 슬라임 오브젝트가 자기 숫자를 <code>UnityEngine.Random</code>으로 직접 뽑고, 합 판정은 물리 Trigger 누적, 점수는 드래그 매니저의 필드였음. 시드 대전이 불가능하고, 화면 없는 AI 판이나 시뮬레이션을 만들 수 없었음.</p>
+    <p><b class="k">구현</b>판의 진짜 상태를 순수 C# <code>BoardModel</code>로 옮기고, <code>SlimeManager</code>·<code>SlimeController</code>는 그 이벤트를 듣고 그리기만 함. 내 판·AI 판·시뮬레이션·테스트가 같은 코드를 씀.</p></div></div>
+
+  <div class="qa"><div class="q">상대마다 객체(IOpponent)를 두는 게 자연스럽지 않나?</div><div class="a">
+    <p>4인 대전에 AI까지 섞이면 "다른 사람 PC의 사람", "내 PC의 AI", "다른 PC의 AI"가 생겨 경우가 많아짐.</p>
+    <p><b class="k">구현</b>상대마다 객체를 두지 않고 <b>모든 점수가 네트워크를 거침</b>. 내 점수는 내가, AI 점수는 방장이 서버에 올리고, 점수판은 서버에서 온 점수만 봄 — 사람이든 AI든 같은 길.</p></div></div>
+
+  <div class="qa"><div class="q">네트워크 요구사항이 정해지지 않았는데 어떻게 먼저 만들까?</div><div class="a">
+    <p>어떤 서버 기술을 쓸지 확정되기 전에 게임 흐름부터 만들어야 했음.</p>
+    <p><b class="k">구현</b>게임 코드는 <code>INetworkService</code> 인터페이스만 앎. 먼저 <code>LocalNetworkService</code>(메모리)로 로비 → 방 → AI 대전 → 결과를 혼자 끝까지 만들고 테스트한 뒤, 같은 약속을 지키는 <code>FirebaseNetworkService</code>를 끼움. 인스펙터에서 둘을 바꿀 수 있어 혼자 테스트할 때는 계속 Local을 씀.</p></div></div>
+
+  <div class="qa"><div class="q">Firebase Unity SDK를 쓰면 편한데 왜 REST로 직접 했나?</div><div class="a">
+    <p>Firebase Unity SDK의 Windows 지원은 베타였음.</p>
+    <p><b class="k">구현</b><code>UnityWebRequest</code>로 인증·CRUD·트랜잭션·SSE 실시간 수신·서버 시각을 직접 구현(<code>FirebaseRestClient</code>). JSON 파서도 작게 직접 둠. 대신 SDK가 해 주던 끊김 알림이 없어 하트비트로 대신함.</p></div></div>
+
+  <h3>판과 입력</h3>
+  <div class="qa"><div class="q">드래그 판정을 Trigger로 모은 목록으로 하면 안 되나?</div><div class="a">
+    <p>Trigger 결과는 물리 업데이트 주기에 묶여 있어, 빠르게 끌고 바로 놓으면 마지막 범위를 놓칠 수 있음.</p>
+    <p><b class="k">구현</b>놓는 순간 <code>Physics2D.OverlapBoxAll</code>로 한 번 더 확인해 판정하고, Trigger 결과는 끄는 동안의 초록·빨강 강조에만 씀.</p></div></div>
+
+  <div class="qa"><div class="q">터진 슬라임은 Destroy하면 되지 않나? 풀은 안 쓰나?</div><div class="a">
+    <p>Destroy는 프레임 끝에 일어나 같은 프레임의 계산이 틀어지고, 재시작마다 170개를 새로 만들었음.</p>
+    <p><b class="k">구현</b>칸 170개를 한 번만 만들고 슬라임이 없으면 그림과 콜라이더만 끔. 칸 수가 고정이라 따로 오브젝트 풀은 두지 않음. 자주 생기고 사라지는 "+점수" 글자만 풀로 씀.</p></div></div>
+
+  <div class="qa"><div class="q">자리마다 시드를 다르게 하면 더 자연스럽지 않나?</div><div class="a">
+    <p>같은 판 경쟁에서 시드 차이로 유불리가 생기면 안 됨.</p>
+    <p><b class="k">구현</b>모든 참가자가 같은 경기 시드. 대신 판 생성·아이템 선정·아이템별 효과의 난수를 서로 다른 시드로 나눠, 한쪽에서 난수를 쓰는 횟수가 다른 쪽 결과를 흔들지 않게 함(4장).</p></div></div>
+
+  <h3>네트워크</h3>
+  <div class="qa"><div class="q">PC마다 시계가 다른데 어떻게 동시에 시작하나?</div><div class="a">
+    <p>각 PC의 시계로 카운트다운을 하면 몇 초씩 어긋남.</p>
+    <p><b class="k">구현</b>접속할 때 서버 타임스탬프를 써 보고, 요청 왕복의 가운데 시각과 비교해 내 시계와의 차이를 구함. 시작 시각(<code>startAt</code>, <code>playAt</code>)은 서버 시각으로 정하고 모두 <code>ServerNow</code>로만 잼.</p></div></div>
+
+  <div class="qa"><div class="q">씬을 불러오는 속도가 PC마다 다른데, 늦은 사람은 어떻게 하나?</div><div class="a">
+    <p>시작 시각만 정해 두면 늦게 불러온 사람은 이미 몇 초 늦은 판을 시작함.</p>
+    <p><b class="k">구현</b>각자 게임 씬에 도착하면 <code>loaded</code>를 쓰고, 방장이 모두 도착했거나 15초가 지나면 그때 <code>playAt</code>(지금 + 1초)을 정함. 모두 그 시각에 3, 2, 1을 시작.</p></div></div>
+
+  <div class="qa"><div class="q">두 사람이 동시에 같은 자리에 들어오면?</div><div class="a">
+    <p>읽고 → 고치고 → 쓰는 사이에 다른 사람이 바꾸면 한쪽이 덮어씀.</p>
+    <p><b class="k">구현</b>ETag 조건부 쓰기 트랜잭션: 읽은 뒤 그사이 바뀌었으면(412) 다시 읽어 재시도. 방 입장·나감, AI 추가(그사이 사람이 들어왔으면 넣지 않음), 계정 번호 발급(동시에 가입해도 번호가 겹치지 않음)에 씀.</p></div></div>
+
+  <div class="qa"><div class="q">시작할 때 여러 값을 따로 쓰면 받는 쪽이 반쯤 바뀐 방을 보지 않나?</div><div class="a">
+    <p>seed, targetSum, startAt, state를 따로 쓰면 그 사이에 이벤트가 도착할 수 있음.</p>
+    <p><b class="k">구현</b>시작 정보 전부와 빈 점수표를 PATCH 한 번으로 씀 → 모두가 같은 순간에 완성된 시작 정보를 받음.</p></div></div>
+
+  <h3>게임 디자인을 코드로</h3>
+  <div class="qa"><div class="q">AI 난이도를 점수로 비교하면 안 되나?</div><div class="a">
+    <p>점수는 천사·킹·악마를 어떻게 만났는지에 따라 크게 흔들림.</p>
+    <p><b class="k">구현</b>난이도 비교는 <b>슬라임 제거 수</b>로. 사람의 기록을 CSV로 남기고 같은 시드로 AI에게 다시 풀게 해, 목표 합별 반응 시간 배율을 구함(기획서 11장).</p></div></div>
+
+  <div class="qa"><div class="q">돋보기가 최선의 수를 알려 주면 안 되나? 조커는 원하는 곳에 두면 안 되나?</div><div class="a">
+    <p>돋보기가 최선의 수를 알려 주면 일찍 써서 킹 조합을 찾는 것이 정답이 되고, 조커를 원하는 곳에 두면 천사 옆에 넣고 바로 터뜨리는 쉬운 고득점이 됨.</p>
+    <p><b class="k">구현</b>돋보기는 악마 없는 조합 중 무작위 하나, 조커는 경기 시드로 칸을 뽑아 가장 가까운 기본 슬라임. 둘 다 누르는 즉시 쓰고, 같은 순서로 쓰면 모든 참가자에게 같은 결과.</p></div></div>
+
+  <div class="qa"><div class="q">난이도마다 다른 AI 로직을 짜야 하나?</div><div class="a">
+    <p>난이도마다 로직이 다르면 고칠 곳이 네 배가 되고, 난이도 차이가 "생각의 질"인지 "속도"인지 섞임.</p>
+    <p><b class="k">구현</b>모두 같은 전략(<code>AiStrategy.Best</code>)을 쓰고 정확도와 반응 시간만 다르게. 수치는 <code>AiDifficultyTable</code> 한 곳에서만 고침.</p></div></div>
+</section>
+
+<section>
+  <h2><span class="no">11</span>남은 일</h2>
+  <table>
+    <thead><tr><th style="width:36mm">항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>난이도 체감 확인</td><td>목표 합별 반응 시간 배율을 직접 플레이로 확인하고 필요하면 <code>AiDifficultyTable</code> 조정</td></tr>
+      <tr><td>지옥 난이도</td><td>지금 2.4 ~ 4.8초라 목표 합 10에서 사람이 28% 정도 이김 → 의도(이기기 어렵게)에 맞게 다시 보기</td></tr>
+      <tr><td>게임 씬 채팅</td><td>대전 중·결과 채널(<code>ChatChannel.Match</code> · <code>Result</code>)은 있으나 게임 씬에 채팅창이 없음</td></tr>
+      <tr><td>보안 규칙 강화</td><td>지금은 로그인한 사람이면 어느 방이든 쓸 수 있음 → 자기 자리만 쓰기, AI 자리는 방장만, 점수 1회 변화량 상한</td></tr>
+    </tbody>
+  </table>
+  <h3>보류 (확정 전)</h3>
+  <ul>
+    <li>"번지는 악마" 규칙(15초마다 옆 기본 슬라임으로 번짐, 상한 20).</li>
+  </ul>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>SlimePOP 기획서</title>
+<link rel="stylesheet" href="doc.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="top">
+    <div class="kicker">PROJECT-B · GAME DESIGN DOCUMENT</div>
+    <h1>SlimePOP<br>기획서</h1>
+    <div class="subtitle">최대 4인 실시간 슬라임 숫자 퍼즐 대전</div>
+  </div>
+  <div>
+    <div class="grid">
+      <div><b>문서 버전</b>v1.0</div>
+      <div><b>기준 빌드</b>Version 1.0.0 (2026-11-06)</div>
+      <div><b>장르</b>숫자 퍼즐 · 실시간 대전</div>
+      <div><b>플랫폼</b>PC Windows</div>
+      <div><b>인원</b>1 ~ 4명 (사람 + AI)</div>
+      <div><b>한 판</b>180초</div>
+    </div>
+    <p class="small muted" style="margin-top:5mm">이 문서는 지금 빌드의 규칙만 적습니다. 구현 방식은 별도의 개발 문서에 있습니다.</p>
+  </div>
+</div>
+
+<section>
+  <h2>차례</h2>
+  <div class="toc">
+    <div><span class="n">1</span>게임 개요</div>
+    <div><span class="n">2</span>한 판의 규칙</div>
+    <div><span class="n">3</span>슬라임 종류와 점수</div>
+    <div><span class="n">4</span>아이템</div>
+    <div><span class="n">5</span>방과 대전</div>
+    <div><span class="n">6</span>AI 상대</div>
+    <div><span class="n">7</span>화면 흐름</div>
+    <div><span class="n">8</span>계정과 채팅</div>
+    <div><span class="n">9</span>꾸미기와 옵션</div>
+    <div><span class="n">10</span>연출</div>
+    <div><span class="n">11</span>밸런스 근거</div>
+    <div><span class="n">12</span>남은 일</div>
+  </div>
+
+  <h2 style="margin-top:12mm"><span class="no">1</span>게임 개요</h2>
+  <p><b>같은 판, 같은 목표 합으로 최대 4명이 180초 동안 점수를 겨루는 슬라임 숫자 퍼즐 대전 게임.</b> 숫자가 적힌 슬라임 170마리가 깔린 판에서 마우스로 사각형을 끌어, 안의 숫자 합이 목표 합과 같으면 슬라임이 터지고 점수를 얻습니다.</p>
+  <table class="kv">
+    <tbody>
+      <tr><td>핵심 재미</td><td>빠르게 합을 찾는 손맛 + 특수 슬라임(천사·킹·악마)을 노리는 판단 + 다른 참가자와의 실시간 순위 경쟁</td></tr>
+      <tr><td>대전 방식</td><td>각자 자기 판을 푸는 점수 경쟁. 다른 사람의 판을 방해하는 요소는 없음</td></tr>
+      <tr><td>공정성</td><td>모든 참가자가 같은 시드로 만든 완전히 같은 판, 같은 목표 합, 같은 아이템으로 시작</td></tr>
+      <tr><td>상대</td><td>온라인 플레이어 또는 AI. 방장이 빈 자리에 AI를 넣고 자리마다 난이도를 고름</td></tr>
+      <tr><td>아트 방향</td><td>크레용·물감·공책을 쓴 손그림 낙서풍. 동그란 슬라임 캐릭터</td></tr>
+      <tr><td>소셜</td><td>이메일 계정, 로비 접속자 목록, 로비·대기실 채팅</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">2</span>한 판의 규칙</h2>
+  <table class="kv">
+    <tbody>
+      <tr><td>판</td><td>17 × 10 = 170칸. 슬라임마다 숫자 1 ~ 9 (같은 확률)</td></tr>
+      <tr><td>조작</td><td>마우스로 사각형을 끌어 놓음. 안의 숫자 합이 목표 합과 같으면 터짐. 끄는 동안 범위가 초록(맞음)·빨강(틀림)으로 보임</td></tr>
+      <tr><td>목표 합</td><td>판마다 10 ~ 15 중 하나. 판 시작 전 뽑기 화면에서 공개되고 한 판 동안 고정</td></tr>
+      <tr><td>시간</td><td>180초. 일시정지 없음, 조기 종료 없음 — 판이 막혀도 시간은 끝까지 흐름</td></tr>
+      <tr><td>막혔을 때</td><td>"더 이상 만들 수 있는 수가 없습니다!" 안내. 남은 아이템으로 살릴 수 있음</td></tr>
+      <tr><td>특수 슬라임</td><td>판마다 킹 2 · 천사 3 · 악마 5마리, 나머지 160마리는 기본. 위치와 숫자는 시드로 정해짐</td></tr>
+    </tbody>
+  </table>
+
+  <h3>순위</h3>
+  <ol>
+    <li>점수가 높은 순.</li>
+    <li>동점이면 그 점수에 <b>먼저 도달한</b> 사람이 위 (점수가 바뀔 때마다 경기 시작 기준 시각을 기록).</li>
+    <li>기권(대전 중 나감·연결 끊김)은 맨 아래. 기권끼리는 먼저 나간 사람이 더 아래.</li>
+  </ol>
+  <p class="small muted">점수는 마이너스가 될 수 있습니다(악마). 순위는 점수로 정하고, 영구 전적·최고 기록은 두지 않습니다 — 그 판의 기록은 대기실로 돌아가면 지웁니다.</p>
+</section>
+
+<section class="cont">
+  <h2><span class="no">3</span>슬라임 종류와 점수</h2>
+  <table>
+    <thead><tr><th>종류</th><th class="c">기본점수</th><th>특수점수</th><th>생기는 곳</th></tr></thead>
+    <tbody>
+      <tr><td>기본</td><td class="c">1</td><td>없음</td><td>판 생성</td></tr>
+      <tr><td>악마</td><td class="c">1</td><td>B × (−1)</td><td>판 생성 (5마리)</td></tr>
+      <tr><td>천사</td><td class="c">2</td><td>B × 2</td><td>판 생성 (3마리)</td></tr>
+      <tr><td>킹</td><td class="c">1</td><td>+10</td><td>판 생성 (2마리)</td></tr>
+      <tr><td>조커</td><td class="c">3</td><td>+(목표 합 × 2)</td><td>조커 아이템</td></tr>
+      <tr><td>합체</td><td class="c">합쳐진 기본점수 합</td><td>없음</td><td>합체 아이템 (2 × 2칸 차지)</td></tr>
+    </tbody>
+  </table>
+  <div class="formula">B = 터뜨린 사각형 안 슬라임들의 기본점수 합<br>
+점수 = B + Σ천사(B × 2) + Σ악마(B × −1) + Σ킹(10) + Σ조커(목표 합 × 2)</div>
+  <table>
+    <thead><tr><th>예 (목표 합 10)</th><th class="c">B</th><th>계산</th><th class="num">점수</th></tr></thead>
+    <tbody>
+      <tr><td>기본 + 기본</td><td class="c">2</td><td>2</td><td class="num">2</td></tr>
+      <tr><td>기본 + 악마</td><td class="c">2</td><td>2 − 2</td><td class="num">0</td></tr>
+      <tr><td>기본 + 천사</td><td class="c">3</td><td>3 + 6</td><td class="num">9</td></tr>
+      <tr><td>천사 + 킹</td><td class="c">3</td><td>3 + 6 + 10</td><td class="num">19</td></tr>
+      <tr><td>천사 + 천사</td><td class="c">4</td><td>4 + 8 + 8</td><td class="num">20</td></tr>
+      <tr><td>기본 + 조커</td><td class="c">4</td><td>4 + 20</td><td class="num">24</td></tr>
+      <tr><td>천사 + 조커</td><td class="c">5</td><td>5 + 10 + 20</td><td class="num">35</td></tr>
+      <tr><td>악마 + 악마</td><td class="c">2</td><td>2 − 2 − 2</td><td class="num">−2</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">악마는 같이 터뜨린 슬라임의 점수를 깎는 함정, 천사·킹은 노릴 만한 보너스입니다. 그래서 "어디를 먼저 지울까"가 단순 속도 경쟁 위에 판단을 더합니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">4</span>아이템</h2>
+  <ul>
+    <li>6종 중 <b>판마다 1개</b>를 무작위로 뽑고, 모든 참가자가 같은 아이템을 받음. 판 시작 전 뽑기 화면에서 룰렛으로 공개.</li>
+    <li>단축키 <b>A</b>. 대상을 고르는 아이템은 판 위에 범위를 보여 주고 클릭으로 쓰며, ESC로 취소하면 횟수를 쓰지 않음.</li>
+    <li>모든 아이템은 내 판에만 작용. 조커·합체 슬라임은 어떤 아이템의 대상도 아님.</li>
+    <li>무작위가 들어간 아이템도 경기 시드를 쓰므로, 모두가 같은 순서로 쓰면 같은 결과.</li>
+  </ul>
+  <table>
+    <thead><tr><th style="width:22mm">아이템</th><th class="c" style="width:12mm">횟수</th><th>효과</th></tr></thead>
+    <tbody>
+      <tr><td>돋보기</td><td class="c">1</td><td>누르는 즉시 가능한 조합 하나를 표시. 최고의 수가 아니라 <b>악마가 없는 조합 중 무작위</b> — 일찍 써서 킹 조합을 찾는 식의 이득을 막음</td></tr>
+      <tr><td>파괴</td><td class="c">2</td><td>슬라임 1마리 제거, 그 슬라임의 기본점수만 얻음</td></tr>
+      <tr><td>변신</td><td class="c">1</td><td>5 × 5 범위의 슬라임마다 50% 확률로 +1 또는 −1 (9 → 1, 1 → 9로 순환). 막혔을 때 판을 살리는 용도</td></tr>
+      <tr><td>합체</td><td class="c">1</td><td>2 × 2 범위(2마리 이상)를 큰 슬라임 하나로. 숫자 = 합의 일의 자리. <b>0이면 바로 터지고 합쳐진 수 × 4점</b>. 범위에 조커가 있으면 불가</td></tr>
+      <tr><td>조커</td><td class="c">1</td><td>누르는 즉시 무작위 기본 슬라임 하나가 조커가 됨(자리 선택 불가). 5초마다 빈자리로 이동하며 남은 시간을 표시. 원하는 곳에 넣고 바로 터뜨리는 쉬운 고득점을 막으려고 자리를 고를 수 없게 함</td></tr>
+      <tr><td>숫자변경</td><td class="c">3</td><td>슬라임 1마리의 숫자를 원래 숫자를 뺀 1 ~ 9 중 무작위로</td></tr>
+    </tbody>
+  </table>
+  <div class="note">처음에는 6종을 모두, 이후 3개를 주었지만 숫자를 지우느라 바빠 아이템을 쓸 여유가 없었습니다. 그래서 판마다 1개로 줄이고 판 시간을 120초에서 180초로 늘렸습니다.</div>
+</section>
+
+<section>
+  <h2><span class="no">5</span>방과 대전</h2>
+  <h3>방</h3>
+  <ul>
+    <li>방 만들기: 제목(최대 20자)과 인원(1 ~ 4명)을 고름. 만든 사람이 방장.</li>
+    <li>방 목록에서 골라 들어가거나, <b>빠른 참여</b>로 빈자리가 있는 대기 중인 방에 무작위로 들어감. 이미 시작한 방에는 들어갈 수 없음.</li>
+    <li>방장은 빈 자리에 AI를 넣고 빼며, 자리마다 난이도를 고름. AI 자리에는 무작위 이름과 정해진 색이 붙음.</li>
+    <li><b>준비 버튼 없음</b> — 가볍게 즐기는 게임이라 방장이 시작을 누르면 바로 시작.</li>
+  </ul>
+
+  <h3>시작 흐름</h3>
+  <div class="flow">
+    <div class="step"><b>방장 시작</b>시드·목표 합을 방에 기록</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>대기실 5초</b>채팅에 5, 4, 3, 2, 1 안내</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>게임 씬</b>모두 도착 (최대 15초 대기)</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>뽑기</b>목표 합 · 아이템 공개</div>
+    <div class="arrow">→</div>
+    <div class="step hl"><b>3, 2, 1</b>모두 같은 서버 시각에 시작</div>
+    <div class="arrow">→</div>
+    <div class="step hl"><b>180초</b>점수 실시간 공유</div>
+  </div>
+  <ul>
+    <li>PC마다 시계가 다르므로 모든 시간은 서버 시각 기준. 늦게 불러온 사람을 15초까지 기다리고, 그 뒤에는 온 사람끼리 시작.</li>
+    <li>대전 중에는 다른 참가자의 판은 보이지 않고 점수와 순위만 보임.</li>
+  </ul>
+
+  <h3>판이 끝나면</h3>
+  <ul>
+    <li>TIME UP! 연출 뒤 결과 화면: 1 ~ 4등의 닉네임, 점수(기권은 "기권"), 각자의 최종 판.</li>
+    <li>"룸으로 가기" 또는 20초 뒤 자동으로 같은 방의 대기실로 돌아감 → 바로 재대결 가능.</li>
+  </ul>
+
+  <h3>나감과 연결 끊김</h3>
+  <table>
+    <thead><tr><th style="width:32mm">상황</th><th>처리</th></tr></thead>
+    <tbody>
+      <tr><td>대기실에서 나감</td><td>자리를 비움. 방장이면 남은 사람에게 방장을 넘기고, 사람이 아무도 안 남으면 방을 지움</td></tr>
+      <tr><td>대전 중 나감</td><td>기권(최하위). 결과 화면에 이름이 보이도록 자리는 남겨 두고, 대기실로 돌아갈 때 비움</td></tr>
+      <tr><td>연결 끊김</td><td>5초마다 접속 신호를 보내고, 15초 동안 없으면 끊긴 것으로 봄. 대기 중이면 자리를 비우고, 대전 중이면 기권</td></tr>
+      <tr><td>방장 끊김</td><td>남은 사람 중 자리 번호가 가장 앞인 사람이 방장을 맡음</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">6</span>AI 상대</h2>
+  <ul>
+    <li>AI는 방장 PC에서 계산하고 점수만 서버에 올림 — 다른 참가자에게는 사람과 같은 방식으로 점수가 보임.</li>
+    <li>AI는 <b>틀린 드래그를 하지 않음</b>. 대신 반응 시간이 핸디캡.</li>
+    <li>모든 난이도가 같은 전략을 쓰고 <b>정확도</b>(최선의 수·아이템을 쓸 좋은 때를 알아챌 확률)와 <b>반응 시간</b>만 다름.</li>
+  </ul>
+  <table>
+    <thead><tr><th>난이도</th><th class="c">반응 시간 (목표 합 10)</th><th class="c">정확도</th><th>성격</th></tr></thead>
+    <tbody>
+      <tr><td>쉬움</td><td class="c">4.8 ~ 9.6초</td><td class="c">0%</td><td>보이는 대로 아무 수. 막히면 아무 아이템이나 아무 데나</td></tr>
+      <tr><td>보통</td><td class="c">3.6 ~ 7.2초</td><td class="c">33%</td><td>가끔 좋은 수</td></tr>
+      <tr><td>어려움</td><td class="c">2.8 ~ 5.6초</td><td class="c">67%</td><td>"진땀승"을 목표로</td></tr>
+      <tr><td>지옥</td><td class="c">2.4 ~ 4.8초</td><td class="c">100%</td><td>사람이 이기기 어렵게. 목표 합과 상관없이 늘 같은 속도</td></tr>
+    </tbody>
+  </table>
+  <h3>목표 합에 따른 반응 시간 배율</h3>
+  <p>목표 합이 클수록 사람이 조합을 찾는 데 오래 걸리므로, 쉬움 · 보통 · 어려움은 반응 시간을 늘림.</p>
+  <table>
+    <thead><tr><th>목표 합</th><th class="c">10</th><th class="c">11</th><th class="c">12</th><th class="c">13</th><th class="c">14</th><th class="c">15</th></tr></thead>
+    <tbody><tr><td>배율</td><td class="c">×1</td><td class="c">×1.2</td><td class="c">×1.35</td><td class="c">×1.5</td><td class="c">×1.65</td><td class="c">×1.65</td></tr></tbody>
+  </table>
+  <h3>사람처럼 보이게</h3>
+  <ul>
+    <li>반응 시간에 무작위 편차, 3마리 이상 조합은 1마리마다 0.08초씩 더 걸림, 가끔(15%) 연속으로 빠르게 터뜨림.</li>
+    <li>고른 사각형을 실제 슬라임이 있는 곳까지 좁혀서 끔.</li>
+  </ul>
+  <h3>발표용 자동 플레이</h3>
+  <p>대기실에서 <b>T</b>를 누르면 내 자리도 AI가 대신 둡니다(1 쉬움 · 2 보통 · 3 어려움 · 4 지옥, 다시 T로 끔). 사각형을 끌어 놓는 모습과 아이템 범위를 화면에 보여 준 뒤 적용하므로 시연에서 사람처럼 보입니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">7</span>화면 흐름</h2>
+  <div class="flow">
+    <div class="step"><b>로그인</b>타이틀 · 로그인 · 회원가입</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>로비</b>방 목록 · 접속자 · 채팅</div>
+    <div class="arrow">→</div>
+    <div class="step"><b>룸</b>참가자 카드 · AI · 채팅</div>
+    <div class="arrow">→</div>
+    <div class="step hl"><b>게임</b>뽑기 · 대전 · 결과</div>
+  </div>
+  <div class="loopnote">↺ 결과 화면에서 같은 룸으로 돌아와 재대결</div>
+
+  <table>
+    <thead><tr><th style="width:18mm">씬</th><th>구성</th></tr></thead>
+    <tbody>
+      <tr><td>로그인</td><td>SLIMEPOP!!! 글자 등장 연출 → Touch To Start → 서버 연결 확인 → 이메일 로그인. 회원가입은 이메일·비밀번호 확인 뒤 닉네임 생성 창에서 가입</td></tr>
+      <tr><td>로비</td><td>내 닉네임과 #번호, 방 목록, 빠른 참여, 방 만들기, 접속자 목록(공책 팝업), 접힌 로비 채팅(최근 한 줄 + 안 읽은 수), 도움말·옵션·로그아웃·종료</td></tr>
+      <tr><td>룸</td><td>방 제목·인원·상태, 참가자 카드(슬라임·이름·PLAYER n, 자리 색), 방장의 AI 토글·난이도 선택, 방 채팅, 게임 시작(방장), 나가기</td></tr>
+      <tr><td>게임</td><td>뽑기 화면(목표 합 · 아이템) → 3, 2, 1 → 판 · 남은 시간 · 아이템 칸 · 실시간 순위(참가자 슬라임이 등수 자리로 통통 튀며 이동) → TIME UP! → 결과 화면</td></tr>
+    </tbody>
+  </table>
+
+  <div class="shots3">
+    <figure><img src="img/login.png"><figcaption>로그인</figcaption></figure>
+    <figure><img src="img/signup.png"><figcaption>회원가입</figcaption></figure>
+    <figure><img src="img/login-fail.png"><figcaption>로그인 실패 안내</figcaption></figure>
+  </div>
+</section>
+
+<section class="cont">
+  <div class="shots">
+    <figure><img src="img/lobby.png"><figcaption>로비 — 방 목록 · 빠른 참여 · 방 만들기 · 로비 채팅</figcaption></figure>
+    <figure><img src="img/lobby-players.png"><figcaption>로비 — 접속자 목록</figcaption></figure>
+    <figure><img src="img/room.png"><figcaption>룸 — 참가자 카드와 게임 시작</figcaption></figure>
+    <figure><img src="img/room-chat.png"><figcaption>룸 채팅 — 두 창에서 입장 알림과 대화 확인</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">8</span>계정과 채팅</h2>
+  <h3>계정</h3>
+  <ul>
+    <li>이메일 + 비밀번호로 회원가입·로그인. 이메일은 다음 접속 때 미리 채우고 비밀번호는 저장하지 않음.</li>
+    <li>로그인 실패 이유(비밀번호 틀림 등)를 사람이 읽을 문장으로 보여 줌. 회원가입은 칸마다 옆에 이유를 보여 주고, 고치면 지움.</li>
+    <li>닉네임: 2 ~ 12자, 공백과 # 불가. 같은 닉네임 허용 — 화면에는 <b>"닉네임#0012"</b>처럼 가입 순서 번호를 붙여 구분.</li>
+    <li>닉네임을 비워 두면 기본 닉네임 = 성격 + 색깔 + "슬라임" (예: 말랑한민트색슬라임). AI 이름도 같은 방식.</li>
+    <li>가입은 닉네임 창에서 "결정"을 누를 때 실제로 함 — 가입 도중에 닫아도 닉네임 없는 계정이 남지 않음.</li>
+  </ul>
+  <h3>채팅</h3>
+  <ul>
+    <li>로비 채팅(접속자 전체)과 대기실 채팅(같은 방). Enter 또는 전송 버튼.</li>
+    <li>한 번에 100자, 1초에 1번(도배 방지).</li>
+    <li>대기실에는 입장·퇴장·방장 변경과 시작 카운트다운을 시스템 메시지로 띄움. 씬이 바뀌어도 지난 대화를 다시 보여 줌.</li>
+  </ul>
+
+  <section class="cont">
+  <h2><span class="no">9</span>꾸미기와 옵션</h2>
+  <table>
+    <thead><tr><th style="width:24mm">항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>슬라임 색</td><td>파스텔 10색 팔레트에서 고름. 내 판의 기본 슬라임과 룸 카드·순위·결과 판에 내 색으로 보임. 특수 슬라임은 고정 외형</td></tr>
+      <tr><td>맵 테마</td><td>8종 — 기본(새싹), 봄, 여름, 가을, 겨울, 맑음, 밤, 흐림. 내 화면에만 적용</td></tr>
+      <tr><td>소리</td><td>BGM · 효과음 볼륨 따로. 값은 저장되어 다음 실행에도 유지</td></tr>
+    </tbody>
+  </table>
+  </section>
+</section>
+
+<section>
+  <h2><span class="no">10</span>연출</h2>
+  <table>
+    <thead><tr><th style="width:28mm">때</th><th>연출</th></tr></thead>
+    <tbody>
+      <tr><td>판 시작 전</td><td>목표 합 숫자가 10 ~ 15 사이로 빠르게 돌다 점점 느려져 멈춤 → 빨간 네모가 아이템 6개 위를 옮겨 다니다 하나에 멈춤 → 목표 합 슬라임이 시간 글자 위로 날아감</td></tr>
+      <tr><td>터짐</td><td>슬라임이 부풀었다 쏙 사라짐(마리마다 0.035초 시간차)</td></tr>
+      <tr><td>+점수</td><td>판 위에 "+12"가 톡 커지며 떠오름. 15점 이상은 금색으로 크게, 0점은 회색, 손해는 빨강</td></tr>
+      <tr><td>합이 틀림</td><td>빨간 드래그 상자가 좌우로 흔들린 뒤 사라짐</td></tr>
+      <tr><td>순위 변동</td><td>참가자 슬라임이 바뀐 등수 자리로 통통 튀며 이동</td></tr>
+      <tr><td>마지막 10초</td><td>시간 글자가 빨갛게, 5초부터 째깍 소리</td></tr>
+      <tr><td>시간 끝</td><td>TIME UP! — 1.2초 동안 마지막 판을 보여 준 뒤 결과 화면</td></tr>
+      <tr><td>화면 전환</td><td>패널이 살짝 커지며 나타나고, 반대로 사라짐</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="cont">
+  <h2><span class="no">11</span>밸런스 근거</h2>
+  <p>AI 난이도는 "사람이 실제로 몇 마리를 지우는가"를 기준으로 맞췄습니다. 점수는 특수 슬라임 운에 따라 흔들리므로 비교는 <b>슬라임 제거 수</b>로 했습니다.</p>
+  <h3>직접 플레이 기록 (목표 합마다 10판, 180초)</h3>
+  <table>
+    <thead><tr><th class="c">목표 합</th><th class="num">평균 제거</th><th class="c">범위</th><th class="num">평균 간격</th><th class="num">판당 실수</th><th>관찰</th></tr></thead>
+    <tbody>
+      <tr><td class="c">10</td><td class="num">107.9</td><td class="c">87 ~ 134</td><td class="num">3.3초</td><td class="num">1.7</td><td>후반 60초엔 판이 먼저 바닥남 (사람이 아니라 판의 한계)</td></tr>
+      <tr><td class="c">11</td><td class="num">87.8</td><td class="c">60 ~ 104</td><td class="num">4.8초</td><td class="num">2.4</td><td>고르게 지우지만 시간이 모자람</td></tr>
+      <tr><td class="c">12</td><td class="num">84.5</td><td class="c">54 ~ 96</td><td class="num">5.3초</td><td class="num">2.6</td><td>2마리 조합 55%</td></tr>
+      <tr><td class="c">13</td><td class="num">79.4</td><td class="c">50 ~ 100</td><td class="num">5.9초</td><td class="num">5.3</td><td>실수가 2배</td></tr>
+      <tr><td class="c">14</td><td class="num">75.3</td><td class="c">59 ~ 90</td><td class="num">6.1초</td><td class="num">7.0</td><td>후반 60초 20마리로 떨어짐</td></tr>
+      <tr><td class="c">15</td><td class="num">81.2</td><td class="c">59 ~ 113</td><td class="num">6.5초</td><td class="num">7.8</td><td>2마리 조합이 6+9, 7+8뿐이라 한 번에 3.1마리씩 → 14보다 많이 지움</td></tr>
+    </tbody>
+  </table>
+  <h3>난이도 목표와 결과</h3>
+  <ul>
+    <li>목표: 쉬움 ≈ 사람 평균 제거의 60%, 보통 ≈ 80%, 어려움 ≈ 95%, 지옥은 사람이 이기기 어렵게.</li>
+    <li>위 기록으로 목표 합별로 필요한 반응 시간을 구해(10 대비 11: 1.22 · 12: 1.37 · 13: 1.55 · 14: 1.67 · 15: 1.69) 조금 낮춰 6장의 배율로 정함.</li>
+    <li>결과: 기록한 판들을 같은 시드로 AI에게 다시 풀게 했을 때, 사람이 어려움을 이기는 비율이 목표 합마다 61 ~ 68%.</li>
+    <li>배율 하나(1.2배)로 묶었던 이전 값에서는 어려움 승률이 12: 34% · 13: 13% · 14: 2% · 15: 3%로 목표 합이 커질수록 무너졌음 → 목표 합별 배율로 바꾼 이유.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">12</span>남은 일</h2>
+  <table>
+    <thead><tr><th style="width:36mm">항목</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>난이도 체감 확인</td><td>목표 합별 반응 시간 배율을 직접 플레이로 확인하고 필요하면 조정</td></tr>
+      <tr><td>지옥 난이도</td><td>지금 2.4 ~ 4.8초라 목표 합 10에서 사람이 28% 정도 이김 → "이기기 어렵게"라는 의도에 맞게 1 ~ 2초대로 되돌릴지 검토</td></tr>
+      <tr><td>대전 중 · 결과 화면 채팅</td><td>채팅 채널은 준비되어 있으나 게임 씬에는 채팅창이 없음</td></tr>
+    </tbody>
+  </table>
+  <h3>보류 (확정 전)</h3>
+  <ul>
+    <li>"번지는 악마": 15초마다 악마가 옆 기본 슬라임으로 번짐(상한 20), 파괴·합체로 없앨 수 있음.</li>
+  </ul>
+</section>
+
+</body>
+</html>

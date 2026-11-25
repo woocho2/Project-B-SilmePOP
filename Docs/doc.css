@@ -1,0 +1,81 @@
+@page { size: A4; margin: 18mm 16mm 18mm 16mm;
+  @bottom-center { content: counter(page); font-family: "Malgun Gothic"; font-size: 8.5pt; color: #8a8f98; }
+}
+@page :first { @bottom-center { content: none; } }
+:root { --ink:#1f2430; --sub:#5d6574; --line:#d9dde5; --soft:#f3f5f8; --accent:#1f8a78; --accent-soft:#e4f4f0;
+        --coral:#e0675a; --gold:#d19a12; --sky:#3f8fd6; --violet:#8a5cc2; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: "Malgun Gothic", sans-serif; color: var(--ink); font-size: 9.6pt; line-height: 1.62; margin: 0; word-break: keep-all; }
+h2 { font-size: 16pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 2px solid var(--ink); break-after: avoid; line-height: 1.3; }
+h2 .no { color: var(--accent); margin-right: 3mm; }
+h3 { font-size: 11.5pt; margin: 6mm 0 2mm; break-after: avoid; line-height: 1.3; }
+h3::before { content: ""; display: inline-block; width: 3px; height: 11pt; background: var(--accent); margin-right: 2.5mm; vertical-align: -1.5pt; }
+p { margin: 0 0 2.4mm; }
+ul, ol { margin: 0 0 2.4mm; padding-left: 5mm; }
+li { margin: 0.6mm 0; }
+section { break-before: page; }
+section.cont { break-before: auto; margin-top: 8mm; }
+table { width: 100%; border-collapse: collapse; margin: 1.5mm 0 3.5mm; font-size: 8.8pt; }
+tr { break-inside: avoid; }
+th, td { border-bottom: 1px solid var(--line); padding: 1.5mm 2mm; text-align: left; vertical-align: top; }
+thead th { background: var(--soft); border-top: 1.5px solid var(--ink); border-bottom: 1px solid #b9c0cc; font-weight: 700; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.c, th.c { text-align: center; }
+code { font-family: Consolas, "Malgun Gothic", monospace; font-size: 8.4pt; background: var(--soft); padding: 0 1mm; border-radius: 2px; }
+.note { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 2.2mm 3mm; margin: 2mm 0 3.5mm; font-size: 9pt; }
+.warn { background: #fbf3e2; border-left: 3px solid var(--gold); padding: 2.2mm 3mm; margin: 2mm 0 3.5mm; font-size: 9pt; }
+.formula { font-family: Consolas, "Malgun Gothic", monospace; background: var(--soft); border: 1px solid var(--line); padding: 2.5mm 3.5mm; margin: 1.5mm 0 3.5mm; font-size: 8.8pt; line-height: 1.75; border-radius: 3px; }
+.muted { color: var(--sub); }
+.small { font-size: 8.4pt; }
+.kv td:first-child { width: 30mm; color: var(--sub); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+
+/* 표지 */
+.cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; }
+.cover .top { margin-top: 48mm; }
+.cover .kicker { color: var(--accent); font-weight: 700; letter-spacing: 1.5px; font-size: 10pt; }
+.cover h1 { font-size: 30pt; margin: 4mm 0 3mm; letter-spacing: -0.5px; line-height: 1.2; }
+.cover .subtitle { font-size: 13pt; color: var(--sub); }
+.cover .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10mm; border-top: 2px solid var(--ink); padding-top: 5mm; }
+.cover .grid div { padding: 1.5mm 0; border-bottom: 1px solid var(--line); font-size: 9.4pt; }
+.cover .grid b { display: inline-block; width: 26mm; color: var(--sub); font-weight: 400; }
+
+/* 차례 */
+.toc { columns: 2; column-gap: 10mm; font-size: 9.6pt; }
+.toc div { padding: 1.4mm 0; border-bottom: 1px dotted var(--line); break-inside: avoid; }
+.toc .n { display: inline-block; width: 9mm; color: var(--accent); font-weight: 700; }
+
+/* 흐름도 */
+.flow { display: flex; align-items: stretch; margin: 2mm 0 4mm; }
+.flow .step { flex: 1; min-width: 0; background: var(--soft); border: 1px solid var(--line); border-radius: 3px; padding: 2mm; font-size: 8.4pt; text-align: center; }
+.flow .step b { display: block; font-size: 9pt; margin-bottom: 0.6mm; }
+.flow .step.hl { background: var(--accent-soft); border-color: #a9d8cd; }
+.flow .arrow { width: 5mm; display: flex; align-items: center; justify-content: center; color: var(--sub); font-size: 10pt; }
+.loopnote { font-size: 8.4pt; color: var(--sub); text-align: right; margin-top: -2.5mm; margin-bottom: 4mm; }
+
+/* 계층도 */
+.layers { display: grid; grid-template-columns: 24mm 1fr; gap: 1.6mm; margin: 2mm 0 4mm; font-size: 8.6pt; }
+.layers .lab { background: var(--ink); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; border-radius: 3px; padding: 2mm; text-align: center; }
+.layers .box { border: 1px solid var(--line); background: #fff; border-radius: 3px; padding: 2mm 3mm; }
+.layers .box.ui { background: #fbfaf5; }
+.layers .chips span { display: inline-block; background: var(--soft); border: 1px solid var(--line); border-radius: 2px; padding: 0.2mm 1.6mm; margin: 0.6mm 0.8mm 0.6mm 0; font-family: Consolas, "Malgun Gothic", monospace; font-size: 7.9pt; }
+.layers .dir { grid-column: 1 / span 2; text-align: center; font-size: 8pt; color: var(--sub); margin: -0.6mm 0; }
+
+/* 그림 */
+figure { margin: 2mm 0 4mm; break-inside: avoid; }
+figure img { width: 100%; border: 1px solid var(--line); border-radius: 3px; display: block; }
+figcaption { font-size: 8.2pt; color: var(--sub); margin-top: 1.2mm; text-align: center; }
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.shots3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; }
+
+/* Q&A */
+.qa { border: 1px solid var(--line); border-radius: 3px; margin: 0 0 3mm; break-inside: avoid; }
+.qa .q { background: var(--soft); padding: 1.8mm 3mm; font-weight: 700; border-bottom: 1px solid var(--line); }
+.qa .q::before { content: "Q"; display: inline-block; width: 5.5mm; color: var(--accent); font-weight: 800; }
+.qa .a { padding: 1.8mm 3mm 1.8mm 8.5mm; font-size: 9pt; }
+.qa .a p { margin: 0 0 1.2mm; }
+.qa .a p:last-child { margin-bottom: 0; }
+.qa .a b.k { color: var(--accent); margin-right: 1.5mm; }
+
+.tag { display: inline-block; padding: 0 2mm; border-radius: 8px; font-size: 8pt; font-weight: 700; color: #fff; }
